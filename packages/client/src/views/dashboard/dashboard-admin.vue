@@ -41,7 +41,7 @@
                 <tbody v-else>
                   <tr>
                     <td colspan="5">
-                      <v-alert text dense prominent type="error" icon="mdi-shield-remove" class="text-xs-center mt-3">
+                      <v-alert text dense prominent type="error" icon="mdi-shield-remove" class="text-center mt-3">
                         <h3>{{ $t('Views.Dashboard.admin.no_data') }}</h3>
                       </v-alert>
                     </td>
