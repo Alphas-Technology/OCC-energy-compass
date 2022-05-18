@@ -2,6 +2,7 @@
   "name": "ts-express-api-mongo",
   "version": "1.0.0",
   "description": "A starting point for Node.js REST API",
+  "license": "UNLICENSED",
   "scripts": {
     "start": "env-cmd yarn build && yarn serve",
     "build": "env-cmd yarn build-ts && yarn tslint",
