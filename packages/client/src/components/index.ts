@@ -6,6 +6,7 @@ import ChipStatus from './chip-status.vue'
 import ColorCard from './color-card.vue'
 import ColorPicker from './color-picker.vue'
 import ConfirmationModal from './confirmation-modal.vue'
+import ConfirmLogout from './confirm-logout.vue'
 import ConfirmSpendDialog from './dialogs/confirm-spend.vue'
 import DataTable from './data-table.vue'
 import DatePicker from './date-picker.vue'
@@ -36,6 +37,7 @@ const components = [
   { key: 'ColorCard', component: ColorCard },
   { key: 'ColorPicker', component: ColorPicker },
   { key: 'ConfirmationModal', component: ConfirmationModal },
+  { key: 'ConfirmLogout', component: ConfirmLogout },
   { key: 'ConfirmSpendDialog', component: ConfirmSpendDialog },
   { key: 'DataTable', component: DataTable },
   { key: 'DatePicker', component: DatePicker },

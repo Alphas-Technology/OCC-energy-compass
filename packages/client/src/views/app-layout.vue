@@ -159,7 +159,7 @@
                 </v-list-item-title>
               </v-list-item>
             </template>
-            <v-list-item @click="signOut" class="text-center">
+            <v-list-item @click="confirmLogout = true" class="text-center">
               <v-list-item-title style="color: #3899dac7">
                 <v-icon color="#3899dac7" small>mdi-logout-variant</v-icon>
                 {{ $t('Views.AppLayout.app_bar_action_logout') }}
@@ -216,6 +216,11 @@
     <x-alert></x-alert>
     <x-help-modal></x-help-modal>
     <x-loading></x-loading>
+    <!-- Logout Confirmation -->
+    <x-confirm-logout
+      :show.sync="confirmLogout"
+      @close="confirmLogout = false"
+    ></x-confirm-logout>
   </v-app>
 </template>
 
@@ -228,6 +233,7 @@ import ProductsService from '../services/products'
 export default {
   data () {
     return {
+      confirmLogout: false,
       menu: false,
       languages: [],
       language: 'es',
@@ -257,11 +263,6 @@ export default {
     goProfile () {
       this.$router.push('/commercial-profile')
       this.menu = !this.menu
-    },
-    signOut () {
-      this.$store
-        .dispatch('session/signOut')
-        .then(() => this.$router.push('/auth/sign-in'))
     },
     toggleNavigation () {
       this.$refs.navigation.toggle()

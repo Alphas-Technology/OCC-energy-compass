@@ -54,7 +54,7 @@
         </x-menu-leaf>
       </template>
       <v-list-item
-        @click="signOut"
+        @click="confirmLogout = true"
         class="x-list-leaf"
         style="background-color: #3b3b3b !important"
       >
@@ -81,7 +81,7 @@
         </x-menu-leaf>
       </template>
       <v-list-item
-        @click="signOut"
+        @click="confirmLogout = true"
         class="x-list-leaf"
         style="background-color: #3b3b3b !important"
       >
@@ -93,6 +93,11 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+    <!-- Logout Confirmation -->
+    <x-confirm-logout
+      :show.sync="confirmLogout"
+      @close="confirmLogout = false"
+    ></x-confirm-logout>
   </v-navigation-drawer>
 </template>
 
@@ -113,6 +118,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      confirmLogout: false,
       show: true,
       groups: null,
       isChangingImage: false,
@@ -153,10 +159,6 @@ export default Vue.extend({
       })
   },
   methods: {
-    signOut () {
-      this.$store.dispatch('session/signOut')
-        .then(() => this.$router.push('/auth/sign-in'))
-    },
     imageLoadError () {
       this.isChangingImage = true
       setTimeout(() => {

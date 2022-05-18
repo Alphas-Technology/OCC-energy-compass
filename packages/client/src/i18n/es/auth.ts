@@ -57,5 +57,6 @@ export default {
   personal_account: 'Cuenta Única Empresa',
   commercial_account: 'Cuenta Multi Empresas',
   terms_and_confitions_header: 'Términos y condiciones de uso personal',
-  terms_and_confitions_changed_header: 'Hemos cambiado nuestros Términos y condiciones de uso personal'
+  terms_and_confitions_changed_header: 'Hemos cambiado nuestros Términos y condiciones de uso personal',
+  confirm_logout: '¿Estás seguro que deseas cerrar sesión?'
 }

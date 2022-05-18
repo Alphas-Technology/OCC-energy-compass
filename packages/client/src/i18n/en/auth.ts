@@ -55,5 +55,6 @@ export default {
   customer_personal_d_2: 'Register an user as admin with him enterprise to handle it personally.',
   customer_commercial_d_2: 'Register an user as admin of many enterprises.',
   personal_account: 'Personal account',
-  commercial_account: 'Commercial account'
+  commercial_account: 'Commercial account',
+  confirm_logout: 'Are you sure you want to log out?'
 }
