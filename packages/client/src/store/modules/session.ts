@@ -72,7 +72,7 @@ const actions = {
       })
   },
   getEnergyHost () {
-    return hosts.getOne('energycompass')
+    return hosts.getOne('energy compass')
       .catch(err => {
         if (err) return false
       })
