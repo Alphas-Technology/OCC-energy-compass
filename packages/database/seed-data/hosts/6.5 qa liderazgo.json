@@ -1,0 +1,9 @@
+
+{
+  "productName": "LIDERAZGO360",
+  "clientUrl": "https://liderazgoclient-qa.azurewebsites.net/",
+  "clientPort": 443,
+  "serverUrl": "https://liderazgoserver-qa.azurewebsites.net/",
+  "serverPort": 443,
+  "reference": 6
+}

@@ -1,0 +1,13 @@
+{
+  "idx": 7,
+  "index": ["burnoutOrganizational"],
+  "answers": 0,
+  "reference": {
+    "es": "Justicia",
+    "en": "Justice"
+  },
+  "question": {
+    "es": "La organización es justa en sus decisiones (reconocimiento,  consecuencias, promociones, compensación, etc.)",
+    "en": "The organization is fair in its decisions (recognition, consequences, promotions, compensation, etc.)"
+  }
+}

@@ -1,0 +1,9 @@
+
+{
+  "productName": "Cultura",
+  "clientUrl": "https://occculturaclient-qa.azurewebsites.net/",
+  "clientPort": 443,
+  "serverUrl": "https://occculturaserver-qa.azurewebsites.net/",
+  "serverPort": 443,
+  "reference": 2
+}

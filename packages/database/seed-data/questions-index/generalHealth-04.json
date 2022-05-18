@@ -1,0 +1,13 @@
+{
+  "idx": 4,
+  "index": ["generalHealth"],
+  "answers": 4,
+  "reference": {
+    "es": "Alcohol",
+    "en": "Alcohol"
+  },
+  "question": {
+    "es": "Consumo alcohol",
+    "en": "Alcohol consumption"
+  }
+}

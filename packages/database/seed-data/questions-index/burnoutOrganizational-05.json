@@ -1,0 +1,13 @@
+{
+  "idx": 10,
+  "index": ["burnoutOrganizational"],
+  "answers": 0,
+  "reference": {
+    "es": "Desconexión",
+    "en": "Disconnection"
+  },
+  "question": {
+    "es": "La organización respeta espacios diarios de desconexión laboral y promueve el disfrute oportuno de vacaciones",
+    "en": "The organization respects daily spaces for disconnection from work and promotes timely enjoyment of vacations"
+  }
+}

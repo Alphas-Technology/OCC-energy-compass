@@ -1,0 +1,13 @@
+{
+  "idx": 5,
+  "index": ["generalHealth"],
+  "answers": 0,
+  "reference": {
+    "es": "Chequeos médicos",
+    "en": "Medical checkups"
+  },
+  "question": {
+    "es": "Tengo la disciplina de realizarme chequeos médicos preventivos",
+    "en": "I have the discipline to perform preventive medical check-ups"
+  }
+}

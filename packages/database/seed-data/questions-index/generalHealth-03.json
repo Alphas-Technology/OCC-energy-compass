@@ -1,0 +1,13 @@
+{
+  "idx": 3,
+  "index": ["generalHealth"],
+  "answers": 3,
+  "reference": {
+    "es": "Cigarrillo",
+    "en": "Cigarette"
+  },
+  "question": {
+    "es": "Consumo cigarrillos ",
+    "en": "Cigarette consumption"
+  }
+}

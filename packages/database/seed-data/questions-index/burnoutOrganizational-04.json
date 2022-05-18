@@ -1,0 +1,13 @@
+{
+  "idx": 9,
+  "index": ["burnoutOrganizational"],
+  "answers": 0,
+  "reference": {
+    "es": "Estrés crónico",
+    "en": "Chronic stress"
+  },
+  "question": {
+    "es": "La organización identifica y gestiona oportunamente casos de estrés crónico",
+    "en": "The organization identifies and manages cases of chronic stress in a timely manner"
+  }
+}

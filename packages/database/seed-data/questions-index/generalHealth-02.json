@@ -1,0 +1,13 @@
+{
+  "idx": 1,
+  "index": ["generalHealth"],
+  "answers": 0,
+  "reference": {
+    "es": "Defensas",
+    "en": "Defenses"
+  },
+  "question": {
+    "es": "En general mis defensas están altas y pocas veces sufro de gripes y/ó resfríos",
+    "en": "In general, my defenses are high and I rarely suffer from colds and/or flu"
+  }
+}

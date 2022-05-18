@@ -1,0 +1,13 @@
+{
+  "idx": 0,
+  "index": ["generalHealth", "burnoutIndividual"],
+  "answers": 0,
+  "reference": {
+    "es": "Salud General",
+    "en": "General health"
+  },
+  "question": {
+    "es": "Mi estado físico y de salud es muy bueno",
+    "en": "My physical and health condition is very good"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "idx": 4,
+  "5": { "es": "Nunca consumo", "en": "I never consume" },
+  "4": { "es": "Casi nunca consumo", "en": "I hardly ever drink" },
+  "3": { "es": "Eventualmente consumo", "en": "I eventually consume" },
+  "2": { "es": "Frecuentemente consumo", "en": "I frequently consume" },
+  "1": { "es": "Consumo casi a diario", "en": "I consume almost daily" }
+}

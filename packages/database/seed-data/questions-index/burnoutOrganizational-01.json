@@ -1,0 +1,13 @@
+{
+  "idx": 6,
+  "index": ["burnoutOrganizational"],
+  "answers": 0,
+  "reference": {
+    "es": "Prioridad",
+    "en": "Priority"
+  },
+  "question": {
+    "es": "El balance y bienestar de los colaboradores es prioridad de la organización",
+    "en": "The balance and well-being of the collaborators is a priority of the organization"
+  }
+}

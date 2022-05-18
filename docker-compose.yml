@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+    client:
+        container_name: occ_energy_compass_client
+        build:
+          context: ./packages/client
+          dockerfile: Dockerfile.dev
+        ports:
+            - "8087:8080"
+        volumes:
+            - ./packages/client/src:/usr/src/app/src
+            #- /usr/src/app/node_modules
+        depends_on:
+            - api
+        networks:
+            - occpor
+    api:
+        container_name: occ_energy_compass_api
+        build:
+          context: ./packages/api
+          dockerfile: Dockerfile.dev
+        ports:
+            - "3007:3000"
+        volumes:
+            - ./packages/api/src:/usr/src/app/src
+            #- /usr/src/app/node_modules
+        depends_on:
+            - mongodb
+        networks:
+            - occpor
+    mongodb:
+        container_name: occ_energy_compass_mongodb
+        image: mongo
+        restart: always
+        volumes:
+            - /data/db
+        ports:
+            - 33017:27017
+        networks:
+            - occpor
+networks:
+    occpor:
+        driver: bridge
+
+volumes:
+  mongodb:
