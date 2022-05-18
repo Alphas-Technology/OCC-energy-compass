@@ -2,6 +2,7 @@
   "name": "clean-customer",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -14,7 +15,7 @@
     "@fortawesome/fontawesome-free": "5.14.0",
     "@types/echarts": "^4.9.2",
     "@types/node": "14.6.0",
-    "axios": "0.20.0",
+    "axios": "0.21.2",
     "core-js": "3.6.5",
     "echarts": "4.8.0",
     "echarts-wordcloud": "1.1.3",
