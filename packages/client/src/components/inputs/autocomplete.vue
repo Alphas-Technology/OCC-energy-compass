@@ -24,6 +24,7 @@
         :readonly="readonly"
         :return-object="returnObject"
         :multiple="multiple"
+        :outlined="outlined"
         :chips="chips"
       >
         <template v-slot:message="props">
@@ -61,6 +62,7 @@ export default Vue.extend({
     readonly: Boolean,
     returnObject: Boolean,
     multiple: Boolean,
+    outlined: Boolean,
     chips: Boolean
   },
   computed: {
