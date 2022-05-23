@@ -3,10 +3,10 @@
     <template v-slot:default>
       <thead>
         <tr>
-          <th class="text-center text-h6">
+          <th class="pt-3 text-center subtitle-2">
             {{ $t('Views.Evaluations.stepEvaluatedSelection.evaluatedTable.team_members') }}
           </th>
-          <th class="text-center text-h6">
+          <th class="pt-3 text-center subtitle-2">
             {{ $t('Views.Evaluations.stepEvaluatedSelection.evaluatedTable.actions') }}
           </th>
         </tr>
@@ -16,8 +16,11 @@
           v-for="item in evaluated"
           :key="item.employeeId"
         >
-          <td class="text-center">{{ item.firstName }} {{ item.lastName }} ({{ identifyTypes[item.identifyTypeId] }}{{ item.identifyDocument }})</td>
-          <td class="text-center">
+          <td class="pt-3 text-center">
+            {{ item.firstName }} {{ item.lastName }}
+            ({{ identifyTypes[item.identifyTypeId] }}{{ item.identifyDocument }})
+          </td>
+          <td class="pt-1 text-center">
             <v-tooltip bottom color="primary">
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -32,7 +35,7 @@
           </td>
         </tr>
         <tr v-if="evaluated.length === 0">
-          <td :colspan="4" class="text-center">{{ $t('Views.Evaluations.stepEvaluatedSelection.evaluatedTable.eval_no_data') }}</td>
+          <td :colspan="4" class="pt-3 text-center">{{ $t('Views.Evaluations.stepEvaluatedSelection.evaluatedTable.eval_no_data') }}</td>
         </tr>
       </tbody>
     </template>

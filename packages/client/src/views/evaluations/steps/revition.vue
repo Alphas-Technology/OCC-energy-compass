@@ -8,14 +8,14 @@
           <v-row class="mt-4">
             <v-col xs="12" md="6" class="mb-3 my-2">
               <x-list-item-revition
-                icon="mdi-account-card-details"
+                icon="feed"
                 :title="$t('Views.Evaluations.stepRevition.poll_name')"
                 :sub-title="evaluation.name"
               ></x-list-item-revition>
             </v-col>
             <v-col xs="12" md="6" class="mb-3 my-2">
               <x-list-item-revition
-                icon="mdi-account-card-details-outline"
+                icon="sticky_note_2"
                 :title="$t('Views.Evaluations.stepRevition.external_name')"
                 :sub-title="evaluation.displayName || evaluation.name"
               ></x-list-item-revition>
@@ -67,28 +67,49 @@
                 :title="`${computedPrice} ${$t('Views.Evaluations.stepRevition.token_unit')}`"
                 :sub-title="computedPrice <= 0 ?
                   $t('Views.Evaluations.stepRevition.paid_measuring') :
-                  $t('Views.Evaluations.stepRevition.workshop_cost', { members: (evaluation.evaluated.length - countOldEvaluated)})"
+                  $t('Views.Evaluations.stepRevition.workshop_cost', { members: (evaluation.populationCount - countOldEvaluated)})"
               ></x-list-item-revition>
             </v-col>
           </v-row>
-          <v-row class="mt-4">
-            <v-expansion-panels>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  {{ $t('Views.Evaluations.stepRevition.team') }} ({{ evaluation.evaluated.length }} {{ $t('Views.Evaluations.stepRevition.team_members') }})
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <v-chip
-                    class="ma-2"
-                    color="info"
-                    v-for="eva in evaluation.evaluated" :key="eva.id"
+
+          <!-- Additional Questions -->
+          <v-divider class="my-3" v-if="evaluation.switchAdditionalQuestion"></v-divider>
+          <v-row class="mt-4" v-if="evaluation.switchAdditionalQuestion">
+            <v-col cols="12">
+              <h6 class="title">{{ $t('Views.Evaluations.stepQuestion.open_question') }}</h6>
+              <v-list>
+                <v-list-group
+                  v-for="(item, $idx) in evaluation.additionalQuestions"
+                  :key="$idx"
+                  v-model="item.active"
+                  prepend-icon="mdi-comment-question"
+                  no-action
+                >
+                  <template v-slot:activator>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.question }}</v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+
+                  <v-list-item
+                    v-for="(subItem, $i) in item.options"
+                    :key="$i"
                   >
-                  {{ eva.firstName }} {{ eva.lastName }} ({{ identifyTypes[eva.identifyTypeId] }}{{ eva.identifyDocument }})
-                  </v-chip>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
+                    <v-list-item-content class="pl-4">
+                      <v-list-item-title>{{ subItem }}</v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-action>
+                      <v-icon>mdi-radiobox-blank</v-icon>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list-group>
+              </v-list>
+            </v-col>
           </v-row>
+
           <v-divider class="my-3"></v-divider>
           <v-row class="mt-4">
             <v-col cols="12" class="mb-3">
@@ -129,6 +150,7 @@
                               :label="$t('Views.Evaluations.stepRevition.message_subject')"
                               name="message_subject"
                               :append-outer-icon="$t('help.icon')"
+                              :disabled="evaluation.status !== 'pending'"
                               @click:append-outer="$store.dispatch('help/display', $t('help.engagement.create.subject'))"
                             ></v-text-field>
                           </v-col>
@@ -137,8 +159,11 @@
                           <v-col>
                             <quill-editor ref="pollInvitationBody"
                               v-model="evaluation.pollInvitation.body"
-                              :options="editorOption">
-                            </quill-editor>
+                              :disabled="evaluation.status !== 'pending'"
+                              :options="editorOption"
+                              :class="evaluation.status !== 'pending' ? 'grey--text' : ''"
+                              :style="evaluation.status !== 'pending' ? 'pointer-events: none' : ''"
+                            ></quill-editor>
                             <!--
                             <v-text-field
                               :label="$t('Views.Evaluations.stepRevition.input_select_video')"
@@ -383,7 +408,7 @@ export default {
   },
   computed: {
     computedPrice () {
-      const evaluatedDiff = this.evaluation.evaluated.length - this.countOldEvaluated
+      const evaluatedDiff = this.evaluation.populationCount - this.countOldEvaluated
       return evaluatedDiff <= 0 ? 0 : (evaluatedDiff * this.price)
     },
     pollReminderEditor () {

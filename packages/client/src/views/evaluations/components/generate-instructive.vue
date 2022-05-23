@@ -29,15 +29,15 @@ pdfmake.vfs = pdffonts.pdfMake.vfs
 export default Vue.extend({
   data () {
     return {
-      imageStep1: null,
-      imageStep2: null,
-      imageStep3: null,
-      imageStep4: null,
-      imageStep5: null,
-      imageStep6: null,
-      imageStep7: null,
-      imageStep8: null,
-      imagesBase64: []
+      // imageStep1: null,
+      // imageStep2: null,
+      // imageStep3: null,
+      // imageStep4: null,
+      // imageStep5: null,
+      // imageStep6: null,
+      // imageStep7: null,
+      // imageStep8: null,
+      // imagesBase64: []
     }
   },
   methods: {
@@ -56,27 +56,29 @@ export default Vue.extend({
               widths: [300, 150],
               body: [
                 ['email'],
-                ['equipo_evaluado1@email.com'],
-                ['equipo_evaluado2@email.com'],
-                ['equipo_evaluado3@email.com'],
-                ['equipo_evaluado4@email.com'],
-                ['equipo_evaluado5@email.com'],
-                ['equipo_evaluado6@email.com'],
-                ['equipo_evaluado7@email.com'],
-                ['equipo_evaluado8@email.com'],
-                ['equipo_evaluado9@email.com'],
-                ['equipo_evaluado10@email.com'],
-                ['equipo_evaluado11@email.com'],
-                ['equipo_evaluado12@email.com'],
-                ['equipo_evaluado13@email.com']
+                ['participante1@email.com'],
+                ['participante2@email.com'],
+                ['participante3@email.com'],
+                ['participante4@email.com'],
+                ['participante5@email.com'],
+                ['participante6@email.com'],
+                ['participante7@email.com'],
+                ['participante8@email.com'],
+                ['participante9@email.com'],
+                ['participante10@email.com'],
+                ['participante11@email.com'],
+                ['participante12@email.com'],
+                ['participante13@email.com'],
+                ['participante14@email.com']
               ]
             },
             margin: [40, 5, 30, 10],
-            pageBreak: 'after'
+            pageBreak: ''
           }
         ]
       }
 
+      /*
       docDefinition.content.push({
         text: this.$t('instructive.importDataToExcelTitle'),
         style: 'h2'
@@ -88,6 +90,7 @@ export default Vue.extend({
           { image: this.imagesBase64[i], width: 450, height: 250, margin: [40, 10, 30, 10] }
         )
       }
+      */
       docDefinition.styles = {
         paragraph: {
           fontSize: 12,
@@ -127,67 +130,67 @@ export default Vue.extend({
           resolve(pdfmake.createPdf(docDefinition).download('Instructivo'))
         }).then(() => this.$store.dispatch('loading/hide'))
       }
-    },
-    /* end to download help */
-    toDataURL (url, callback) {
-      const xhr = new XMLHttpRequest()
-      xhr.open('get', url)
-      xhr.responseType = 'blob'
-
-      xhr.onload = function () {
-        const fr = new FileReader()
-
-        fr.onload = function () {
-          callback(this.result)
-        }
-
-        fr.readAsDataURL(xhr.response)
-      }
-      xhr.send()
-    },
-    setDataToUrl (value, idx) {
-      if (value) {
-        this.toDataURL(value, (dataURL) => {
-          this.imagesBase64[idx] = dataURL
-        })
-      }
     }
+    /* end to download help */
+    // toDataURL (url, callback) {
+    //   const xhr = new XMLHttpRequest()
+    //   xhr.open('get', url)
+    //   xhr.responseType = 'blob'
+
+    //   xhr.onload = function () {
+    //     const fr = new FileReader()
+
+    //     fr.onload = function () {
+    //       callback(this.result)
+    //     }
+
+    //     fr.readAsDataURL(xhr.response)
+    //   }
+    //   xhr.send()
+    // },
+    // setDataToUrl (value, idx) {
+    //   if (value) {
+    //     this.toDataURL(value, (dataURL) => {
+    //       this.imagesBase64[idx] = dataURL
+    //     })
+    //   }
+    // }
   },
   mounted () {
-    this.imageStep1 = document.getElementById('excelImage1').src
-    this.imageStep2 = document.getElementById('excelImage2').src
-    this.imageStep3 = document.getElementById('excelImage3').src
-    this.imageStep4 = document.getElementById('excelImage4').src
-    this.imageStep5 = document.getElementById('excelImage5').src
-    this.imageStep6 = document.getElementById('excelImage6').src
-    this.imageStep7 = document.getElementById('excelImage7').src
-    this.imageStep8 = document.getElementById('excelImage8').src
+    // this.imageStep1 = document.getElementById('excelImage1').src
+    // this.imageStep2 = document.getElementById('excelImage2').src
+    // this.imageStep3 = document.getElementById('excelImage3').src
+    // this.imageStep4 = document.getElementById('excelImage4').src
+    // this.imageStep5 = document.getElementById('excelImage5').src
+    // this.imageStep6 = document.getElementById('excelImage6').src
+    // this.imageStep7 = document.getElementById('excelImage7').src
+    // this.imageStep8 = document.getElementById('excelImage8').src
   },
   watch: {
-    imageStep1 (newVal) {
-      this.setDataToUrl(newVal, 1)
-    },
-    imageStep2 (newVal) {
-      this.setDataToUrl(newVal, 2)
-    },
-    imageStep3 (newVal) {
-      this.setDataToUrl(newVal, 3)
-    },
-    imageStep4 (newVal) {
-      this.setDataToUrl(newVal, 4)
-    },
-    imageStep5 (newVal) {
-      this.setDataToUrl(newVal, 5)
-    },
-    imageStep6 (newVal) {
-      this.setDataToUrl(newVal, 6)
-    },
-    imageStep7 (newVal) {
-      this.setDataToUrl(newVal, 7)
-    },
-    imageStep8 (newVal) {
-      this.setDataToUrl(newVal, 8)
-    }
+    // imageStep1 (newVal) {
+    //   this.setDataToUrl(newVal, 1)
+    // },
+    // imageStep2 (newVal) {
+    //   this.setDataToUrl(newVal, 2)
+    // },
+    // imageStep3 (newVal) {
+    //   this.setDataToUrl(newVal, 3)
+    // },
+    // imageStep4 (newVal) {
+    //   this.setDataToUrl(newVal, 4)
+    // },
+    // imageStep5 (newVal) {
+    //   this.setDataToUrl(newVal, 5)
+    // },
+    // imageStep6 (newVal) {
+    //   this.setDataToUrl(newVal, 6)
+    // },
+    // imageStep7 (newVal) {
+    //   this.setDataToUrl(newVal, 7)
+    // },
+    // imageStep8 (newVal) {
+    //   this.setDataToUrl(newVal, 8)
+    // }
   }
 })
 </script>

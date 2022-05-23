@@ -56,6 +56,7 @@
                 step="3"
               >
                 <x-step-question
+                  :is-edit="true"
                   :evaluation="evaluation"
                   step="3"
                   nextAction="Views.Evaluations.edit.stepper_btn_next"
@@ -68,6 +69,7 @@
                 step="4"
               >
                 <x-step-evaluated-selection
+                  :is-edit="true"
                   :evaluation="evaluation"
                   :identify-types="identifyTypes"
                   step="4"
@@ -85,6 +87,7 @@
                   :evaluation="evaluation"
                   :price="productService"
                   step="5"
+                  :key="step"
                   nextAction="Views.Evaluations.edit.stepper_btn_update"
                   prevAction="Views.Evaluations.edit.stepper_btn_back"
                   :balance="balance"
@@ -154,6 +157,7 @@ export default Vue.extend({
         displayName: '',
         slug: '',
         status: '',
+        selectionType: '',
         operations: '',
         timeZone: '',
         tokenId: '',
@@ -175,7 +179,20 @@ export default Vue.extend({
         customEmailRelease: {},
         customEmailDeadline: '',
         invitationFileFlag: true,
-        reminderFileFlag: true
+        reminderFileFlag: true,
+        demographicItems: {},
+        // Demographic Selected Criteria
+        departmentIds: [],
+        chargeIds: [],
+        academicDegreeIds: [],
+        jobTypeIds: [],
+        rangeAge: [],
+        rangeAntiquity: [],
+        genderId: '',
+        countrySelect: [],
+        headquarterSelect: [],
+        additionalDemographic1Ids: [],
+        additionalDemographic2Ids: []
       },
       step: 1,
       enterpriseId: null,
@@ -201,51 +218,64 @@ export default Vue.extend({
   created () {
     this.$store.dispatch('loading/show')
     Resolver.all({
-      employees: employeesService.listActive(),
       timeZones: timeZoneService.list(),
       identifyTypes: identifyTypesService.list(),
-      balance: evaluationsService.checkBalance(),
+      balance: evaluationsService.checkBalance('individual'),
       evaluation: evaluationsService.getOneToEdit(this.$route.params.slug)
     })
       .then(res => {
         res.identifyTypes.items.forEach(et => {
           this.identifyTypes[et.id] = this.getInitials(et.translate.label) + ' - '
         })
-        this.getEmployees(res.employees.items)
         this.getTimeZones(res.timeZones.items)
         this.balance = res.balance.balance
         this.productService = res.balance.productService
         this.price = res.balance.productService
-        this.getEvaluation(res.evaluation)
-        this.mapEvaluated()
-        this.$store.dispatch('loading/hide')
+        this.assembleEvaluation(res.evaluation)
       })
       .catch(err => {
         this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
+      })
+      .finally(() => {
         this.$store.dispatch('loading/hide')
       })
+  },
+  watch: {
+    step (val) {
+      if (val === 4 && this.evaluation.selectionType === '') {
+        this.evaluation.selectionType = this.selType
+      }
+    }
   },
   methods: {
     getInitials (text) {
       return text.trim().split(' ').map(t => t.slice(0, 1)).join('').toUpperCase()
     },
-    getEmployees (items) {
-      this.employees = items.map((employee) => {
-        return {
-          text: `${employee.firstName} ${employee.lastName} (${this.identifyTypes[employee.identifyTypeId]}${employee.identifyDocument})`,
-          value: employee.id,
-          id: employee.id,
-          firstName: employee.firstName,
-          lastName: employee.lastName,
-          identifyDocument: employee.identifyDocument,
-          identifyTypeId: employee.identifyTypeId,
-          employee: { id: employee.employee.id }
-        }
-      })
+    getEmployees () {
+      this.$store.dispatch('loading/show')
+      employeesService.listActive()
+        .then(res => {
+          this.employees = res.items.map((employee) => {
+            return {
+              text: `${employee.firstName} ${employee.lastName} (${this.identifyTypes[employee.identifyTypeId]}${employee.identifyDocument})`,
+              value: employee.id,
+              id: employee.id,
+              firstName: employee.firstName,
+              lastName: employee.lastName,
+              identifyDocument: employee.identifyDocument,
+              identifyTypeId: employee.identifyTypeId,
+              employee: { id: employee.employee.id }
+            }
+          })
+          this.mapEvaluated()
+        })
+        .finally(() => {
+          this.$store.dispatch('loading/hide')
+        })
     },
     mapEvaluated () {
       this.evaluation.evaluated = this.employees.filter(emp => {
-        return this.evaluation.evaluated.find(evaluated => evaluated.employee.id === emp.id)
+        return this.evaluation.selectionDetails.evaluatedIds.includes(emp.id)
       })
     },
     getTimeZones (items) {
@@ -266,7 +296,7 @@ export default Vue.extend({
     },
     verifySpend (data) {
       if (data === 1) {
-        return this.edit()
+        return this.edit(true)
       }
       this.showModalConfirm = false
     },
@@ -291,23 +321,34 @@ export default Vue.extend({
       }
     },
     reCheckBalance () {
-      evaluationsService.checkBalance()
+      evaluationsService.checkBalance('individual')
         .then(res => {
           this.balance = res.balance
         })
     },
-    getEvaluation (res) {
+    assembleEvaluation (res) {
       this.evaluation.edit = true
       this.evaluation.name = res.name
       this.evaluation.displayName = res.displayName
       this.autoSwitchName = Boolean(this.evaluation.displayName)
       this.evaluation.status = res.status
-      this.evaluation.timeZone = res.timeZone
+      this.selType = res.populationSelectionType
+      if (this.selType !== 'everybody') {
+        this.evaluation.selectionDetails = res.populationSelectionDetails
+      }
+      if (this.selType === 'individual') {
+        this.getEmployees()
+      }
+      this.evaluation.populationCount = res.populationCount
       this.evaluation.questionnaire = res.questionnaire.slug
+      this.evaluation.additionalQuestions = res.additionalQuestions
+      if (res.additionalQuestions[0].question !== '') {
+        this.evaluation.switchAdditionalQuestion = true
+      }
       this.evaluation.deliveredAt = this.getFormattedDate(res.deliveredAt)
       this.evaluation.validUntil = this.getFormattedDate(res.validUntil)
-      this.evaluation.evaluated = res.evaluated
-      this.countOldEvaluated = res.evaluated.length
+      this.evaluation.timeZone = res.timeZone
+      this.countOldEvaluated = res.populationCount
       this.evaluation.customEmailRelease = res.customEmailRelease
       this.evaluation.customEmailReminder = res.customEmailReminder
       this.getFormattedReminders(res.reminders)
@@ -322,7 +363,6 @@ export default Vue.extend({
         body: this.evaluation.customEmailReminder.body,
         attachment: this.evaluation.customEmailReminder.attachment
       }
-      this.evaluation.thankMessage = res.customEmailDeadline ? res.customEmailDeadline.body : ''
     },
     getFormattedReminders (reminders) {
       for (const reminder of reminders) {
@@ -344,7 +384,7 @@ export default Vue.extend({
         hour: time[0] + ':00'
       }
     },
-    edit () {
+    edit (spentTokens = false) {
       this.$store.dispatch('loading/show')
       this.disableButtonModal = false
       const pollInvitationFile = this.evaluation.pollInvitation.file
@@ -386,7 +426,11 @@ export default Vue.extend({
         .then((res) => {
           if (res) {
             this.$store.dispatch('alert/success', this.$t('Views.Evaluations.edit.updated_evaluation'))
-            setTimeout(this.redirectSummary, 3000)
+            if (spentTokens) {
+              this.redirectSummary(res.slug)
+            } else {
+              this.redirectEvaluationList()
+            }
           }
           return false
         })
@@ -395,9 +439,18 @@ export default Vue.extend({
           this.$store.dispatch('loading/hide')
         })
     },
-    redirectSummary () {
-      this.$store.dispatch('loading/hide')
-      this.$router.push('/evaluations')
+    redirectEvaluationList () {
+      setTimeout(() => {
+        this.$store.dispatch('loading/hide')
+        this.$router.push('/evaluations')
+      }, 3000)
+    },
+    redirectSummary (slug) {
+      const evaluatedDiff = this.evaluation.evaluated.length - this.countOldEvaluated
+      setTimeout(() => {
+        this.$store.dispatch('loading/hide')
+        this.$router.push(`/operation-summary/individual/${slug}/${evaluatedDiff}`)
+      }, 3000)
     },
     deleteInvitationFile () {
       delete this.evaluation.customEmailRelease.attachment

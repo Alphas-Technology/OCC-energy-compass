@@ -1,92 +1,227 @@
 <template>
-    <v-container flat>
-      <v-card flat>
-        <ValidationObserver v-slot="{ handleSubmit }">
-          <v-form @submit.prevent="handleSubmit(changeStep)">
-            <v-row>
-              <v-col>
-                {{ $t('Views.Evaluations.stepQuestion.title') }}
-                <v-divider></v-divider>
-              </v-col>
-            </v-row>
-            <v-row
-              v-for="(item,index) in questionnaires"
-              v-bind:key="index"
+  <v-container flat class="pb-0">
+    <v-card flat>
+      <ValidationObserver ref="additional_qs" v-slot="{ handleSubmit }">
+        <v-form @submit.prevent="handleSubmit(checkNext)">
+          <v-row>
+            <v-col class="headline">
+              {{ $t('Views.Evaluations.stepQuestion.title') }}
+              <v-divider></v-divider>
+            </v-col>
+          </v-row>
+          <v-row
+            v-for="(item,index) in questionnaires"
+            v-bind:key="index"
+          >
+            <v-col cols="12" sm="7" class="pt-3 pl-4">
+              <v-radio-group
+                v-model="evaluation.questionnaire"
+                :value="evaluation.questionnaire"
+                :mandatory="false"
+                class="my-0"
+              >
+                <v-radio
+                  class="pt-3"
+                  :label="item.name"
+                  :value="item.slug"
+                  :readonly="evaluation.status != 'pending'"
+                  :disabled="evaluation.status != 'pending'"
+                ></v-radio>
+              </v-radio-group>
+            </v-col>
+            <v-col cols="12" sm="5" class="pt-6 text-right">
+              <v-btn dark small
+                class="white--text"
+                color="primary"
+                style="margin-right=100%;"
+                @click="getPdf(item)"
+              >
+                {{$t('Views.Evaluations.stepQuestion.inputDownload')}}
+                <v-icon dark right small>mdi-file-pdf</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-alert type="info" color="grey lighten-1">
+            {{ $t('Views.Evaluations.stepQuestion.custom_questionnaire_info') }}
+          </v-alert>
+
+          <!------------------------------------------------------------------------>
+          <!------------------------- Additional Questions ------------------------->
+          <!------------------------------------------------------------------------>
+          <v-row no-gutters>
+            <v-col cols="12">
+              <v-switch
+                :readonly="evaluation.status !== 'pending' || isEdit"
+                v-model="evaluation.switchAdditionalQuestion"
+                :label="$t('Views.Evaluations.stepQuestion.want_open_question')"
+                color="primary"
+                :append-icon="$t('help.icon')"
+                @click:append="$store.dispatch('help/display', $t('help.pulse.create.open'))"
+              ></v-switch>
+              <x-info v-if="evaluation.switchAdditionalQuestion"
+                :text="$t('Views.Evaluations.stepQuestion.open_question_info')"
+              ></x-info>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters v-if="evaluation.switchAdditionalQuestion">
+            <v-col cols="12" class="headline px-4">
+              {{ $t('Views.Evaluations.stepQuestion.open_question') }}
+              <v-tooltip :disabled="evaluation.additionalQuestions.length === maxOpenQuestion || evaluation.status !== 'pending'" bottom color="green lighten-3">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    fab small
+                    color="#068ad5"
+                    class="white--text ml-4"
+                    :disabled="evaluation.additionalQuestions.length === maxOpenQuestion || evaluation.status !== 'pending' || computedMoreAdditionalQs"
+                    @click="addOpenQuestion"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('Views.Evaluations.stepQuestion.add_open_question') }}</span>
+              </v-tooltip>
+              <v-tooltip :disabled="evaluation.additionalQuestions.length === minOpenQuestion || evaluation.status !== 'pending'" bottom color="red">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    fab small
+                    color="#f65871"
+                    class="white--text ml-4"
+                    :disabled="evaluation.additionalQuestions.length === minOpenQuestion || evaluation.status !== 'pending'"
+                    @click="removeOpenQuestion"
+                  >
+                    <v-icon>mdi-minus</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('Views.Evaluations.stepQuestion.remove_open_question') }}</span>
+              </v-tooltip>
+              <v-divider class="mt-1"></v-divider>
+            </v-col>
+
+            <!-- Questions -->
+            <v-col cols="12" sm="6"
+              v-for="(additional, idx) in evaluation.additionalQuestions"
+              :key="`q${idx}`"
+              class="px-5 pb-6"
             >
-              <v-col cols="12" sm="7" class="pt-3 pl-4">
-                <v-radio-group
-                  v-model="evaluation.questionnaire"
-                  :value="evaluation.questionnaire"
-                  :mandatory="false"
-                  class="my-0"
+              <v-row>
+                <v-col cols="12">
+                  <ValidationProvider v-slot="{ errors }"
+                    :name="$t('Views.Evaluations.stepQuestion.additional_n', {n: idx + 1})"
+                    :rules="{
+                      required: hasOptions(additional)
+                    }"
+                    mode="lazy"
+                  >
+                    <v-text-field light
+                      v-model="additional.question"
+                      :label="$t('Views.Evaluations.stepQuestion.insert_question', {n: idx + 1})"
+                      :name="`external_name${idx}`"
+                      :readonly="evaluation.status !== 'pending'"
+                      :disabled="evaluation.status !== 'pending'"
+                      :error-messages="errors[0]"
+                    >
+                      <template #append>
+                        <v-tooltip :disabled="additional.options.length === maxOptionOpenQuestion || evaluation.status !== 'pending'" bottom color="green lighten-3">
+                          <template v-slot:activator="{ on }">
+                            <v-btn
+                              v-on="on"
+                              fab small
+                              color="#068ad5"
+                              class="white--text"
+                              :disabled="additional.options.length === maxOptionOpenQuestion || evaluation.status !== 'pending'"
+                              @click="addOptionOpenQuestion(additional)"
+                            >
+                              <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>{{ $t('Views.Evaluations.stepQuestion.add_question_option') }}</span>
+                        </v-tooltip>
+                      </template>
+                    </v-text-field>
+                  </ValidationProvider>
+                </v-col>
+                <!-- Options -->
+                <v-col cols="12" xs="11" offset-xs="1" v-for="(option, $i) in additional.options" :key="$i"
+                  class="pl-7"
                 >
-                  <v-radio
-                    class="pt-3"
-                    :label="item.name"
-                    :value="item.slug"
-                    :readonly="evaluation.status != 'pending'"
-                    :disabled="evaluation.status != 'pending'"
-                  ></v-radio>
-                </v-radio-group>
-              </v-col>
-              <v-col cols="12" sm="5" class="pt-6 text-right">
-                <v-btn
-                  class="white--text mr-4"
-                  color="primary"
-                  style="margin-right=100%;"
-                  dark
-                  small
-                  @click="getPdf(item)"
-                >
-                  {{$t('Views.Evaluations.stepQuestion.inputDownload')}}
-                  <v-icon dark right small>mdi-file-pdf</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-alert type="info">
-              {{ $t('Views.Evaluations.stepQuestion.custom_questionnaire_info') }}
-            </v-alert>
+                  <ValidationProvider v-slot="{ errors }"
+                    :name="$t('Views.Evaluations.stepQuestion.option_n', {n: $i + 1})"
+                    :rules="{
+                      required: additional.question !== ''
+                    }"
+                    mode="eager"
+                  >
+                    <v-text-field light
+                      v-model="additional.options[$i]"
+                      :label="$t('Views.Evaluations.stepQuestion.insert_question_option', {n: idx + 1, o: $i + 1})"
+                      :name="`external_name${idx}${$i}`"
+                      :readonly="evaluation.status !== 'pending'"
+                      :disabled="evaluation.status !== 'pending'"
+                      :error-messages="errors[0]"
+                    >
+                      <template v-slot:append>
+                        <v-tooltip :disabled="additional.options.length === minOptionOpenQuestion || evaluation.status !== 'pending'" bottom color="red">
+                          <template v-slot:activator="{ on }">
+                            <v-btn fab small
+                              v-on="on"
+                              color="#f65871"
+                              class="white--text"
+                              :disabled="additional.options.length === minOptionOpenQuestion || evaluation.status !== 'pending'"
+                              @click="removeOptionOpenQuestion(additional, $i)"
+                            >
+                              <v-icon>mdi-minus</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>{{ $t('Views.Evaluations.stepQuestion.remove_question_option') }}</span>
+                        </v-tooltip>
+                      </template>
+                    </v-text-field>
+                  </ValidationProvider>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <!------------------------------------------------------------------------>
+          <!---------------------------- Action Buttons ---------------------------->
+          <!------------------------------------------------------------------------>
+          <v-card-actions class="pa-0">
             <v-row>
-              <v-col cols="12" sm="6">
-                <v-btn
-                  block
-                  large
+              <v-col cols="12" sm="6" class="pb-1">
+                <v-btn large block
                   @click="changeStep(true)"
-                >{{ $t(prevAction) }}</v-btn>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-btn
-                  v-if="questionnaires.length"
-                  large
-                  block
-                  color="primary"
-                  type="submit"
-                >{{ $t(nextAction) }}
+                >
+                  {{ $t(prevAction) }}
                 </v-btn>
-                <v-btn
-                  v-else
-                  large
-                  block
-                  disabled
+              </v-col>
+              <v-col cols="12" sm="6" class="pb-1">
+                <v-btn large block
                   color="primary"
+                  :disabled="!questionnaires.length"
                   type="submit"
-                >{{ $t(nextAction) }}
+                >
+                  {{ $t(nextAction) }}
                 </v-btn>
               </v-col>
             </v-row>
+          </v-card-actions>
           </v-form>
-        </ValidationObserver>
-      </v-card>
-      <img
-        src="../../../../public/img/20200301_occ_solution_logo_only.png"
-        style="visibility:hidden;"
-        id="occEnergyCompassLogo"
-        width="0"
-        height="0"
-        alt=""
-      />
-      <x-loading></x-loading>
-    </v-container>
+      </ValidationObserver>
+    </v-card>
+
+    <img
+      src="/img/20200301_occ_solution_logo_only.png"
+      style="visibility:hidden;"
+      id="occEnergyCompassLogo"
+      width="0"
+      height="0"
+      alt=""
+    />
+    <x-loading></x-loading>
+  </v-container>
 </template>
 
 <script>
@@ -102,6 +237,7 @@ pdfmake.vfs = pdffonts.pdfMake.vfs
 
 export default {
   props: {
+    isEdit: Boolean,
     evaluation: Object,
     step: String,
     nextAction: String,
@@ -110,28 +246,90 @@ export default {
   data () {
     return {
       questionnaires: [],
-      porLogoSrc: null,
-      porLogoBase64: null
+      minOpenQuestion: 1,
+      maxOpenQuestion: 3,
+      minOptionOpenQuestion: 2,
+      maxOptionOpenQuestion: 5,
+      energyLogoSrc: null,
+      energyLogoBase64: null
     }
   },
   watch: {
-    porLogoSrc (newVal) {
+    'evaluation.switchAdditionalQuestion': {
+      handler (val) {
+        if (!val) {
+          this.evaluation.additionalQuestions = [{
+            question: '',
+            options: ['', '']
+          }]
+        }
+      }
+    },
+    energyLogoSrc (newVal) {
       if (newVal) {
-        this.toDataURL(this.porLogoSrc, (dataURL) => {
-          this.porLogoBase64 = dataURL
+        this.toDataURL(this.energyLogoSrc, (dataURL) => {
+          this.energyLogoBase64 = dataURL
         })
       }
     }
   },
   computed: {
+    computedMoreAdditionalQs () {
+      const lngth = this.evaluation.additionalQuestions.length
+      const lastQ = this.evaluation.additionalQuestions[lngth - 1]
+      const emptyOpts = lastQ.options.reduce((acc, opt) => {
+        if (opt === '') {
+          acc++
+        }
+        return acc
+      }, 0)
+      if (lastQ.question === '' || emptyOpts) {
+        return true
+      }
+      return false
+    },
     ...mapState({
       user: (state) => state.session.user
     })
   },
   methods: {
+    checkNext () {
+      if (this.evaluation.switchAdditionalQuestion) {
+        this.$refs.additional_qs.validate()
+          .then(valid => {
+            if (valid) {
+              this.changeStep()
+            }
+          })
+      } else {
+        this.changeStep()
+      }
+    },
     changeStep (isBack = false) {
       this.evaluation.questionnaireName = (this.questionnaires.find(q => q.slug === this.evaluation.questionnaire) || {}).name
       this.$emit('changeStep', this.engagement, isBack ? +this.step - 1 : +this.step + 1)
+    },
+    hasOptions (additional) {
+      const optWithValue = additional.options.find(opt => opt !== '')
+      if (optWithValue) {
+        return true
+      }
+      return false
+    },
+    addOpenQuestion () {
+      this.evaluation.additionalQuestions.push({
+        question: '',
+        options: ['', '']
+      })
+    },
+    removeOpenQuestion () {
+      this.evaluation.additionalQuestions.pop()
+    },
+    addOptionOpenQuestion (open) {
+      open.options.push('')
+    },
+    removeOptionOpenQuestion (open, idx) {
+      open.options.splice(idx, 1)
     },
     toDataURL (url, callback) {
       const xhr = new XMLHttpRequest()
@@ -219,7 +417,7 @@ export default {
         },
         header: () => {
           return [{
-            image: this.porLogoBase64,
+            image: this.energyLogoBase64,
             height: 45,
             width: 117,
             margin: [15, 0, 25, 15]
@@ -300,7 +498,7 @@ export default {
     this.getQuestionnaires()
   },
   mounted () {
-    this.porLogoSrc = document.getElementById('occEnergyCompassLogo').src
+    this.energyLogoSrc = document.getElementById('occEnergyCompassLogo').src
   }
 }
 </script>

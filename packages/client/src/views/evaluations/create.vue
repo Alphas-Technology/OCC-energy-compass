@@ -21,7 +21,7 @@
               <x-step-overview
                 v-if="step == 1"
                 :evaluation="evaluation"
-                :total-receptors="totalParticipants"
+                C:total-receptors="totalParticipants"
                 step="1"
                 nextAction="Views.Evaluations.create.stepper_btn_next"
                 prevAction="Views.Evaluations.create.stepper_btn_cancel"
@@ -40,9 +40,10 @@
               ></x-step-date>
             </v-stepper-content>
 
-            <v-stepper-content key="3-content" step="3">
+            <v-stepper-content key="3-content" step="3" class="pb-0">
               <x-step-question
                 v-if="step == 3"
+                :is-edit="false"
                 :evaluation="evaluation"
                 step="3"
                 nextAction="Views.Evaluations.create.stepper_btn_next"
@@ -52,7 +53,7 @@
             </v-stepper-content>
             <v-stepper-content key="4-content" step="4">
               <x-step-evaluated-selection
-                v-if="step == 4"
+                v-show="step == 4"
                 :evaluation="evaluation"
                 :identify-types="identifyTypes"
                 step="4"
@@ -67,13 +68,14 @@
                 v-if="step === 5"
                 :evaluation="evaluation"
                 :identify-types="identifyTypes"
-                :price="price"
+                :price="evaluation.price"
                 step="5"
+                :key="step"
                 nextAction="Views.Evaluations.create.stepper_btn_confirm_create"
                 prevAction="Views.Evaluations.create.stepper_btn_back"
                 @changeStep="verifyStepChanged"
                 :balance="balance"
-                :count-old-evaluated="countOldEvaluated"
+                :count-old-evaluated="0"
               ></x-step-revition>
             </v-stepper-content>
           </x-stepper>
@@ -85,7 +87,7 @@
       :costText="$t('Views.Evaluations.create.modal_workshop_cost')"
       :showModalConfirm="showModalConfirm"
       :balance="balance"
-      :price="price"
+      :price="evaluation.totalPrice"
       :noActiveEmployee="false"
       :noBalanceResponse="noBalanceResponse"
       :disableButtonModal="disableButtonModal"
@@ -126,7 +128,7 @@ export default Vue.extend({
         'Views.Evaluations.create.stepper_overview',
         'Views.Evaluations.create.stepper_date',
         'Views.Evaluations.create.stepper_questions',
-        'Views.Evaluations.create.stepper_team',
+        'Views.Evaluations.create.stepper_population',
         'Views.Evaluations.create.stepper_revition'
       ],
       evaluation: {
@@ -145,11 +147,17 @@ export default Vue.extend({
           hour: '23:00'
         },
         status: 'pending',
+        selectionType: '',
+        populationCount: 0,
+        switchAdditionalQuestion: false,
+        additionalQuestions: [{
+          question: '',
+          options: ['', '']
+        }],
         reminders: [],
         switchDate: false,
         questionnaire: '',
         questionnaireName: '',
-        porcent_total: 0,
         pollInvitation: {
           subject: '',
           body: '',
@@ -160,9 +168,22 @@ export default Vue.extend({
           body: '',
           file: ''
         },
-        thankMessage: '',
         active: null,
-        offset: ''
+        price: 0,
+        totalPrice: 0,
+        demographicItems: {},
+        // Demographic Selected Criteria
+        departmentIds: [],
+        chargeIds: [],
+        academicDegreeIds: [],
+        jobTypeIds: [],
+        rangeAge: [],
+        rangeAntiquity: [],
+        genderId: '',
+        countrySelect: [],
+        headquarterSelect: [],
+        additionalDemographic1Ids: [],
+        additionalDemographic2Ids: []
       },
       step: 1,
       enterpriseId: null,
@@ -176,11 +197,8 @@ export default Vue.extend({
       timeZones: [],
       balance: 0,
       showModalConfirm: false,
-      price: 0,
-      productService: 0,
       disableButtonModal: false,
       noBalanceResponse: false,
-      countOldEvaluated: 0,
       createdSlug: ''
     }
   },
@@ -194,7 +212,7 @@ export default Vue.extend({
       employees: employeesService.listActive(),
       timeZones: timeZoneService.list(),
       identifyTypes: identifyTypesService.list(),
-      balance: evaluationsService.checkBalance()
+      balance: evaluationsService.checkBalance('individual')
     })
       .then(res => {
         res.identifyTypes.items.forEach(et => {
@@ -204,8 +222,7 @@ export default Vue.extend({
         this.getEmployees(res.employees.items)
         this.getTimeZones(res.timeZones.items)
         this.balance = res.balance.balance
-        this.productService = res.balance.productService
-        this.price = res.balance.productService
+        this.evaluation.price = res.balance.productService
       })
   },
   methods: {
@@ -213,7 +230,6 @@ export default Vue.extend({
       return text.trim().split(' ').map(t => t.slice(0, 1)).join('').toUpperCase()
     },
     toConfirm () {
-      this.price = this.productService * this.evaluation.evaluated.length
       this.disableButtonModal = true
       this.showModalConfirm = true
     },
@@ -231,7 +247,7 @@ export default Vue.extend({
       }
     },
     reCheckBalance () {
-      evaluationsService.checkBalance()
+      evaluationsService.checkBalance('individual')
         .then(res => {
           this.balance = res.balance
         })
@@ -249,6 +265,14 @@ export default Vue.extend({
       data.enterprise.customer = this.user.customer
 
       data.evaluated = data.evaluated.map(emp => emp.id)
+
+      // Clean Payload
+      delete data.active
+      delete data.questionnaires
+      delete data.demographicItems
+      delete data.questionnaireName
+      delete data.reviewMassive
+
       return evaluationsService.create(data)
         .then((res) => {
           if (!res._id) {
@@ -259,7 +283,6 @@ export default Vue.extend({
             return Promise.reject(this.$t('errors.no_balance'))
           }
 
-          this.disableButtonModal = true
           this.createdSlug = res.slug
           return pollInvitationFile ? evaluationsService.sendInvitationFiles(res._id, { pollInvitationFile })
             .then(() => res)
@@ -281,11 +304,15 @@ export default Vue.extend({
             this.$store.dispatch('alert/success', this.$t('Views.Evaluations.create.msg_created_evaluation'))
             setTimeout(this.redirectSummary, 3000)
           }
+          this.showModalConfirm = false
           return false
         })
         .catch((err) => {
-          this.$store.dispatch('loading/hide')
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
+        })
+        .finally(() => {
+          this.$store.dispatch('loading/hide')
+          this.disableButtonModal = true
         })
     },
     getEmployees (items) {

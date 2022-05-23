@@ -4,11 +4,13 @@
     v-model="showModalPreview"
     max-width="58.8rem"
   >
-    <v-card>
+    <v-card tile>
       <v-card-text>
         <v-row align-center justify-center>
-          <div style="background: #f3f3f3; wi">
-            <p style="padding-left: 1em; margin-bottom: 0"> {{ $t('Views.Evaluations.stepRevition.previewEmail.subject') }}: <strong> {{ subject }} </strong></p>
+          <div style="background: #f3f3f3; margin-top: 0.9em;">
+            <p style="margin-bottom: 0">
+              {{ $t('Views.Evaluations.stepRevition.previewEmail.subject') }}: <strong>{{ subject }}</strong>
+            </p>
           </div>
         </v-row>
         <v-row align-center justify-center row>
@@ -85,7 +87,7 @@
                       </div>
                     </div>
                   </div>
-                  <div :style="style" style="background-position:top center;background-repeat:repeat;background-color:#F4F4F4;">
+                  <div :style="style1" style="background-position:bottom center;background-repeat: no-repeat;background-color:#FFFFFF; background-size: cover;">
                     <div class="block-grid"
                       style="Margin: 0 auto; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
                       <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
@@ -127,17 +129,21 @@
                   <section>
                     <div>
                       <h3 style="color: #000">{{ $t('Views.Evaluations.stepRevition.previewEmail.hello') }}, </h3><br/>
-                      <p>
+                      <p style="margin-bottom: 0;">
                         <section v-html="body" style="color: #000"></section>
                         <br/>
                         <span style="color: #000">
                           {{ $t('Views.Evaluations.stepRevition.previewEmail.link_to_poll') }}
-                          <a :href="publicUrl" target="_blank">{{ $t('Views.Evaluations.stepRevition.previewEmail.click_here') }}</a>
-                        </span><br><br><br>
+                          <a style="text-decoration: underline;">{{ $t('Views.Evaluations.stepRevition.previewEmail.click_here') }}</a>
+                        </span>
+                        <!--
+                        <br><br><br>
                         <span style="color: #000">
                           {{ $t('Views.Evaluations.stepRevition.previewEmail.por_team_members_info') }}
                         </span>
+                        -->
                       </p>
+                      <!--
                       <table style="width: 95%; margin: 0 auto;" border="1">
                         <thead>
                           <tr>
@@ -150,6 +156,7 @@
                           </tr>
                         </tbody>
                       </table>
+                      -->
                     </div>
                   </section>
                   <div style="background-color: #bcdaf5;" v-if="attachments">
@@ -174,7 +181,7 @@
                     </table>
                   </div>
 
-                  <div :style="style2" style="background-position:top center;background-repeat:repeat;background-color:#F4F4F4;">
+                  <div :style="style2" style="background-position:top center;background-repeat: no-repeat;background-color:#FFFFFF; background-size: cover;">
                     <div class="block-grid"
                       style="Margin: 0 auto; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
                       <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
@@ -290,7 +297,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    style () {
+    style1 () {
       return `background-image:url('${this.publicUrl}/img/bg_wave_1.png');`
     },
     style2 () {

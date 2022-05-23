@@ -1,147 +1,104 @@
 <template>
-  <v-card flat>
+  <v-card flat class="pt-3 px-3">
     <v-row>
-      <v-col cols="12" class="pa-3 headline">
+      <v-col cols="12" class="headline">
         {{ $t('Views.Evaluations.stepEvaluatedSelection.title') }}
-        <v-divider></v-divider>
+        <v-divider class="my-1"></v-divider>
       </v-col>
     </v-row>
+    <v-card-subtitle class="pa-1 body-2 text-justify">
+      {{ $t('Views.Evaluations.stepEvaluatedSelection.desc') }}
+    </v-card-subtitle>
+
+    <!-- Population selection type -->
     <v-row>
-      <v-col cols="12">
-        <x-evaluated-table
-          :evaluated="evaluation.evaluated"
-          :identify-types="identifyTypes"
-          @delete="openModal"
-        ></x-evaluated-table>
+      <v-col cols="12" sm="6" md="5" class="pt-8 px-4">
+        <x-inputs-autocomplete light
+          name="selection_type"
+          rules="required"
+          :readonly="isEdit || loadingDemographics"
+          :items="getSelectType"
+          :input="evaluation.selectionType"
+          :label="$t('Views.Evaluations.stepEvaluatedSelection.want_to_send')"
+          :append-outer-icon="$t('help.icon')"
+          :help-message="$t('help.pulse.create.selection')"
+          @updateInput="($event) => evaluation.selectionType = $event"
+        ></x-inputs-autocomplete>
       </v-col>
     </v-row>
-    <v-row v-if="!isMassive">
-      <v-col cols="12" align="center">
-        <v-btn x-large
-          outlined
-          color="green"
-          class="mr"
-          @click="addEvaluated"
+
+    <!------------------------------------->
+    <!------------- EVERYBODY ------------->
+    <!------------------------------------->
+    <v-row v-if="evaluation.selectionType === 'everybody'">
+      <v-col cols="12" class="pt-2 pb-6 px-8 headline text-right">
+        {{ $t('Views.Evaluations.create.total_receptors', {n: `${evaluation.populationCount}`}) }}
+      </v-col>
+    </v-row>
+
+    <!------------------------------------->
+    <!-------- BY DEMOGRAPHIC CUTS -------->
+    <!------------------------------------->
+    <x-evaluated-by-demographic-selection v-if="evaluation.selectionType === 'by_demographic'"
+      ref="demographic_selection"
+      :is-edit="isEdit"
+      :demographic-lists="demographicLists"
+      :evaluation="evaluation"
+      @loadingDemographics="($event) => loadingDemographics = $event"
+      @demographicDataLoaded="($event) => demographicDataLoaded = $event"
+    />
+
+    <!------------------------------------->
+    <!------------- INDIVIDUAL ------------>
+    <!------------------------------------->
+    <x-evaluated-individual-selection v-if="evaluation.selectionType === 'individual'"
+      :is-edit="isEdit"
+      :employees="employees"
+      :evaluation="evaluation"
+      :identify-types="identifyTypes"
+      @editingZeroEvaluated="($event) => editHasCeroEvaluated = $event"
+    />
+
+    <!------------------------------------->
+    <!---------- Actions Buttons ---------->
+    <!------------------------------------->
+    <v-row>
+      <v-col cols="12" sm="6">
+        <v-btn block large
+          :disabled="loadingDemographics"
+          @click="changeStep(true)"
         >
-          <v-icon large class="mr-2">add_circle_outline</v-icon> {{ $t('Views.Evaluations.stepEvaluatedSelection.add_evaluated') }}
+          {{ $t(prevAction) }}
+        </v-btn>
+      </v-col>
+      <v-col cols="12" sm="6">
+        <v-btn block large
+          color="primary"
+          :key="editHasCeroEvaluated"
+          :disabled="!evaluation.populationCount || loadingDemographics || editHasCeroEvaluated"
+          @click="changeStep(false)"
+        >
+          {{ $t(nextAction) }}
         </v-btn>
       </v-col>
     </v-row>
-    <v-row align="center" justify="center">
-      <v-col align="center" justify="center" cols="12">
-        <v-switch
-          v-model="isMassive"
-          :label="$t('Views.Evaluations.stepEvaluatedSelection.want_massive')"
-        ></v-switch>
-      </v-col>
-    </v-row>
-    <template v-if="isMassive">
-      <ValidationObserver v-slot="{ handleSubmit }">
-        <v-form @submit.prevent="handleSubmit(massiveUpload)">
-          <v-row>
-            <v-col align="end">
-              <x-generate-instructive class="mr-2"/>
-              <x-generate-template :emplooyes="evaluation.evaluated" :edit="evaluation.edit"/>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <x-file-upload
-                class="mt-1"
-                v-model="file"
-                @file-picked="filePicked($event)"
-                :label="$t('Views.Evaluations.stepEvaluatedSelection.select_file_to_upload')"
-                reff="employees-massive-upload"
-                :extensions="extensions"
-                name="employees-file"
-                :help="{ ...$t('help.enterprise.massive.file_input') }"
-                error-messages="error"
-                :rules="'ext:csv,xls,xlsx'"
-              ></x-file-upload>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-btn
-                color="primary"
-                block
-                large
-                type="submit"
-              >{{ $t('Views.Evaluations.stepEvaluatedSelection.input_upload_file') }}</v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </ValidationObserver>
-    </template>
-    <v-row>
-      <v-col cols="12" sm="6">
-        <v-btn
-          block
-          large
-          @click="changeStep(true)"
-        >{{ $t(prevAction) }}</v-btn>
-      </v-col>
-      <v-col cols="12" sm="6">
-        <v-btn
-          color="primary"
-          block
-          large
-          @click="changeStep(false)"
-          :disabled="evaluation.evaluated.length < 2"
-        >{{ $t(nextAction) }}</v-btn>
-      </v-col>
-      <v-col cols="12">
-        <v-alert type="warning" dense text v-if="evaluation.evaluated.length < 2">
-          {{ $t('Views.Evaluations.stepEvaluatedSelection.min_evaluated') }}
-        </v-alert>
-      </v-col>
-    </v-row>
-    <x-warnings-dialog
-      :errors="evaluatedErrors"
-      v-if="modalWarnings"
-      @hideModalWarnings="() => this.modalWarnings = false"
-    ></x-warnings-dialog>
-    <x-add-evaluator-dialog
-      v-if="addEvaluator"
-      :employees="employees"
-      :evaluation="evaluation"
-      @closeDialog="addEvaluator = false"
-      @pushEvaluator="pushEvaluator"
-    ></x-add-evaluator-dialog>
-    <x-confirmation-modal
-      :show="modalDel.open"
-      reversible
-      :title="$t('Views.Evaluations.stepEvaluatedSelection.modal_del_title')"
-      :action="deleteEvaluated"
-      :btn-save="$t('Views.Evaluations.stepEvaluatedSelection.input_trash')"
-      color="error"
-      @close="modalDel.open = false"
-    >
-        <template v-slot:question>{{ $t('Views.Evaluations.stepEvaluatedSelection.modal_del_question') }}</template>
-    </x-confirmation-modal>
   </v-card>
 </template>
 
 <script>
 import Vue from 'vue'
+import { mapState } from 'vuex'
 
-import evaluationsService from '../../../services/evaluations'
-
-import XEvaluatedTable from '../components/evaluated-table.vue'
-import XWarningsDialog from '../components/warnings-dialog.vue'
-import XAddEvaluatorDialog from '../components/add-evaluator-dialog.vue'
-import XGenerateInstructive from '../components/generate-instructive.vue'
-import XGenerateTemplate from '../components/generate-template.vue'
+import XEvaluatedIndividualSelection from '../components/evaluated-individual-selection.vue'
+import XEvaluatedByDemographicSelection from '../components/evaluated-by-demographic-selection.vue'
 
 export default Vue.extend({
   components: {
-    XEvaluatedTable,
-    XWarningsDialog,
-    XGenerateInstructive,
-    XGenerateTemplate,
-    XAddEvaluatorDialog
+    XEvaluatedIndividualSelection,
+    XEvaluatedByDemographicSelection
   },
   props: {
+    isEdit: Boolean,
     evaluation: Object,
     identifyTypes: Object,
     step: String,
@@ -151,108 +108,87 @@ export default Vue.extend({
   },
   data () {
     return {
-      leadersAvailable: [[]],
-      pairsAvailable: [[]],
-      dependentsAvailable: [[]],
-      file: '',
-      extensions: ['.xls', '.xslx', '.csv'],
-      baseEmployees: null,
-      evaluated: null,
-      evaluatedList: null,
-      modalWarnings: false,
-      modalErrors: false,
-      isContinueFill: false,
-      addEvaluator: false,
-      isMassive: false,
-      modalDel: {
-        open: false,
-        item: null
-      },
-      evaluatedErrors: {
-        evaluatedNotFound: [],
-        evaluatedDuplicated: []
+      editHasCeroEvaluated: false,
+      loadingDemographics: false,
+      demographicDataLoaded: false,
+      demographicLists: {
+        departments: [],
+        academicDegrees: [],
+        jobTypes: [],
+        charges: [],
+        genders: [],
+        countries: [],
+        getSelectAge: [],
+        additionalDemographics1: [],
+        additionalDemographics2: []
       }
     }
   },
   created () {
-    this.baseEmployees = this.employees
+    //
   },
   watch: {
-    evaluatedErrors: {
-      handler () {
-        if (this.evaluatedErrors.evaluatedNotFound.length || this.evaluatedErrors.evaluatedDuplicated.length) {
-          this.modalWarnings = true
+    'evaluation.selectionType': {
+      handler (val) {
+        if (val) {
+          if (!this.isEdit) {
+            // Reset
+            this.evaluation.populationCount = 0
+            this.evaluation.evaluated = []
+
+            // Check type
+            if (val === 'everybody') {
+              this.evaluation.populationCount = this.employees.length
+              this.evaluation.totalPrice = this.evaluation.populationCount * this.evaluation.price
+            }
+          }
+          if (val === 'by_demographic') {
+            setTimeout(() => {
+              if (!this.isEdit) {
+                this.$refs.demographic_selection.clearFilters()
+              }
+              if (!this.demographicDataLoaded) {
+                this.$refs.demographic_selection.loadDemographicData()
+              }
+            }, 170)
+          }
         }
       },
-      deep: true
+      immediate: true
+    },
+    'evaluation.evaluated': {
+      handler (val) {
+        if (this.evaluation.selectionType === 'individual') {
+          this.evaluation.populationCount = val.length
+          this.evaluation.totalPrice = this.evaluation.populationCount * this.evaluation.price
+        }
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      user: state => state.session.user
+    }),
+    getSelectType () {
+      return [
+        {
+          value: 'everybody',
+          text: this.$t('Views.Evaluations.stepEvaluatedSelection.selectionType.everybody')
+        },
+        {
+          value: 'by_demographic',
+          text: this.$t('Views.Evaluations.stepEvaluatedSelection.selectionType.demographic_cuts')
+        },
+        {
+          value: 'individual',
+          text: this.$t('Views.Evaluations.stepEvaluatedSelection.selectionType.individual')
+        }
+      ]
     }
   },
   methods: {
-    pushEvaluator (evaluated) {
-      this.updateListFromFile(evaluated)
-      this.addEvaluator = false
-    },
     changeStep (isBack = false) {
-      if (this.evaluation.reviewMassive && !this.isContinueFill && !isBack) {
-        this.$emit('changeStep', this.evaluation, isBack ? +this.step - 1 : +this.step + 1)
-      } else {
-        this.$emit('changeStep', this.evaluation, isBack ? +this.step - 1 : +this.step + 1)
-      }
-    },
-    continueFill () {
-      this.isContinueFill = true
-      this.changeStep(false)
-    },
-    backToMassive () {
-      this.evaluation.evaluated = []
-      this.evaluation.reviewMassive = false
-    },
-    deleteEvaluated () {
-      const evaluatedLeft = this.evaluation.evaluated.filter((e) => e.id !== this.modalDel.item.id)
-      this.evaluation.evaluated = evaluatedLeft
-      return Promise.resolve()
-    },
-    massiveUpload () {
-      this.$store.dispatch('loading/show')
-      if (!this.file) {
-        this.$store.dispatch('alert/error', this.$t('Views.Evaluations.stepEvaluatedSelection.incorrect_file'))
-        this.$store.dispatch('loading/hide')
-      } else {
-        return evaluationsService.massiveUpload(this.file)
-          .then((res) => {
-            this.evaluatedErrors = res.errors
-            this.updateListFromFile(res.evaluated)
-            this.$store.dispatch('loading/hide')
-            this.isMassive = false
-            this.file = ''
-          })
-      }
-    },
-    updateListFromFile (resEvaluated) {
-      const evaluated = this.evaluation.evaluated
-      const exists = []
-      resEvaluated.forEach((ev) => {
-        const emp = evaluated.find((it) => ev.id === it.id)
-        if (!emp) {
-          evaluated.push(ev)
-        } else {
-          this.evaluatedErrors.evaluatedDuplicated.push(ev)
-          exists.push(ev)
-        }
-      })
-      if (exists.length) {
-        this.$store.dispatch('alert/warning', this.$t('Views.Evaluations.stepEvaluatedSelection.evaluatedExists'))
-      }
-    },
-    addEvaluated () {
-      this.addEvaluator = true
-    },
-    filePicked (e) {
-      this.file = e
-    },
-    openModal (index) {
-      this.modalDel.item = index
-      this.modalDel.open = true
+      this.$emit('changeStep', this.evaluation, isBack ? +this.step - 1 : +this.step + 1)
     }
   }
 })
