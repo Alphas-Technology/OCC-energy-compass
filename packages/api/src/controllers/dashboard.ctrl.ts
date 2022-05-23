@@ -90,7 +90,7 @@ class DashboardController {
     const response = [];
     for (const eva of evaluations) {
       const item = JSON.parse(JSON.stringify(eva));
-      item.team = await EvaluatedService.countByEvaluationRef(eva._id);
+      item.team = eva.populationCount;
       response.push(item);
     }
     res.send({
