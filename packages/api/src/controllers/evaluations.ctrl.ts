@@ -369,7 +369,6 @@ class EvaluationsController {
     if (oldEvaluation.populationSelectionType === 'individual') {
       const oldEvaluatedIds = oldEvaluation.populationSelectionDetails.evaluatedIds;
       const newEvaluatedIds = input.evaluated;
-      const remanent = newEvaluatedIds.filter(inc => !oldEvaluatedIds.includes(inc));
       const included = newEvaluatedIds.filter(inc => !oldEvaluatedIds.includes(inc));
       const excluded = oldEvaluatedIds.filter(exc => !newEvaluatedIds.includes(exc));
       if (included.length || excluded.length) {
@@ -384,7 +383,7 @@ class EvaluationsController {
           evaluation.operations = spend;
         }
 
-        evaluation.status = 'editing';
+        evaluation.status = oldEvaluation.status === 'pending' ? 'editing' : oldEvaluation.status;
         evaluation.populationCount = newPopulationCount;
         evaluation.populationSelectionDetails.evaluatedIds = newEvaluatedIds;
 
