@@ -97,6 +97,6 @@ export default {
     return service.get(`close/${slug}`)
   },
   checkBalance: (key: string) => {
-    return service.get(`check-balance/${key || 'opri'}`)
+    return service.get(`check-balance/${key}`)
   }
 }
