@@ -82,8 +82,23 @@ class OperationThreadsService {
   }
 
   /**
-   * @description Fetches single question service by name and sets active flag
-   * @param name
+   * @description Fetches single thread & updates status + data
+   * @param id
+   * @param data
+   * @returns {Promise<OperationThreads>}
+   */
+  async findOneAndUpdateStatusData(id: string, status: string, data: {[key: string]: any}): Promise<OperationThreads|OperationThreadsType> {
+    const ObjectID = require('mongodb').ObjectID;
+    return await OperationThreadsRepository.updateOne(
+      {_id: new ObjectID(id)},
+      { status, data }
+    );
+  }
+
+  /**
+   * @description Fetches single thread by ID & updates status to failed with error data
+   * @param id
+   * @param data
    * @returns {Promise<OperationThreads>}
    */
   async findOneAndSaveFail(id: string, data: {[key: string]: any}): Promise<OperationThreads|OperationThreadsType> {
