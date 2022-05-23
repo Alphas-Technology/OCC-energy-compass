@@ -9,6 +9,7 @@ import { default as EvaluationsService } from '../services/evaluations.srvc';
 import { default as EvaluatedService } from '../services/evaluated.srvc';
 import { default as ProductServiceService } from '../services/product-service.srvc';
 import { default as QuestionnairesService } from '../services/questionnaires.srvc';
+import { default as OpenQuestionService } from '../services/open-question.srvc';
 import { default as OperationThreadsService } from '../services/operation-threads.srvc';
 
 import { UnauthorizedException, BadRequestException } from '../error';
@@ -129,11 +130,12 @@ class EvaluationsController {
   }
 
   async create(req: IRequest, res: Response) {
-    const name = req.body.evaluation.name;
+    const input = req.body.evaluation;
+    const name = input.name;
     const slug = slugify(name, { lower: true }) + `-${new Date().getTime()}`;
     try {
       const reminders = [];
-      for (const reminder of req.body.evaluation.reminders) {
+      for (const reminder of input.reminders) {
         if (!reminder.value) {
           continue;
         }
@@ -141,91 +143,110 @@ class EvaluationsController {
           dateTime: new Date(reminder.value + 'T' + reminder.hour + ':00Z'),
           status: 'pending',
           customEmail: {
-            subject: req.body.evaluation.reminderMail.subject,
-            body: req.body.evaluation.reminderMail.body
+            subject: input.reminderMail.subject,
+            body: input.reminderMail.body
           }
         });
       }
 
-      const employeesRequest = await RunHttpRequest.suitePost(req, 'employees/all-participants-by-ids', {
-        enterpriseId: req.user.enterprise.id,
-        ids: req.body.evaluation.evaluated,
-        lang: req.body.lang || 'es'
-      });
-      if (!employeesRequest.success) {
-        throw new BadRequestException('suite-fail/employee-list');
-      }
-      const questionnaire = await QuestionnairesService.findOneBySlug(req.body.evaluation.questionnaire);
+      const questionnaire = await QuestionnairesService.findOneBySlug(input.questionnaire);
       if (!questionnaire) {
         throw new BadRequestException('por-fail/questionnaire-not-found');
       }
 
-      const spend = await SpendRequest(req, 'OCC POR REPORTE INDIVIDUAL', req.body.evaluation.evaluated.length);
+      const spend = await SpendRequest(req, 'OCC ENERGY COMPASS INDIVIDUAL', input.populationCount);
       if (typeof spend === 'string') {
         throw new BadRequestException('suite-fail/create-por/spend-fail');
       }
 
-      const evaluation = {
-        name,
-        displayName: req.body.evaluation.displayName ? req.body.evaluation.displayName : '',
-        slug,
-        enterpriseId: req.user.enterprise.id,
-        enterprise: req.body.evaluation.enterprise,
-        questionnaire,
-        status: 'pending',
-        timeZone: req.body.evaluation.timeZone,
-        deliveredAt: new Date(`${req.body.evaluation.deliveredAt.value} ${req.body.evaluation.deliveredAt.hour}`),
-        validUntil: new Date(`${req.body.evaluation.validUntil.value} ${req.body.evaluation.validUntil.hour}`),
-        customEmailRelease: {
-          subject: req.body.evaluation.pollInvitation.subject,
-          body: req.body.evaluation.pollInvitation.body
-        },
-        customEmailDeadline: {
-          body: req.body.evaluation.thankMessage
-        },
-        customEmailReminder: {
-          subject: req.body.evaluation.reminderMail.subject,
-          body: req.body.evaluation.reminderMail.body
-        },
-        reminders,
-        operations: spend,
-      };
-      const response = await EvaluationsService.create(evaluation);
+      const criteria: any = {};
+      if (input.selectionType === 'by_demographic') {
+        const demographicsDictionary = [
+          'academicDegreeIds',
+          'additionalDemographic1Ids',
+          'additionalDemographic2Ids',
+          'chargeIds',
+          'countrySelect',
+          'departmentIds',
+          'headquarterSelect',
+          'jobTypeIds',
+          'rangeAge',
+          'rangeAntiquity'
+        ];
 
-      let generatedToken = await TokenUtils.hash(`evaluated${slug}${new Date().toDateString()}`);
-      generatedToken = TokenUtils.sanitize(generatedToken);
-      let increases = 1;
-      let decreases = employeesRequest.res.length;
-      const evaluated = [];
-      for (const employee of employeesRequest.res) {
-        if (employee.active) {
-          const token: string = generatedToken.concat(String(increases++))
-            .concat(String(employee.enterpriseId))
-            .concat(String(employee.id))
-            .concat(String(decreases--));
-          evaluated.push({
-            baseToken: generatedToken,
-            token,
-            employee,
-            answersDimention: undefined,
-            status: 'pending',
-            evaluationRef: response._id
-          });
+        if (input['genderId']) {
+          criteria['genderId'] = input['genderId'];
+        }
+        for (const cut of demographicsDictionary) {
+          if (input[cut] && input[cut].length) {
+            criteria[cut] = input[cut];
+          }
         }
       }
-      await EvaluatedService.save(evaluated);
+      if (input.selectionType === 'individual') {
+        criteria['evaluatedIds'] = input.evaluated;
+      }
 
-      const productService = await ProductServiceService.findByName('OCC POR REPORTE INDIVIDUAL');
+      const evaluationData = {
+        name,
+        displayName: input.displayName ? input.displayName : '',
+        slug,
+        status: 'creating',
+        enterpriseId: req.user.enterprise.id,
+        enterprise: input.enterprise,
+        operations: spend,
+        questionnaire,
+        additionalQuestions: input.additionalQuestions,
+        openQuestions: await OpenQuestionService.findAll(),
+        answersReference: {},
+        questionsIndex: {},
+        deliveredAt: new Date(`${input.deliveredAt.value} ${input.deliveredAt.hour}`),
+        validUntil: new Date(`${input.validUntil.value} ${input.validUntil.hour}`),
+        timeZone: input.timeZone,
+        reminders,
+        customEmailRelease: {
+          subject: input.pollInvitation.subject,
+          body: input.pollInvitation.body
+        },
+        customEmailReminder: {
+          subject: input.reminderMail.subject,
+          body: input.reminderMail.body
+        },
+        populationSelectionType: input.selectionType,
+        populationSelectionDetails: criteria,
+        populationCount: input.populationCount,
+        populationCompletedCount: 0,
+        additionalSegmentation: []
+      };
+      const evaluation = await EvaluationsService.create(evaluationData);
+
+      await OperationThreadsService.save({
+        operation: 'CreateEvaluationPopulation',
+        status: 'pending',
+        createdAt: new Date(),
+        data: {
+          _evaluation: evaluation._id,
+          evaluationSlug: evaluation.slug,
+          enterpriseId: req.user.enterprise.id,
+          selectionType: input.selectionType,
+          selectionDetails: Object.keys(criteria).length ? criteria : undefined,
+          totalReceivers: input.populationCount,
+          lang: req.user.lang
+        }
+      });
+
+      const productService = await ProductServiceService.findByName('OCC ENERGY COMPASS INDIVIDUAL');
       await RunHttpRequest.suitePost(req, 'activities/create-activity', {
         service: {
           enterpriseId: req.user.enterprise.id,
-          _id: response._id
+          _id: evaluation._id
         },
         productService: productService.code
       });
 
-      res.send(response);
+      res.send(evaluation);
     } catch (error) {
+      console.log(error);
       res.send({
         msg: error,
         status: 400
@@ -234,7 +255,8 @@ class EvaluationsController {
   }
 
   async update (req: IRequest, res: Response) {
-    const oldEvaluation = await EvaluationsService.findOneBySlug(req.params.slug, 'reminders status enterpriseId operations');
+    const input = req.body.evaluation;
+    const oldEvaluation = await EvaluationsService.findOneBySlug(req.params.slug, '_id slug reminders status enterpriseId operations populationCount populationSelectionType populationSelectionDetails');
     if (!oldEvaluation) {
       throw new BadRequestException('por-fail/not-found');
     }
@@ -242,9 +264,9 @@ class EvaluationsController {
       throw new BadRequestException('por-fail/user-enterprise-not-found');
     }
 
-    const input = req.body.evaluation;
+    // Launch Email
     if (oldEvaluation.customEmailRelease.attachment) {
-      if (input.invitationFileFlag === false) { // Si es falso, el usuario borró el archivo adjunto.
+      if (input.invitationFileFlag === false) {
         input.customEmailRelease = {
           subject: input.pollInvitation.subject,
           body: input.pollInvitation.body
@@ -270,8 +292,9 @@ class EvaluationsController {
       };
     }
 
+    // Reminder Email
     if (oldEvaluation.customEmailReminder.attachment) {
-      if (input.reminderFileFlag === false) { // Si es falso, el usuario borró el archivo adjunto.
+      if (input.reminderFileFlag === false) {
         input.customEmailReminder = {
           subject: input.reminderMail.subject,
           body: input.reminderMail.body
@@ -301,20 +324,9 @@ class EvaluationsController {
       name: input.name,
       displayName: req.body.evaluation.displayName ? req.body.evaluation.displayName : '',
       customEmailReminder: input.customEmailReminder,
-      customEmailDeadline: {
-        body: input.thankMessage
-      },
-      reminders: []
+      reminders: [],
+      populationSelectionDetails: oldEvaluation.populationSelectionDetails
     };
-
-    const employeesRequest = await RunHttpRequest.suitePost(req, 'employees/all-participants-by-ids', {
-      enterpriseId: req.user.enterprise.id,
-      ids: req.body.evaluation.evaluated,
-      lang: req.body.lang || 'es'
-    });
-    if (!employeesRequest.success) {
-      throw new BadRequestException('suite-fail/employee-list');
-    }
 
     if (oldEvaluation.status === 'pending') {
       const questionnaire = await QuestionnairesService.findOneBySlug(req.body.evaluation.questionnaire);
@@ -325,19 +337,10 @@ class EvaluationsController {
       evaluation.deliveredAt = new Date(`${req.body.evaluation.deliveredAt.value} ${req.body.evaluation.deliveredAt.hour}`);
       evaluation.customEmailRelease = input.customEmailRelease;
     }
+
     evaluation.validUntil = new Date(`${req.body.evaluation.validUntil.value} ${req.body.evaluation.validUntil.hour}`);
 
-    const evaluatedCount = await EvaluatedService.countByEvaluationRef(oldEvaluation._id);
-    let spend = [];
-    if (req.body.evaluation.evaluated.length - evaluatedCount > 0) {
-      spend = await SpendRequest(req, 'OCC POR REPORTE INDIVIDUAL', req.body.evaluation.evaluated.length - evaluatedCount);
-      if (typeof spend === 'string') {
-        throw new BadRequestException('suite-fail/edit-por/spend-fail');
-      }
-    }
-    spend.unshift(...oldEvaluation.operations);
-    evaluation.operations = spend;
-
+    // Reminders
     if (req.body.evaluation.reminders) {
       for (const reminder of req.body.evaluation.reminders) {
         const rem = {
@@ -362,60 +365,58 @@ class EvaluationsController {
       }
     }
 
+    // Check for population changes (Allowed only for individual selection type)
+    if (oldEvaluation.populationSelectionType === 'individual') {
+      const oldEvaluatedIds = oldEvaluation.populationSelectionDetails.evaluatedIds;
+      const newEvaluatedIds = input.evaluated;
+      const remanent = newEvaluatedIds.filter(inc => !oldEvaluatedIds.includes(inc));
+      const included = newEvaluatedIds.filter(inc => !oldEvaluatedIds.includes(inc));
+      const excluded = oldEvaluatedIds.filter(exc => !newEvaluatedIds.includes(exc));
+      if (included.length || excluded.length) {
+        const newPopulationCount = oldEvaluation.populationCount + included.length - excluded.length;
+        const addedPopulationCount = newPopulationCount - oldEvaluation.populationCount;
+        if (addedPopulationCount > 0) {
+          const spend = await SpendRequest(req, 'OCC ENERGY COMPASS INDIVIDUAL', addedPopulationCount);
+          if (typeof spend === 'string') {
+            throw new BadRequestException('suite-fail/edit-por/spend-fail');
+          }
+          spend.unshift(...oldEvaluation.operations);
+          evaluation.operations = spend;
+        }
+
+        evaluation.status = 'editing';
+        evaluation.populationCount = newPopulationCount;
+        evaluation.populationSelectionDetails.evaluatedIds = newEvaluatedIds;
+
+        // Create population editing thread
+        await OperationThreadsService.save({
+          operation: 'EditEvaluationPopulation',
+          status: 'pending',
+          createdAt: new Date(),
+          data: {
+            _evaluation: oldEvaluation._id,
+            evaluationStatus: oldEvaluation.status,
+            enterpriseId: req.user.enterprise.id,
+            selectionType: oldEvaluation.populationSelectionType,
+            included,
+            excluded,
+            lang: req.user.lang
+          }
+        });
+      }
+    }
+
     await EvaluationsService.updateBySlug(req.params.slug, evaluation);
 
-    let generatedToken = await TokenUtils.hash(`evaluated${req.params.slug}${new Date().toDateString()}`);
-    generatedToken = TokenUtils.sanitize(generatedToken);
-    let increases = 1;
-    let decreases = employeesRequest.res.length;
-    const evaluated = [];
-    const status = oldEvaluation.status === 'pending' ? 'pending' : 'include';
-    const oldEvaluated = await EvaluatedService.getByEvaluationRef(oldEvaluation._id, 'employee.id');
-    for (const employee of employeesRequest.res) {
-      if (employee.active) {
-        const exist = oldEvaluated.find(eva => eva.employee.id === employee.id);
-        if (!exist) {
-          const token: string = generatedToken.concat(String(increases++))
-            .concat(String(employee.enterpriseId))
-            .concat(String(employee.id))
-            .concat(String(decreases--));
-          evaluated.push({
-            baseToken: generatedToken,
-            token,
-            employee,
-            answersDimention: undefined,
-            status,
-            evaluationRef: oldEvaluation._id
-          });
-        } else {
-          const idx = oldEvaluated.indexOf(exist);
-          oldEvaluated.splice(idx, 1);
-        }
-      }
-    }
-    if (evaluated.length) {
-      await EvaluatedService.save(evaluated);
-    }
-    if (oldEvaluated.length) {
-      if (oldEvaluation.status === 'pending') {
-        for (let i = 0; i < oldEvaluated.length; i++) {
-          await EvaluatedService.deleteOne(oldEvaluation._id, oldEvaluated[i]._id);
-        }
-      } else {
-        for (let i = 0; i < oldEvaluated.length; i++) {
-          await EvaluatedService.exclude(oldEvaluation._id, oldEvaluated[i]._id);
-        }
-      }
-    }
     res.send(oldEvaluation);
   }
 
   async getCountEvaluatedsByTeam(req: IRequest, res: Response) {
-    const evaluation = await EvaluationsService.findOneBySlug(req.params.slug, '_id enterpriseId');
+    const evaluation = await EvaluationsService.findOneBySlug(req.params.slug, 'enterpriseId populationCount');
     if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
       throw new BadRequestException('evaluation-not-found');
     }
-    res.send({ count: await EvaluatedService.countActivesByEvaluationRef(evaluation._id) });
+    res.send({ count: evaluation.populationCount });
   }
 
   async getOneToEdit(req: IRequest, res: Response) {
@@ -423,7 +424,7 @@ class EvaluationsController {
     if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
       throw new BadRequestException('evaluation-not-found');
     }
-    evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'employee');
+    // evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'employee');
     res.send(evaluation);
   }
 
@@ -432,7 +433,7 @@ class EvaluationsController {
     if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
       throw new BadRequestException('evaluation-not-found');
     }
-    evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'status employee');
+    // evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'status employee');
     res.send(evaluation);
   }
 
@@ -496,7 +497,7 @@ class EvaluationsController {
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
-      evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'status employee');
+      // evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'status employee');
       resp.send(evaluation);
     } catch (error) {
       resp.send({
@@ -637,13 +638,19 @@ class EvaluationsController {
   }
 
   async checkBalance(req: IRequest, resp: Response) {
+    const dictionary = {
+      'individual': 'OCC ENERGY COMPASS INDIVIDUAL',
+      'organizational': 'ENERGY COMPASS ORGANIZACIONAL',
+      'by_population': 'ENERGY COMPASS POR POBLACION'
+    };
+
     try {
       const balance = await RunHttpRequest.suiteGet(req, 'token-account-detail/balance');
       if (!balance.success) {
         throw new BadRequestException(`suite-fail/${balance.error.msg}`);
       }
-      const product = req.params.key === 'roop' ? 'REPORTE ORGANIZACIONAL OCC POR' : 'OCC POR REPORTE INDIVIDUAL';
-      const productService = await ProductServiceService.findByName(product);
+      const productServiceName = dictionary[req.params.key];
+      const productService = await ProductServiceService.findByName(productServiceName);
       const productServiceSuite = await RunHttpRequest.suiteGet(req, `product-services/c/${productService.code}`);
       if (!productServiceSuite.success) {
         throw new BadRequestException(`suite-fail/${productServiceSuite.error.msg}`);
