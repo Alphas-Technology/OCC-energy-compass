@@ -1,7 +1,7 @@
 
 import { Translations } from './translations';
 
-export interface Question {
+export interface OpenQuestion {
   name: String;
   question: Translations;
 }
