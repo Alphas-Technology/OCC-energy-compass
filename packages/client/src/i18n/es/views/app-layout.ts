@@ -11,5 +11,6 @@ export default {
   session_as_dialog_text_logged_as_enterprise: 'En estos momentos usted se encuentra identificado como una de las empresas asociadas, puede cerrar su sesión temporal si desea elegir otra empresa o adquirir más tokens',
   session_as_dialog_text_logged_as_enterprise_superadmin: 'En estos momentos usted se encuentra identificado como una de las empresas asociadas a este cliente, puede cerrar su sesión temporal como empresa si desea elegir otra empresa; o puede cerrar su sesión temporal como cliente para volver al dashboard del Super Administrador',
   session_as_dialog_text_logged_as_customer: 'En estos momentos usted se encuentra con una Sesión temporal de Usuario Administrador, puede cerrar su sesión temporal para volver al dashboard del Super Administrador',
-  footer_copyright: 'Todos los derechos reservados 2020'
+  footer_copyright: 'Todos los derechos reservados 2022',
+  waiting: 'Por favor espere'
 }

@@ -14,6 +14,8 @@ export default {
     table_vigency: 'Vigencia',
     table_actions: 'Acciones',
     table_no_data: 'No hay valoraciones para mostrar',
+    status_creating: 'Creando',
+    status_editing: 'Editando',
     status_pending: 'Pendiente',
     status_in_progress: 'En progreso',
     status_completed: 'Completada',
@@ -24,14 +26,15 @@ export default {
     modal_link: 'Copiar enlace',
     modal_btn_close: 'Cerrar',
     may_take_while: 'Esta acción puede tardar unos minutos',
-    msg_link_copied: 'Enlace copiado'
+    msg_link_copied: 'Enlace copiado',
+    refresh: 'Refrescar'
   },
   create: {
     title: 'Crear valoración',
     stepper_overview: 'Nombre de la encuesta',
     stepper_date: 'Fecha',
     stepper_questions: 'Preguntas',
-    stepper_team: 'Equipo',
+    stepper_population: 'Participantes',
     stepper_revition: 'Revisión y personalización',
     stepper_btn_next: 'Siguiente',
     stepper_btn_back: 'Atrás',
@@ -40,14 +43,14 @@ export default {
     stepper_btn_confirm_create: 'Confirmar y Crear',
     modal_confirm_create_title: 'Confirme la creación de la valoración',
     modal_workshop_cost: 'Costo de la valoración',
-    total_receptors: 'Total de encuestados: {n}',
+    total_receptors: 'Total de participantes: {n}',
     msg_created_evaluation: 'Valoración creada satisfactoriamente'
   },
   stepOverview: {
     title: 'Nombre de la encuesta',
     input_name: 'Nombre',
     tooltip_input_name: 'Nombre interno de la valoración',
-    want_external_name: '¿Desea colocar un nombre externo para los integrantes?',
+    want_external_name: '¿Desea colocar un nombre externo para los participantes?',
     input_display_name: 'Nombre de muestra',
     tooltip_input_display_name: 'Nombre de muestra'
   },
@@ -67,31 +70,47 @@ export default {
   },
   stepQuestion: {
     title: 'Preguntas',
-    custom_questionnaire_info: 'Si usted desea modificar alguno de los enunciados de la encuesta podrá hacerlo, siempre y cuando se mantenga el modelo OCC POR. Por favor comuníquese a través de nuestro correo info@occsolutions.org',
+    custom_questionnaire_info: 'Si usted desea modificar alguno de los enunciados de la encuesta podrá hacerlo, siempre y cuando se mantenga el modelo OCC Energy Compass. Por favor comuníquese a través de nuestro correo info@occsolutions.org',
     inputDownload: 'Descargar Cuestionario',
     questionnaire_e: 'Cuestionario POR',
     pdf_explained: 'Este archivo contiene las preguntas del cuestionario "{name}" agrupadas por dimensión.',
     questionnaire_title: 'OCC - Reporte POR',
     copyright: 'Copyright por OCC - Todos los derechos reservados',
     autoEvaluation: 'Autovaloración',
-    generalEvaluation: 'Valoración del equipo'
+    generalEvaluation: 'Valoración del equipo',
+    want_open_question: '¿Desea añadir preguntas adicionales?',
+    open_question_info: 'Puede indicar preguntas personalizadas adicionales, indicando las posibles respuestas.',
+    open_question: 'Preguntas adicionales',
+    add_open_question: 'Añadir otra pregunta adicional',
+    remove_open_question: 'Eliminar última pregunta adicional',
+    min_open_question: 'Debe tener al menos una pregunta abierta disponible',
+    max_open_question: 'Solamente puede {n} preguntas abiertas por encuesta',
+    insert_question: 'Insertar contenido de la pregunta {n}',
+    insert_question_option: 'Insertar opción {o} para pregunta {n}',
+    add_question_option: 'Añadir otra opción ',
+    remove_question_option: 'Eliminar opción ',
+    min_question_option: 'Debe tener al menos {n} opciones disponibles',
+    max_question_option: 'Sólo puede indicar {n} opciones para una pregunta abierta',
+    additional_n: 'pregunta {n}',
+    option_n: 'opción {n}'
   },
   stepEvaluatedSelection: {
-    title: 'Equipo',
+    title: 'Participantes',
+    desc: 'En esta sección, podrás elegir los participantes de la medición, puedes escoger entre todos los colaboradores activos en la empresa, por corte demográfico o individual. Recuerda que todos los participantes de la medición, deben estar previamente cargados.',
     want_massive: '¿Desea realizar la asignación de la valoración via carga masiva?',
-    add_evaluated: 'Agregar integrante',
+    add_evaluated: 'Agregar participante',
     select_file_to_upload: 'Selecciones archivo a subir',
-    evaluatedExists: 'Hay integrantes en el archivo que ya se encuentran en el listado',
+    evaluatedExists: 'Hay participantes en el archivo que ya se encuentran en el listado',
     incorrect_file: 'Por favor cargue un archivo valido',
     input_upload_file: 'Subir archivo',
     modal_del_title: 'Confirmar Borrado',
-    modal_del_question: '¿Desea borrar este integrante?',
+    modal_del_question: '¿Desea borrar este participante?',
     input_trash: 'Borrar',
-    min_evaluated: 'Se necesitan al menos dos(2) miembros para ser considerado un equipo',
+    min_evaluated: 'Se necesitan al menos dos (2) miembros para ser considerado un equipo',
     evaluatedTable: {
-      team_members: 'Integrantes',
+      team_members: 'Participantes',
       actions: 'Acciones',
-      eval_no_data: 'No hay integrantes para mostrar',
+      eval_no_data: 'No hay participantes para mostrar',
       input_trash: 'Borrar'
     },
     generateInstructive: {
@@ -101,17 +120,47 @@ export default {
       download_template: 'Descargar plantilla'
     },
     warningsDialog: {
-      evaluated_not_found_warning: 'Los integrantes mostrados a continación no fueron encontrados como colaboradores de su empresa:',
+      evaluated_not_found_warning: 'Los participantes mostrados a continación no fueron encontrados como colaboradores de su empresa:',
       multiple_appears_warning: 'se ha repetido como evaluado, por lo cual se tomó en cuenta en su primera aparición y se ignoró en la o las siguientes',
-      the_member: 'El integrante',
+      the_member: 'El participante',
       warnings_list: 'Listado de advertencias',
       input_close: 'Cerrar'
     },
     addEvaluatorDialog: {
-      add_evaluated: 'Agregar integrante',
-      evaluated: 'Integrantes',
+      add_evaluated: 'Agregar participante',
+      evaluated: 'Participantes',
       input_cancel: 'Cancelar',
       input_save: 'Guardar'
+    },
+    want_to_send: '¿A quién desea enviar esta encuesta?',
+    selectionType: {
+      everybody: 'A toda mi organización',
+      demographic_cuts: 'A cortes demográficos',
+      individual: 'Individual'
+    },
+    please_wait: 'Por favor espere mientras se cargan todos los demográficos',
+    demographic_cuts: {
+      departments: 'Áreas / Departamentos',
+      charges: 'Cargos',
+      academic_degrees: 'Nivel Académico',
+      job_types: 'Tipo de Contratación',
+      select_age_range: 'Rango de Edad',
+      select_antiquity_range: 'Rango de Antigüedad',
+      genders: 'Género',
+      countries: 'País',
+      headquarter: 'Sede',
+      optionalDemo1: 'Demográfico Adicional 1',
+      optionalDemo2: 'Demográfico Adicional 2'
+    },
+    ranges: {
+      antiquity_low: 'Menos de {n} meses',
+      antiquity_range_single: 'De {n} meses a {p} año',
+      antiquity_range_one: 'De {n} año a {p} años',
+      antiquity_range: 'De {n} años a {p} años',
+      antiquity_upper: 'Más de {n} años',
+      age_low: 'Menos de {n} años',
+      age_range: 'De {n} a {p} años',
+      age_upper: 'Más de {n} años'
     }
   },
   stepRevition: {
@@ -123,7 +172,7 @@ export default {
     send_reminders: 'Envio de recordatorios',
     questionnaire: 'Cuestionario',
     paid_measuring: 'La valoración ya ha sido pagada.',
-    workshop_cost: 'Costo de la valoración para {members} integrantes',
+    workshop_cost: 'Costo de la valoración para {members} participantes',
     personalization: 'Personalización de correos electrónicos',
     poll_invitation: 'Invitación a la valoración',
     reminder_mail: 'Correo de recordatorio',
@@ -136,9 +185,9 @@ export default {
     fileExist: 'Video adjunto',
     token_unit: 'OCC Tokens',
     team: 'Equipo',
-    team_members: 'Integrantes',
+    team_members: 'Participantes',
     deleteFile: 'Eliminar archivo',
-    custom_msg: '<p>Bienvenido a la valoración POR la cual recoge las percepciones sobre del trabajo en equipo con su auto-percepción. Esta información permite tener un panorama completo sobre el equipo y el impacto que está generando en su entorno laboral.</p>' +
+    custom_msg: '<p>Bienvenido a la valoración de <b>Energy Compass Individual</b>, la cual recoge las percepciones sobre del trabajo en equipo con su auto-percepción. Esta información permite tener un panorama completo sobre el equipo y el impacto que está generando en su entorno laboral.</p>' +
     '<p>Ésta es una encuesta de percepción; ninguna pregunta tiene respuesta correcta o incorrecta. Su <b>sinceridad y franqueza</b> son fundamentales para que los resultados sean útiles. <b>Sus respuestas son totalmente confidenciales.</b></p>' +
     '<p>Información clave sobre esta encuesta:</p>' +
     '<p>La información entregada será manejada de manera <b>confidencial</b> y será utilizada con fines estadísticos.</p>' +
@@ -146,7 +195,7 @@ export default {
     '<p>Si tiene alguna duda o evidencia algún problema con la encuesta por favor no dude en contactarnos en el correo: <a href="mailto:info@occsolutions.org">info@occsolutions.org</a>.</p>' +
     '<p>Recuerde que <b>este link es personal</b> y no se debe compartir.</p>' +
     '<p>De antemano le agradecemos por su tiempo en este importante proceso.</p>',
-    custom_reminder: '<p>Le recordamos que tiene pendiente la valoración de liderazgo POR. Su opinión es muy importante en este proceso. Queremos recordarle que:</p>' +
+    custom_reminder: '<p>Le recordamos que tiene pendiente la valoración de <b>Energy Compass Individual</b>. Su opinión es muy importante en este proceso. Queremos recordarle que:</p>' +
       '<p>Ésta es una encuesta de percepción; ninguna pregunta tiene respuesta correcta o incorrecta. Su <b>sinceridad y franqueza</b> son fundamentales para que los resultados sean útiles. <b>Sus respuestas son totalmente confidenciales.</b></p>' +
       '<p>Información clave sobre esta encuesta:</p>' +
       '<p>La información entregada será manejada de manera <b>confidencial</b> y será utilizada con fines estadísticos.</p>' +
@@ -159,17 +208,17 @@ export default {
       hello: 'Hola',
       link_to_poll: 'El siguiente enlace le enviará hacia la encuesta',
       click_here: 'click aquí',
-      por_team_members_info: 'En la siguiente tabla se listan todos los integrantes del equipo a valorar',
-      por_team_members: 'Integrantes del equipo',
+      por_team_members_info: 'En la siguiente tabla se listan todos los participantes del equipo a valorar',
+      por_team_members: 'Participantes del equipo',
       attached_video: 'Vídeo adjunto',
-      rights_reserved: 'Todos los derechos reservados 2020',
+      rights_reserved: 'Todos los derechos reservados 2022',
       sent_automatic: 'Este mensaje fue automáticamente enviado desde',
       support: 'Por favor no responda directamente a este correo. Las respuestas llegarán a un buzón automatizado y no nos será posible leer o contestar su correo. Para ponerse en contacto con nosotros envíe un correo a'
     }
   },
   edit: {
     title: 'Editar valoración',
-    confirm_edit_title: 'Confirme la edición de la valoración<br/>Nuevos integrantes',
+    confirm_edit_title: 'Confirme la edición de la valoración<br/>Nuevos participantes',
     diff_cost: 'Costo de la diferencia',
     updated_evaluation: 'Valoración actualizada exitosamente',
     stepper_overview: 'Nombre de la encuesta',
@@ -183,7 +232,7 @@ export default {
     stepper_btn_update: 'Actualizar'
   },
   show: {
-    evaluation: 'Valoración POR',
+    evaluation: 'Valoración Energy Compass Individual',
     options: 'Opciones',
     generate_report: 'Generar reportes',
     edit: 'Editar valoración',
@@ -204,22 +253,22 @@ export default {
     reminders_sent_succesfully: 'Recordatorios enviados correctamente',
     evaluation_closed_succesfully: 'Valoración cerrada correctamente',
     team: 'Equipo',
-    team_members: 'Integrantes',
+    team_members: 'Participantes',
     status_pending: 'Pendiente',
     status_in_progress: 'En progreso',
     status_completed: 'Completada',
     input_confirm: 'Confirmar',
     download_reports: 'Descargar Reportes',
-    modal_title: 'Participación de los integrantes del equipo',
-    modal_info: 'A continuación se muestra una explicación del estado de la participación de los integrantes del equipo según un color representativo',
+    modal_title: 'Participación de los participantes del equipo',
+    modal_info: 'A continuación se muestra una explicación del estado de la participación de los participantes del equipo según un color representativo',
     modal_chip_default: 'No han iniciado o ingresado a responder la valoración',
     modal_chip_info: 'Ha ingresado a responder la valoración',
     modal_chip_success: 'Ha finalizado de responder la valoración',
     modal_input_close: 'Cerrar'
   },
   evaluation: {
-    evaluate: 'Integrante',
-    information: 'Bienvenido(a) a la encuesta para valoración de trabajo en equipo con el modelo POR® (Personas, Organización y Resultados).',
+    evaluate: 'Participante',
+    information: 'Bienvenido(a) a la encuesta para valoración de Energy Compass Individual ®.',
     information_2: 'La valoración está compuesta por una serie comportamientos y conductas relacionadas con las competencias y valores del Modelo POR, sobre las cuales cada evaluador califica la frecuencia entre 1 y 6 de acuerdo a la siguiente escala:',
     information_3: 'Puede visualizar está y más información haciendo click en el botón de progreso, ubicado en el inferior derecho de la página',
     score_label1: 'Nunca',
@@ -270,19 +319,19 @@ export default {
       progress_auto_info: 'Progreso de respuestas por autoevaluación',
       progress_team_info: 'Progreso de respuestas por valoración al equipo',
       progress_info: 'Progreso de respuestas general',
-      members_info: 'Integrantes del equipo'
+      members_info: 'Participantes del equipo'
     }
   },
   report: {
     no_answers_modal_msg: 'La encuesta actual no posee respuestas, por lo cual no será posible generar un reporte.',
     select_report_type: 'Seleccione el tipo de reporte que desea generar',
     required_general_title: 'Reporte Organizacional',
-    required_general_desc: 'Este reporte muestra los resultados de la apreciación de todos los integrantes del equipo con respecto al mismo.',
+    required_general_desc: 'Este reporte muestra los resultados de la apreciación de todos los participantes del equipo con respecto al mismo.',
     no_members: 'No hubo participación de los miembros',
     general_report: 'Generar reporte',
     individual_title: 'Reportes individuales',
     individual_desc: 'Cada reporte cuenta con los resultados de la valoración realizada por cada miembro del equipo.',
-    header_members: 'Integrantes',
+    header_members: 'Participantes',
     header_action: 'Acción',
     input_back: 'Atras',
     input_accept: 'Aceptar'

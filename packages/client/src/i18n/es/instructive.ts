@@ -1,13 +1,13 @@
 
 export default {
-  title: 'Instructivo OCC Solutions - POR: Módulo de carga masiva de miembros del equipo.',
+  title: 'Instructivo OCC Solutions - Energy Compass: Módulo de carga masiva de participantes.',
   title_body: 'Este instructivo tiene como finalidad orientar al usuario final, en la forma correcta de ' +
     'ingresar el formato de carga masiva, para prevenir errores en la carga de datos de usuarios.',
   example: 'Ejemplo:',
   use_methods: 'Forma de uso',
   description: 'Al descargar el formato de carga masiva obtendrá un archivo en formato .csv, dentro de este archivo ' +
   'podrá observar una columna, en la cual tendra la cabecera email. ' +
-  'En esta columna se deben ingresar los correos electrónicos de los Colaboradores activos de su empresa que pertenezcan al equipo a evaluar',
+  'En esta columna se deben ingresar los correos electrónicos de los Colaboradores activos de su empresa que participarán en la valoración.',
   importDataToExcelTitle: 'Importar datos de archivo CSV a Documento Excel.',
   step1: 'Paso 1',
   step1_desc: 'Abrir Excel.',

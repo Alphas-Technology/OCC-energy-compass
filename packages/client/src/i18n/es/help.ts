@@ -32,7 +32,7 @@ export default {
         text: 'Los recordatorios se enviaran vía correo electrónico a aquellos colaboradores que no hayan respondido hasta el momento. Se pueden configurar máximo 5 recordatorios.'
       },
       openQuestion: {
-        title: 'Añadir preguntas abiertas adicionales',
+        title: 'Añadir preguntas adicionales',
         text: 'Permite agregar hasta tres preguntas abiertas extras a la encuesta con un máximo de cinco opciones cada una.'
       },
       subject: {
@@ -135,12 +135,12 @@ export default {
         text: 'Permite añadir las preguntas de una o más dimensiones pertenecientes a un cuestionario. Esta acción es obligatoria en caso de no incluir preguntas de compromiso en la encuesta.'
       },
       open: {
-        title: 'Añadir preguntas abiertas adicionales',
+        title: 'Añadir preguntas adicionales',
         text: 'Permite agregar hasta tres preguntas abiertas extras a la encuesta con un máximo de cinco opciones cada una.'
       },
       selection: {
         title: '¿A quién desea enviar esta encuesta?',
-        text: `Permite seleccionar a los encuestados de de la encuesta en base a tres criterios distintos: toda la organización, filtrados por cortes demográficos o por selección aleatoria en base a un porcentaje de todos los colaboradores. ${required}`
+        text: `Permite seleccionar a los participantes de la encuesta en base a tres criterios distintos: toda la organización, filtrados por cortes demográficos o individual. ${required}`
       }
     }
   },
