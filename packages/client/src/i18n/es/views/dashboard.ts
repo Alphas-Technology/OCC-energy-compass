@@ -26,6 +26,8 @@ export default {
     no_evaluation_culture: 'Aún no se han realizado valoraciones',
     go_creation: 'Crear valoración',
     go_list: 'Ir al listado',
+    status_creating: 'Creando',
+    status_editing: 'Editando',
     status_pending: 'Pendiente',
     status_in_progress: 'En progreso',
     status_completed: 'Completada'
