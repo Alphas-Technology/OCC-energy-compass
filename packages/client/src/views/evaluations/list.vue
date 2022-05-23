@@ -49,9 +49,11 @@
             no-data="Views.Evaluations.list.table_no_data"
           >
             <template v-slot:structure="prop">
-              <td class="text-center" style="vertical-align: middle;">{{ prop.item.displayName ? prop.item.displayName : prop.item.name }}</td>
               <td class="text-center" style="vertical-align: middle;">
-                <v-tooltip top color="blue" :disabled="prop.item.status !== 'creating'">
+                {{ prop.item.name }}
+              </td>
+              <td class="text-center" style="vertical-align: middle;">
+                <v-tooltip top color="blue" :disabled="!['creating', 'editing'].includes(prop.item.status)">
                   <template v-slot:activator="{ on }">
                     <v-chip outlined label
                       v-on="on"
@@ -65,39 +67,51 @@
               </td>
               <td class="text-center" style="vertical-align: middle;">{{ prop.item.deliveredAt | date({date: true, hour: false}) }} hasta {{ prop.item.validUntil | date({date: true, hour: false}) }} </td>
               <td class="text-center px-0" style="vertical-align: middle;">
-                <v-tooltip bottom color="primary">
-                  <template v-slot:activator="{ on }" v-if="prop.item.status !== 'completed'">
-                    <v-btn
-                      :to="`evaluations/${prop.item.slug}/edit`"
-                      v-on="on"
-                      text icon>
-                      <v-icon small>edit</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>{{ $t('Views.Evaluations.list.btn_edit') }}</span>
-                </v-tooltip>
-                <v-tooltip bottom color="primary">
+                <template v-if="!['creating', 'editing'].includes(prop.item.status)">
+                  <v-tooltip bottom color="primary">
+                    <template v-slot:activator="{ on }" v-if="prop.item.status !== 'completed'">
+                      <v-btn
+                        :to="`evaluations/${prop.item.slug}/edit`"
+                        v-on="on"
+                        text icon>
+                        <v-icon small>edit</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('Views.Evaluations.list.btn_edit') }}</span>
+                  </v-tooltip>
+                  <v-tooltip bottom color="primary">
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        :to="`/evaluations/${prop.item.slug}/details`"
+                        v-on="on"
+                        text icon>
+                        <v-icon small>fa-eye</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('Views.Evaluations.list.btn_details') }}</span>
+                  </v-tooltip>
+                  <v-tooltip bottom color="primary" v-if="prop.item.status === 'completed'">
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        :to="`/evaluations/reports/${prop.item._id}`"
+                        v-on="on"
+                        icon
+                      >
+                        <v-icon small>mdi-chart-bar-stacked</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('Views.Evaluations.list.btn_report') }}</span>
+                  </v-tooltip>
+                </template>
+                <v-tooltip v-else bottom color="primary">
                   <template v-slot:activator="{ on }">
-                    <v-btn
-                      :to="`/evaluations/${prop.item.slug}/details`"
-                      v-on="on"
-                      text icon>
-                      <v-icon small>fa-eye</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>{{ $t('Views.Evaluations.list.btn_details') }}</span>
-                </v-tooltip>
-                <v-tooltip bottom color="primary" v-if="prop.item.status === 'completed'">
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      :to="`/evaluations/reports/${prop.item._id}`"
-                      v-on="on"
-                      icon
+                    <v-btn v-on="on" icon
+                      @click="pageReload"
                     >
-                      <v-icon small>mdi-chart-bar-stacked</v-icon>
+                      <v-icon small>mdi-reload</v-icon>
                     </v-btn>
                   </template>
-                  <span>{{ $t('Views.Evaluations.list.btn_report') }}</span>
+                  <span>{{ $t('Views.Evaluations.list.refresh') }}</span>
                 </v-tooltip>
               </td>
             </template>
@@ -183,6 +197,9 @@ export default Vue.extend({
     })
   },
   methods: {
+    pageReload () {
+      location.reload()
+    },
     getColor (status) {
       switch (status) {
         case 'pending':
