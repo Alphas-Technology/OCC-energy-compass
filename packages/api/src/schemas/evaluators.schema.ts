@@ -7,12 +7,13 @@ import { ObjectID } from 'mongodb';
 export type EvaluatorType = Evaluator & mongoose.Document;
 
 const EvaluatorsSchema = new mongoose.Schema({
-  employee: Object,
-  token: { index: true, type: String },
+  evaluationRef: { index: true, type: ObjectID },
   baseToken: String,
-  evaluations: Object,
+  token: { index: true, type: String },
   status: { index: true, type: String },
-  evaluationRef: { index: true, type: ObjectID }
+  indEmpEntId: { index: true, type: Number },
+  employee: Object,
+  evaluations: Object
 }, { timestamps: true });
 
 

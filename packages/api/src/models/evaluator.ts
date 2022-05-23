@@ -4,10 +4,11 @@ import { ObjectID } from 'mongodb';
 import { Dimention } from './dimention';
 
 export interface Evaluator {
-  employee?: any;
+  evaluationRef?: ObjectID;
   baseToken?: string;
   token?: string;
-  evaluations: Dimention<Number>;
   status?: string;
-  evaluationRef?: ObjectID;
+  indEmpEntId?: number;
+  employee?: any;
+  evaluations: Dimention<Number>;
 }
