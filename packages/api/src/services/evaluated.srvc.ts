@@ -13,20 +13,36 @@ class EvaluatedService {
     return EvaluatedRepository.insertMany(populations);
   }
 
-  async exclude(evaluationRef: any, ref: any) {
-    EvaluatedRepository.updateOne(
+  async excludeOne(evaluationRef: any, ref: any) {
+    return EvaluatedRepository.updateOne(
       { evaluationRef: new ObjectID(evaluationRef), _id: new ObjectID(ref) },
       { $set: { status: 'excluded', employee: undefined } },
       (err) => {}
     );
   }
 
+  async excludeBatch(evaluationRef: any, populationIds: Array<any>) {
+    return EvaluatedRepository.updateMany({
+      evaluationRef: new ObjectID(evaluationRef),
+      _id: { $in: populationIds }
+    }, {
+      $set: { status: 'excluded', employee: undefined }
+    });
+  }
+
   async deleteMany(evaluationRef: any, populations: Array<any>) {
-    EvaluatedRepository.findOneAndDelete({ evaluationRef: new ObjectID(evaluationRef), _id: { $in: populations.map(p => new ObjectID(p._id))} });
+    return EvaluatedRepository.findOneAndDelete({ evaluationRef: new ObjectID(evaluationRef), _id: { $in: populations.map(p => new ObjectID(p._id))} });
   }
 
   async deleteOne(evaluationRef: any, populations: any) {
-    EvaluatedRepository.deleteOne({ evaluationRef: new ObjectID(evaluationRef), _id: new ObjectID(populations) }, (err) => {});
+    return EvaluatedRepository.deleteOne({ evaluationRef: new ObjectID(evaluationRef), _id: new ObjectID(populations) }, (err) => {});
+  }
+
+  async deleteBatch(evaluationRef: any, populationIds: Array<any>) {
+    return EvaluatedRepository.deleteMany({
+      evaluationRef: new ObjectID(evaluationRef),
+      _id: { $in: populationIds }
+    });
   }
 
   async countByEvaluationRef(evaluationRef: any): Promise<number> {
@@ -54,11 +70,11 @@ class EvaluatedService {
   }
 
   async findManyByEmployeeId(employeeId: number, select?: undefined|any): Promise<EvaluatorType[]> {
-    return EvaluatedRepository.find({'employee.employee.id': employeeId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
+    return EvaluatedRepository.find({'employee.id': employeeId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
   }
 
-  async findManyByEmployeeEnterpriseId(employeeId: number, select?: undefined|any): Promise<EvaluatorType[]> {
-    return EvaluatedRepository.find({'employee.id': employeeId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
+  async findManyByEmployeeEnterpriseId(employeeEnterpriseId: number, select?: undefined|any): Promise<EvaluatorType[]> {
+    return EvaluatedRepository.find({'indEmpEntId': employeeEnterpriseId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
   }
 
   async findOneByEmployeeEnterpriseIdAndEvaluationRef(evaluationRef: any, employeeId: number, select?: undefined|any): Promise<EvaluatorType> {
@@ -67,6 +83,21 @@ class EvaluatedService {
       'employee.id': employeeId,
       'status': 'completed'
     }, select || undefined);
+  }
+
+  async findBatchByEvaluationRefAndEmployeeEnterpriseIds(evaluationRef: any, employeeEnterpriseIds: Array<number>, select?: undefined|any): Promise<EvaluatorType[]> {
+    return EvaluatedRepository.find({
+      evaluationRef: new ObjectID(evaluationRef),
+      'indEmpEntId': { $in: employeeEnterpriseIds },
+      'status': { $nin: ['completed', 'excluded']}
+    }, select || undefined);
+  }
+
+  async getEvaluationBaseToken(evaluationRef: any): Promise<EvaluatorType> {
+    return EvaluatedRepository.findOne({
+      evaluationRef: new ObjectID(evaluationRef),
+      'status': { $nin: ['excluded']}
+    }, 'baseToken');
   }
 
   async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatorType> {
