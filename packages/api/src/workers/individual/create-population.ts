@@ -6,7 +6,7 @@ import { default as OperationThreadsService } from '../../services/operation-thr
 import RunHttpRequest from '../../utils/run-http-request';
 import TokenUtils from '../../utils/token-utils';
 
-class CreatePulsePopulation {
+class CreatePopulation {
 
   public async checkCreatePopulation () {
     const pendingOperationThread = await OperationThreadsService.findByOperationAndStatus(
@@ -179,4 +179,4 @@ class CreatePulsePopulation {
   }
 }
 
-export default new CreatePulsePopulation();
+export default new CreatePopulation();
