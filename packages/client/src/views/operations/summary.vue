@@ -16,7 +16,13 @@
         </v-row>
         <v-row>
           <v-col cols="12" class="text-center">
-            <span class="display-1">{{ $t('Views.Operations.summary.workshop_cost') }}: </span>
+            <span class="display-1">
+              {{
+                $route.params.editCount
+                  ? $t('Views.Operations.summary.workshop_update_cost')
+                  : $t('Views.Operations.summary.workshop_cost')
+              }}:
+            </span>
             <span class="display-1">
               {{price}} {{ $t('Views.Operations.summary.token_unit') }}
             </span>
@@ -72,12 +78,16 @@ export default Vue.extend({
   },
   created () {
     this.$store.dispatch('loading/show')
-    evaluationsService.checkBalance(this.$route.params.type !== 'individual' ? 'roop' : 'opri')
+    evaluationsService.checkBalance(this.$route.params.type)
       .then(res => {
         this.price = res.productService
         this.balance = res.balance
         if (this.$route.params.type === 'individual') {
-          return evaluationsService.getCountEvaluated(this.$route.params.slug)
+          if (!this.$route.params.editCount) {
+            return evaluationsService.getCountEvaluated(this.$route.params.slug)
+          } else {
+            return { count: this.$route.params.editCount }
+          }
         }
         return { count: 1 }
       })

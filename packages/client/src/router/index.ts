@@ -153,7 +153,7 @@ const routes = [
     beforeEnter: RequireProduct
   },
   {
-    path: '/operation-summary/:type/:slug',
+    path: '/operation-summary/:type/:slug/:editCount?',
     component: OperationSummary
   }
 ]
