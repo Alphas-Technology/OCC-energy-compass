@@ -12,11 +12,11 @@ class EvaluationsService {
    * @returns {Promise<Questionnaire[]>}
    */
   async listAll(filters: object = {}, select?: undefined|any): Promise<Evaluation[]> {
-    return EvaluationRepository.find(filters, select || undefined);
+    return EvaluationRepository.find(filters, select || undefined).sort({'createdAt': -1});
   }
 
   async listByEnterprise(enterpriseId: number, filters: object = {}, select?: undefined|any): Promise<Evaluation[]> {
-    return EvaluationRepository.find({ enterpriseId: enterpriseId, ...filters }, select || undefined);
+    return EvaluationRepository.find({ enterpriseId: enterpriseId, ...filters }, select || undefined).sort({'createdAt': -1});
   }
 
   async create(evaluation: Evaluation): Promise<Evaluation> {
@@ -127,7 +127,7 @@ class EvaluationsService {
   }
 
   async listByStartDate(): Promise<Evaluation[]> {
-    return EvaluationRepository.find({}, 'slug displayName name deliveredAt validUntil status enterprise.name enterprise.customer.name').sort({ deliveredAt: 'desc' }).limit(10);
+    return EvaluationRepository.find({}, 'slug displayName name deliveredAt validUntil status enterprise.name enterprise.customer.name populationCount').sort({ deliveredAt: 'desc' }).limit(10);
   }
 
   async listByEnterpriseOrderByStartDate(enterpriseId: number): Promise<Evaluation[]> {
