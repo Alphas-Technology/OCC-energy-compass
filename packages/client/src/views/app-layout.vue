@@ -17,110 +17,74 @@
       <img src="/img/20200301_occ_solution_logo_only.png" style="height: 80%;" class="pl-2" alt="OCC - Solutions logo"/>
 
       <v-spacer></v-spacer>
-      <div class="text-center">
-        <v-menu
-          :nudge-width="296"
-          :nudge-bottom="35"
-          :nudge-left="160"
-          transition="slide-y-transition"
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn
-              text
-              v-on="on"
-            >
-              <v-icon large>mdi-apps</v-icon>
-            </v-btn>
-          </template>
-          <v-card style="max-width: 22.7em">
-            <v-row>
-              <template v-for="item in products">
-                <v-col cols="6" :key="item.name" style="cursor: pointer">
-                  <a :href="item.url">
-                    <img :src="item.logo || item.defaultLogo"
-                      alt="System Logo"
-                      style="max-width: 150px"
-                    />
-                  </a>
-                </v-col>
-              </template>
-            </v-row>
-          </v-card>
-        </v-menu>
-
-        <v-tooltip left v-if="user.role === 'customer'">
-          <template v-slot:activator="{ on }">
-            <v-btn href="https://occ-solutions.com/ayuda/" class="elevation-0" text fab  target="_blank" v-on="on">
-              <v-icon>mdi-help-circle</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t('Views.AppLayout.app_bar_text_manual') }}</span>
-        </v-tooltip>
-        <!--
-        <v-menu offset-y v-if="notifications && notifications.unread_number !== undefined">
-          <template v-slot:activator="{ on }">
-            <v-badge right color="red">
-              <template v-slot:badge v-if="notifications.unread_number > 0">
-                <span v-if="notifications.unread_number < 100">{{notifications.unread_number}}</span>
-                <span v-else>+99</span>
-              </template>
-            </v-badge>
-            <v-btn class="elevation-0" text fab v-on="on">
-              <v-icon>notifications</v-icon>
-            </v-btn>
-          </template>
-          <v-list style="max-width: 28em">
-            <v-list-item
-              v-for="(notification, index) in notifications.last_notifications"
-              :key="index"
-              :class="!notification.read ? 'unread' : ''"
-            >
-              <template v-if="user.role === 'admin'">
-                <v-list-item-title @click="readNotification(notification)" v-if="notification.sourceType === 'enterprise_plan'">
-                  <router-link
-                    :to="notification.action"
-                    class="no-decoration"
-                    :class="!notification.read ? 'font-unread' : 'read'"
-                  >
-                    {{ $t(`notifications.${notification.type}`, {enterprise: notification.source.name}) }}
-                  </router-link>
-                </v-list-item-title>
-                <v-list-item-title @click="readNotification(notification)" v-else>
-                  <router-link
-                    :to="notification.action"
-                    class="no-decoration"
-                    :class="!notification.read ? 'font-unread' : 'read'"
-                  >
-                    {{ $t(`notifications.${notification.type}`, {enterprise: notification.source.enterprise.name, poll: notification.source.name}) }}
-                  </router-link>
-                </v-list-item-title>
-              </template>
-              <template v-else>
-                <v-list-item-title @click="readNotification(notification)">
-                  <router-link
-                    :to="notification.action"
-                    class="no-decoration"
-                    :class="!notification.read ? 'font-unread' : 'read'"
-                  >
-                    {{ $t(`notifications.${notification.type}`) }}
-                  </router-link>
-                </v-list-item-title>
-              </template>
-            </v-list-item>
-            <v-list-item class="see-more-btn" @click="$router.push('/notifications')">
-              <v-list-item-title class="seemore">
-                <router-link
-                  to="/notifications"
-                  class="no-decoration"
-                >
-                  {{$t('notifications.see_more')}}
-                </router-link>
-              </v-list-item-title>
+      <v-menu
+        v-model="openMenu"
+        :nudge-width="296"
+        :nudge-bottom="40"
+        :nudge-left="295"
+        transition="slide-y-transition"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            v-on="on"
+          >
+            <v-icon large>mdi-apps</v-icon>
+          </v-btn>
+        </template>
+        <v-card tile style="max-width: 22.7em">
+          <v-row no-gutters v-if="loadingProducts">
+            <v-col cols="12" class="py-12 text-center">
+              <v-progress-circular indeterminate
+                :width="4"
+                :size="54"
+                color="primary"
+                class="mx-auto"
+              ></v-progress-circular>
+              <p class="mt-1 mb-0 pl-3 caption grey--text text--darken-2">
+                {{ $t('Views.AppLayout.waiting') }}...
+              </p>
+            </v-col>
+          </v-row>
+          <v-list v-else style="max-height: 77vh" class="py-0 overflow-y-auto">
+            <v-list-item>
+              <v-list-item-content class="pb-0">
+                <v-row>
+                  <template v-for="item in products">
+                    <v-col cols="6" :key="item.name" style="cursor: pointer">
+                      <a :href="item.url">
+                        <img :src="item.logo || item.defaultLogo"
+                          alt="System Logo"
+                          :style="item.name === 'occ'
+                            ? 'max-height: 50px; max-width: 150px; margin-left: 1em;margin-top: 1.5em;'
+                            : item.name.includes('LIDERAZGO')
+                              ? 'margin-top: 0.5em; max-width: 160px'
+                              : 'max-width: 150px'
+                          "
+                        />
+                      </a>
+                    </v-col>
+                  </template>
+                </v-row>
+              </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-menu>
-        -->
-      </div>
+        </v-card>
+      </v-menu>
+
+      <v-tooltip left v-if="user.role === 'customer'">
+        <template v-slot:activator="{ on }">
+          <v-btn text fab
+            v-on="on"
+            href="https://occ-solutions.com/ayuda/"
+            class="mx-1 elevation-0"
+            target="_blank"
+          >
+            <v-icon>mdi-help-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('Views.AppLayout.app_bar_text_manual') }}</span>
+      </v-tooltip>
 
       <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
         <template v-slot:activator="{ on }">
@@ -233,6 +197,7 @@ import ProductsService from '../services/products'
 export default {
   data () {
     return {
+      openMenu: false,
       confirmLogout: false,
       menu: false,
       languages: [],
@@ -245,6 +210,7 @@ export default {
       host: null,
       showSnackbarDialog: false,
       suiteWeb: '',
+      loadingProducts: true,
       products: [],
       options: {
         filter: null,
@@ -258,6 +224,13 @@ export default {
     ...mapState({
       user: state => state.session.user
     })
+  },
+  watch: {
+    openMenu (val) {
+      if (val && !this.products.length) {
+        this.loadProducts()
+      }
+    }
   },
   methods: {
     goProfile () {
@@ -279,6 +252,35 @@ export default {
           .then(res => { this.products = res })
       }
       return Promise.resolve([])
+    },
+    loadProducts () {
+      this.getProducts()
+        .then(() => {
+          this.products.unshift({
+            name: 'OCC SUITE',
+            logo: `${this.suiteWeb}/img/20200301_occ_solution_logo.png`,
+            url: this.suiteWeb
+          })
+          if (this.host && this.host.reference) {
+            const por = this.products.find(prod => prod.id === this.host.reference)
+            if (por) {
+              this.products.splice(this.products.indexOf(por), 1)
+            }
+          }
+          let imageLoaded = 0
+          for (const prod of this.products) {
+            const img = new Image()
+            img.src = prod.logo || prod.defaultLogo
+            img.onload = () => {
+              imageLoaded++
+              if (imageLoaded === this.products.length) {
+                setTimeout(() => {
+                  this.loadingProducts = false
+                }, 400)
+              }
+            }
+          }
+        })
     }
   },
   created () {
@@ -305,20 +307,8 @@ export default {
         if (res) {
           this.$set(this, 'suiteWeb', res)
         }
-        return this.getProducts()
       })
-      .then(() => {
-        this.products.unshift({
-          name: 'OCC SUITE',
-          logo: `${this.suiteWeb}/img/20200301_occ_solution_logo.png`,
-          url: this.suiteWeb
-        })
-        if (this.host && this.host.reference) {
-          const por = this.products.find(prod => prod.id === this.host.reference)
-          if (por) {
-            this.products.splice(this.products.indexOf(por), 1)
-          }
-        }
+      .finally(() => {
         this.$store.dispatch('loading/hide')
       })
   },
