@@ -9,17 +9,21 @@ const EvaluationsSchema = new mongoose.Schema({
   name: String,
   displayName: String,
   slug: { index: true, type: String, unique: true },
+  status: { index: true, type: String },
   enterpriseId: { index: true, type: Number },
   enterprise: Object,
+  operations: Array,
   questionnaire: Object,
+  additionalQuestions: [],
+  openQuestions: [{
+    name: String,
+    translation: {}
+  }],
   answersReference: Object,
   questionsIndex: Object,
-  status: { index: true, type: String },
-  timeZone: String,
   deliveredAt: { index: true, type: Date },
   validUntil: { index: true, type: Date },
-  createdAt: { index: true, type: Date },
-  operations: Array,
+  timeZone: String,
   reminders: [{
     dateTime: Date,
     status: String,
@@ -34,14 +38,17 @@ const EvaluationsSchema = new mongoose.Schema({
     body: String,
     attachment: String
   },
-  customEmailDeadline: {
-    body: String
-  },
   customEmailReminder: {
     subject: String,
     body: String,
     attachment: String
-  }
+  },
+  populationSelectionType: String,
+  populationSelectionDetails: Object,
+  populationCount: Number,
+  populationCompletedCount: Number,
+  additionalSegmentation: Object,
+  createdAt: { index: true, type: Date }
 }, { timestamps: true });
 
 const EvaluationRepository = mongoose.model<EvaluationsType>('Evaluation', EvaluationsSchema);
