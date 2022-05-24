@@ -76,7 +76,7 @@ class EvaluationsController {
       const num = await EvaluatedService.countActivesByEvaluationRef(eva.evaluationRef);
       if (!num) {
         await EvaluationsService.closeEvaluationById(eva.evaluationRef);
-        const productService = await ProductServiceService.findByName('OCC POR REPORTE INDIVIDUAL');
+        const productService = await ProductServiceService.findByName('OCC ENERGY COMPASS INDIVIDUAL');
         await RunHttpRequest.suitePost(req, 'activities/create-activity', {
           service: {
             enterpriseId: req.user.enterprise.id,
@@ -115,7 +115,7 @@ class EvaluationsController {
       try {
         await HttpSuperagentRequest.sendRequest({
           product: 'suite',
-          path: 'activities/evaluation-dml/update-status',
+          path: 'activities/energy-compass-individual/update-status',
           method: 'POST',
           data: {
             evaluation: evaluation,
@@ -124,7 +124,7 @@ class EvaluationsController {
           }
         });
       } catch (error) {
-        console.log('activities/evaluation-dml/update-status', error);
+        console.log('activities/energy-compass-individual/update-status', error);
       }
     });
   }
@@ -512,11 +512,11 @@ class EvaluationsController {
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
-      const spend = await SpendRequest(req, 'REPORTE ORGANIZACIONAL OCC POR', 1);
+      const spend = await SpendRequest(req, 'ENERGY COMPASS ORGANIZACIONAL', 1);
       if (typeof spend === 'string') {
         throw new BadRequestException('suite-fail/evaluation/spend-fail');
       }
-      const productService = await ProductServiceService.findByName('REPORTE ORGANIZACIONAL OCC POR');
+      const productService = await ProductServiceService.findByName('ENERGY COMPASS ORGANIZACIONAL');
       await RunHttpRequest.suitePost(req, 'activities/create-activity', {
         service: {
           enterpriseId: req.user.enterprise.id,
@@ -781,7 +781,7 @@ class EvaluationsController {
       const evaluation = await EvaluationsService.closeEvaluation(req.params.slug);
       // await HttpSuperagentRequest.sendRequest({
       //   product: 'suite',
-      //   path: 'activities/evaluation-dml/update-status',
+      //   path: 'activities/energy-compass-individual/update-status',
       //   method: 'POST',
       //   data: {
       //     evaluation: evaluation,
