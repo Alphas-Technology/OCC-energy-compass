@@ -111,7 +111,7 @@ const routes = [
         beforeEnter: RequireAuthentication
       },
       {
-        path: '/evaluations/por/:tokenId',
+        path: '/evaluations/energy-compass/:tokenId',
         component: Evaluation
       }
     ]
@@ -121,7 +121,7 @@ const routes = [
     component: EvaluationLayout,
     children: [
       {
-        path: 'evaluations/por/:tokenId',
+        path: 'evaluations/energy-compass/:tokenId',
         component: Evaluation
       }
     ]
