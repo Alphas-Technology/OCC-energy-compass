@@ -100,6 +100,22 @@ class EvaluatedService {
     }, 'baseToken');
   }
 
+  async findByBatchByEvaluationId(evaluationId: any, skip: number, qty: number, select?: undefined|any): Promise<EvaluatorType[]> {
+    return EvaluatedRepository.find(
+      { evaluationRef: evaluationId },
+      select || undefined,
+      { skip: Number(skip * qty), limit: Number(qty) }
+    );
+  }
+
+  async findByBatchByEvaluationIdByItems(evaluationId: any, filter, skip: number, qty: number, select?: undefined|any): Promise<EvaluatorType[]> {
+    return EvaluatedRepository.find(
+      { evaluationRef: evaluationId, ...filter },
+      select || undefined,
+      { skip: Number(skip * qty), limit: Number(qty) }
+    );
+  }
+
   async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatorType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},

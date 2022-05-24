@@ -1,6 +1,10 @@
 
+import { ObjectID } from 'mongodb';
 import { Evaluation } from '../models/evaluation';
 import EvaluationRepository, { EvaluationsType } from '../schemas/evaluation.schema';
+
+import ProductServiceService from './product-service.srvc';
+import RunHttpRequest from '../utils/run-http-request';
 
 /**
  * @class QuestionnaireService
@@ -28,7 +32,6 @@ class EvaluationsService {
   }
 
   async findById(id: string, select?: undefined|any): Promise<Evaluation> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationRepository.findOne({_id: new ObjectID(id)}, select || undefined);
   }
 
@@ -101,7 +104,6 @@ class EvaluationsService {
   }
 
   async updateReminders(id: string, reminders: any): Promise<Evaluation> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationRepository.findByIdAndUpdate(new ObjectID(id), {
       reminders: reminders
     });
@@ -118,7 +120,6 @@ class EvaluationsService {
   }
 
   async closeEvaluationById(id: any): Promise<Evaluation> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationRepository.findOneAndUpdate({ _id: new ObjectID(id) }, { status: 'completed' });
   }
 
@@ -135,7 +136,6 @@ class EvaluationsService {
   }
 
   async getPreviousByIdAndEnterprise(id: string, enterpriseId: number, deliveredAt: any, select?: undefined|any): Promise<Evaluation[]> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationRepository.find({
         $and: [{
           _id: {$ne: new ObjectID(id)} },
@@ -145,6 +145,40 @@ class EvaluationsService {
         ]
       }, select || undefined)
     .sort({'deliveredAt': -1});
+  }
+
+  /**
+   * @description Update a evaluation's answered polls count
+   * @returns {Promise<void>}
+   */
+  async updateAnsweredCount(id: string, populationCompletedCount: number): Promise<Evaluation> {
+    return EvaluationRepository.findByIdAndUpdate(new ObjectID(id), {
+      populationCompletedCount
+    });
+  }
+
+  /**
+   * @description Updates Suite Activity for a given Evaluation
+   * @returns {Promise<Evaluation[]>}
+   */
+  async updateSuiteActivity(evaluation: Evaluation, status: string) {
+    let resp;
+    try {
+      const productService = await ProductServiceService.findByName('OCC ENERGY COMPASS INDIVIDUAL');
+      resp = await RunHttpRequest.suitePost(undefined, 'activities/energy-compass-individual/update-status', {
+        evaluation: {
+          enterpriseId: evaluation.enterpriseId,
+          status: status,
+          _id: evaluation._id
+        },
+        productService
+      });
+    } catch (error) {
+      console.log('activities/energy-compass-individual/update-status', error);
+      resp = error;
+    }
+
+    return resp;
   }
 }
 
