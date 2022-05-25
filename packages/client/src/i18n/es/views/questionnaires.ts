@@ -48,7 +48,7 @@ export default {
     tooltip_info: 'Debe presionar ENTER para editar',
     edited_succesfully: 'Cuestionario editado correctamente',
     edited_error: 'Error en la edición del cuestionario',
-    d_physical: 'Físico',
+    d_physical: 'Física',
     d_mental: 'Mental',
     d_emotional: 'Emocional',
     d_professional: 'Profesional',
