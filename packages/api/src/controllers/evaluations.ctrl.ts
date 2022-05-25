@@ -70,45 +70,6 @@ class EvaluationsController {
     }
   }
 
-  async updateEvaluator(req: IRequest, resp: Response) {
-    try {
-      const eva = await EvaluatedService.completeAnswersDimention(req.body.tokenId, req.body.data);
-      const num = await EvaluatedService.countActivesByEvaluationRef(eva.evaluationRef);
-      if (!num) {
-        await EvaluationsService.closeEvaluationById(eva.evaluationRef);
-        const productService = await ProductServiceService.findByName('OCC ENERGY COMPASS INDIVIDUAL');
-        await RunHttpRequest.suitePost(req, 'activities/create-activity', {
-          service: {
-            enterpriseId: req.user.enterprise.id,
-            _id: eva.evaluationRef,
-            productService: productService.code,
-            status: 'completed'
-          }
-        });
-      }
-      resp.send();
-    } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        er: error,
-        status: 404
-      });
-    }
-  }
-
-  async updateEvaluationStatus(req: Request, resp: Response) {
-    try {
-      const response = await EvaluationsService.updateEvaluationStatus(req.body.tokenId, req.body.type, req.body.index, req.body.evaluatedIndex);
-      resp.send(response);
-    } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        er: error,
-        status: 404
-      });
-    }
-  }
-
   async updateActivityStatus(evaluationsIds: any[]) {
     const evaluations = await EvaluationsService.findManyById(evaluationsIds);
     evaluations.forEach(async evaluation => {

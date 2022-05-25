@@ -24,17 +24,6 @@ export default (middlewares, services) => {
     EvaluationsController.updateAnswersDimention
   );
 
-  EvaluationsRouter.put(
-    '/update-evaluator',
-    EvaluationsController.updateEvaluator
-  );
-
-
-  EvaluationsRouter.put(
-    '/update-evaluation-status',
-    EvaluationsController.updateEvaluationStatus
-  );
-
   EvaluationsRouter.use(middlewares.jwt);
 
   EvaluationsRouter.get(

@@ -50,55 +50,6 @@ class EvaluationsService {
     });
   }
 
-  async updateEvaluationStatus(tokenId: string, type: string, index?: string, evaluatedIndex?: string): Promise<Evaluation> {
-    const setCompleted = (res: any) => {
-      let completed = true;
-      res.evaluated.forEach((elem: any) => {
-        if (!elem.employee.completed) {
-          completed = false;
-        }
-        elem.leadersEvaluators.forEach((elemLeader: any) => {
-          if (!elemLeader.completed) {
-            completed = false;
-          }
-        });
-        elem.dependentsEvaluators.forEach((elemDependent: any) => {
-          if (!elemDependent.completed) {
-            completed = false;
-          }
-        });
-        elem.pairsEvaluators.forEach((elemPair: any) => {
-          if (!elemPair.completed) {
-            completed = false;
-          }
-        });
-      });
-      if (completed) {
-        return this.closeEvaluation(res.slug);
-      }
-      return res;
-    };
-    if (type === 'autoevaluation') {
-      return EvaluationRepository.findOneAndUpdate(
-        {'evaluated.employee.token': tokenId},
-        { '$set': { 'evaluated.$.employee.completed': true }},
-        { new: true}
-      ).then((res) => setCompleted(res));
-    } else {
-      const query = 'evaluated.' + evaluatedIndex + '.' + type + '.' + index + '.completed';
-      const $set = {};
-      $set[query] = true;
-
-      return EvaluationRepository.findOneAndUpdate(
-        {$or: [{'evaluated': {'$elemMatch': {'leadersEvaluators': {'$elemMatch': {'token': tokenId}}}}},
-          {'evaluated': {'$elemMatch': {'dependentsEvaluators': {'$elemMatch': {'token': tokenId}}}}},
-          {'evaluated': {'$elemMatch': {'pairsEvaluators': {'$elemMatch': {'token': tokenId}}}}}]},
-        { '$set': $set },
-        { new: true}
-      ).then((res) => setCompleted(res));
-    }
-  }
-
   async filterByStatus(status: string) {
     return EvaluationRepository.find({ status });
   }

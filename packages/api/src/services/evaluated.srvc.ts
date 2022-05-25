@@ -1,15 +1,15 @@
 
 import { ObjectID } from 'mongodb';
-import { Evaluator } from '../models/evaluator';
-import EvaluatedRepository, { EvaluatorType } from '../schemas/evaluators.schema';
+import { Evaluated } from '../models/evaluated';
+import EvaluatedRepository, { EvaluatedType } from '../schemas/evaluated.schema';
 
 class EvaluatedService {
 
-  async create(evaluator: Evaluator): Promise<Evaluator> {
-    return (await new EvaluatedRepository(evaluator).save());
+  async create(evaluated: Evaluated): Promise<Evaluated> {
+    return (await new EvaluatedRepository(evaluated).save());
   }
 
-  async save(populations: Array<Evaluator>): Promise<Evaluator[]> {
+  async save(populations: Array<Evaluated>): Promise<Evaluated[]> {
     return EvaluatedRepository.insertMany(populations);
   }
 
@@ -57,27 +57,27 @@ class EvaluatedService {
     return EvaluatedRepository.countDocuments({ evaluationRef: new ObjectID(evaluationRef), status: 'completed' }, (err, result) => result);
   }
 
-  async getByEvaluationRef(evaluationRef: any, select?: string|undefined): Promise<EvaluatorType[]> {
+  async getByEvaluationRef(evaluationRef: any, select?: string|undefined): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find({ evaluationRef: new ObjectID(evaluationRef), status: { $ne : 'excluded'} }, select);
   }
 
-  async getLotByEvaluationRef(evaluationRef: any, skip: number, qty: number, select?: string|undefined): Promise<EvaluatorType[]> {
+  async getLotByEvaluationRef(evaluationRef: any, skip: number, qty: number, select?: string|undefined): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find({ evaluationRef: new ObjectID(evaluationRef), status: { $ne : 'excluded'} }, select, { skip: Number(skip * qty), limit: Number(qty) });
   }
 
-  async getOneByToken(token: string, select?: string|undefined): Promise<EvaluatorType> {
+  async getOneByToken(token: string, select?: string|undefined): Promise<EvaluatedType> {
     return EvaluatedRepository.findOne({ token }, select);
   }
 
-  async findManyByEmployeeId(employeeId: number, select?: undefined|any): Promise<EvaluatorType[]> {
+  async findManyByEmployeeId(employeeId: number, select?: undefined|any): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find({'employee.id': employeeId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
   }
 
-  async findManyByEmployeeEnterpriseId(employeeEnterpriseId: number, select?: undefined|any): Promise<EvaluatorType[]> {
+  async findManyByEmployeeEnterpriseId(employeeEnterpriseId: number, select?: undefined|any): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find({'indEmpEntId': employeeEnterpriseId, 'status': { $nin: ['completed', 'excluded']} }, select || undefined);
   }
 
-  async findOneByEmployeeEnterpriseIdAndEvaluationRef(evaluationRef: any, employeeId: number, select?: undefined|any): Promise<EvaluatorType> {
+  async findOneByEmployeeEnterpriseIdAndEvaluationRef(evaluationRef: any, employeeId: number, select?: undefined|any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOne({
       evaluationRef: new ObjectID(evaluationRef),
       'employee.id': employeeId,
@@ -85,7 +85,7 @@ class EvaluatedService {
     }, select || undefined);
   }
 
-  async findBatchByEvaluationRefAndEmployeeEnterpriseIds(evaluationRef: any, employeeEnterpriseIds: Array<number>, select?: undefined|any): Promise<EvaluatorType[]> {
+  async findBatchByEvaluationRefAndEmployeeEnterpriseIds(evaluationRef: any, employeeEnterpriseIds: Array<number>, select?: undefined|any): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find({
       evaluationRef: new ObjectID(evaluationRef),
       'indEmpEntId': { $in: employeeEnterpriseIds },
@@ -93,14 +93,14 @@ class EvaluatedService {
     }, select || undefined);
   }
 
-  async getEvaluationBaseToken(evaluationRef: any): Promise<EvaluatorType> {
+  async getEvaluationBaseToken(evaluationRef: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOne({
       evaluationRef: new ObjectID(evaluationRef),
       'status': { $nin: ['excluded']}
     }, 'baseToken');
   }
 
-  async findByBatchByEvaluationId(evaluationId: any, skip: number, qty: number, select?: undefined|any): Promise<EvaluatorType[]> {
+  async findByBatchByEvaluationId(evaluationId: any, skip: number, qty: number, select?: undefined|any): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find(
       { evaluationRef: evaluationId },
       select || undefined,
@@ -108,7 +108,7 @@ class EvaluatedService {
     );
   }
 
-  async findByBatchByEvaluationIdByItems(evaluationId: any, filter, skip: number, qty: number, select?: undefined|any): Promise<EvaluatorType[]> {
+  async findByBatchByEvaluationIdByItems(evaluationId: any, filter, skip: number, qty: number, select?: undefined|any): Promise<EvaluatedType[]> {
     return EvaluatedRepository.find(
       { evaluationRef: evaluationId, ...filter },
       select || undefined,
@@ -116,7 +116,7 @@ class EvaluatedService {
     );
   }
 
-  async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatorType> {
+  async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
       { '$set': { 'answersDimention': answersDimention, 'status': 'in_progress' }},
@@ -124,7 +124,7 @@ class EvaluatedService {
     );
   }
 
-  async updateAnswersDimention(tokenId: string, path: string, score: number): Promise<EvaluatorType> {
+  async updateAnswersDimention(tokenId: string, path: string, score: number): Promise<EvaluatedType> {
     const data: any = {
       $set : {
         status: 'in_progress'
@@ -138,7 +138,7 @@ class EvaluatedService {
     );
   }
 
-  async completeAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatorType> {
+  async completeAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
       { '$set': { 'answersDimention': answersDimention, 'status': 'completed' }},

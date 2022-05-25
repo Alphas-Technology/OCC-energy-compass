@@ -2,7 +2,7 @@
 import { default as EvaluationsService } from '../../services/evaluations.srvc';
 import { default as EvaluatedService } from '../../services/evaluated.srvc';
 import { default as OperationThreadsService } from '../../services/operation-threads.srvc';
-import { Evaluator } from '../../models/evaluator';
+import { Evaluated } from '../../models/evaluated';
 
 import RunHttpRequest from '../../utils/run-http-request';
 
@@ -26,7 +26,7 @@ class SendEvaluationsEmails {
       );
 
       const interval = 250;
-      let population: Evaluator[];
+      let population: Evaluated[];
       let round = 0;
       const select = 'employee.email status token employee.employeeEnterprise.firstName employee.employeeEnterprise.lastName';
       while (true) {
@@ -69,7 +69,7 @@ class SendEvaluationsEmails {
     return pendingOperationThreads._id;
   }
 
-  private async getAndFilterpopulation(population: Evaluator[]) {
+  private async getAndFilterpopulation(population: Evaluated[]) {
     const endPopulation = [];
     population.forEach((employee) => {
       if (employee.employee.email && (employee.status === 'pending' || employee.status === 'in_progress')) {
