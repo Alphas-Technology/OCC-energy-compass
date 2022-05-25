@@ -78,9 +78,6 @@ export default {
   generateTemplate: () => {
     return service.get('generate-template')
   },
-  updateEvaluator: (tokenId: string, answersDimention: any) => {
-    return service.put('update-evaluator', { tokenId, data: answersDimention })
-  },
   setAnswersDimention: (tokenId: string, answersDimention: any) => {
     return service.put('set-answersDimention', { tokenId: tokenId, data: answersDimention })
   },
