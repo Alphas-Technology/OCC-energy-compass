@@ -3,8 +3,8 @@
   "index": ["generalHealth", "burnoutIndividual"],
   "answers": 0,
   "reference": {
-    "es": "Salud General",
-    "en": "General health"
+    "es": "Estado físico y de salud",
+    "en": "Physical and health status"
   },
   "question": {
     "es": "Mi estado físico y de salud es muy bueno",

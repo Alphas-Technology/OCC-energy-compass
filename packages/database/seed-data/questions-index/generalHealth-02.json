@@ -3,8 +3,8 @@
   "index": ["generalHealth"],
   "answers": 0,
   "reference": {
-    "es": "Defensas",
-    "en": "Defenses"
+    "es": "Nivel de defensas",
+    "en": "Level of defenses"
   },
   "question": {
     "es": "En general mis defensas están altas y pocas veces sufro de gripes y/ó resfríos",

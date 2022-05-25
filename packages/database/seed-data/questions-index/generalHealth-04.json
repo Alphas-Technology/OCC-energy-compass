@@ -3,8 +3,8 @@
   "index": ["generalHealth"],
   "answers": 4,
   "reference": {
-    "es": "Alcohol",
-    "en": "Alcohol"
+    "es": "Frecuencia de consumo de alcohol",
+    "en": "Frequency of alcohol consumption"
   },
   "question": {
     "es": "Consumo alcohol",

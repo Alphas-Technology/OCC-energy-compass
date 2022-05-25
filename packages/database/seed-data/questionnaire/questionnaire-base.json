@@ -15,8 +15,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Calidad de la dieta",
-            "en": "Diet quality"
+            "es": "Dieta saludable y balanceada",
+            "en": "Healthy and balanced diet"
           },
           "question": {
             "es": "Considero que mi dieta es muy saludable y balanceada",
@@ -27,8 +27,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Cantidad de comida",
-            "en": "Quantity of food"
+            "es": "Cuidado en cantidad de comida consumida",
+            "en": "Carefulness in the amount of food consumed"
           },
           "question": {
             "es": "Siempre soy muy cuidadoso con las porciones / tamaño de mis comidas, evitando excesos",
@@ -39,8 +39,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Conocimiento alimentos",
-            "en": "food knowledge"
+            "es": "Conocimiento de ingredientes  y orígenes de los alimentos",
+            "en": "Knowledge of ingredients and origins of food"
           },
           "question": {
             "es": "Conozco bien los ingredientes, orígenes y características de los alimentos que consumo (soy crítico y curioso)",
@@ -51,8 +51,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Hidratación",
-            "en": "Hydration"
+            "es": "Cantidad de líquidos consumidos",
+            "en": "Amount of fluids consumed"
           },
           "question": {
             "es": "Tomo suficiente líquido durante el día (al menos el equivalente a 2.5 litros de agua)",
@@ -65,8 +65,8 @@
           "index": [],
           "answers": 1,
           "reference": {
-            "es": "Ejercicio cardiovascular",
-            "en": "Cardiovascular exercise"
+            "es": "Frecuencia de ejercicios cardiovasculares",
+            "en": "Frequency of cardiovascular exercises"
           },
           "question": {
             "es": "Número aproximado de veces que hago ejercicios cardiovasculares a la semana",
@@ -77,8 +77,8 @@
           "index": [],
           "answers": 1,
           "reference": {
-            "es": "Ejercicio fortalecimiento",
-            "en": "Strengthening exercise"
+            "es": "Frecuencia de ejercicios de fortalecimiento / estiramiento",
+            "en": "Frequency of strengthening/stretching exercises"
           },
           "question": {
             "es": "Número aproximado de veces que hago ejercicios de fortalecimiento / estiramiento a la semana",
@@ -89,8 +89,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Movimiento",
-            "en": "Movement"
+            "es": "Nivel de actividad y movimiento en rutina diaria",
+            "en": "Level of activity and movement in daily routine"
           },
           "question": {
             "es": "En general mi rutina en días laborales es activa, con movimiento permanente",
@@ -101,8 +101,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Disciplina ejercicio",
-            "en": "Exercise discipline"
+            "es": "Metas para mejorar desempeño físico",
+            "en": "Goals to improve physical performance"
           },
           "question": {
             "es": "Tengo metas concretas para mejorar mi desempeño en actividades físicas / deportivas",
@@ -115,8 +115,8 @@
           "index": [],
           "answers": 2,
           "reference": {
-            "es": "Cantidad de sueño",
-            "en": "amount of sleep"
+            "es": "Número aproximado de horas de sueño",
+            "en": "Approximate number of hours of sleep"
           },
           "question": {
             "es": "El número aproximado de mis horas de sueño en la noche es",
@@ -127,8 +127,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Energía diaria",
-            "en": "daily energy"
+            "es": "Nivel de energía al terminar jornada laboral",
+            "en": "Energy level at the end of the working day"
           },
           "question": {
             "es": "Siempre termino mi jornada laboral diaria con buenos niveles de energía",
@@ -139,8 +139,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Pausas activas",
-            "en": "Active breaks"
+            "es": "Realización de pausas activas ",
+            "en": "Taking active breaks"
           },
           "question": {
             "es": "Siempre hago varias pausas activas durante el día para renovar mi energía",
@@ -151,8 +151,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Calidad del sueño",
-            "en": "Sleep quality"
+            "es": "Calidad del sueño y nivel de reparación",
+            "en": "Sleep quality and level of repair"
           },
           "question": {
             "es": "Tengo un sueño muy reparador que me permite levantarme siempre totalmente renovado",
@@ -167,8 +167,8 @@
           "index": ["generalHealth", "burnoutIndividual"],
           "answers": 0,
           "reference": {
-            "es": "Estrés laboral",
-            "en": "Work stress"
+            "es": "Impacto en salud física y mental del estrés laboral ",
+            "en": "Impact on physical and mental health of work stress"
           },
           "question": {
             "es": "Mi nivel de estrés laboral actual no afecta mi salud física ni mental",
@@ -179,8 +179,8 @@
           "index": ["burnoutIndividual"],
           "answers": 0,
           "reference": {
-            "es": "Estrés personal",
-            "en": "Personal stress"
+            "es": "Nivel de estrés por relaciones personales y familiares",
+            "en": "Stress level due to personal and family relationships"
           },
           "question": {
             "es": "Mis relaciones personales (pareja, hijos, familia, amigos) actualmente no me generen alto estrés",
@@ -191,8 +191,8 @@
           "index": ["burnoutIndividual"],
           "answers": 0,
           "reference": {
-            "es": "Salud financiera",
-            "en": "Financial health"
+            "es": "Nivel de estrés por situación financiera",
+            "en": "Stress level due to financial situation"
           },
           "question": {
             "es": "Mi situación financiera actual no me genera preocupación ni ansiedad",
@@ -203,8 +203,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Respuesta Estrés",
-            "en": "Stress Response"
+            "es": "Respuesta en situaciones de crisis y estrés",
+            "en": "Response in crisis and stress situations"
           },
           "question": {
             "es": "En situaciones crisis y alto estrés, siempre respondo con calma y asertividad (sin ansiedad)",
@@ -217,8 +217,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Foco",
-            "en": "Focus"
+            "es": "Presencia y foco en conversaciones con los demás",
+            "en": "Presence and focus in conversations with others"
           },
           "question": {
             "es": "En mis conversaciones, siempre estoy prestando total atención a mis interlocutores",
@@ -229,8 +229,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Meditación",
-            "en": "Meditation"
+            "es": "Realización de actividades de concentración y reflexión",
+            "en": "Carrying out concentration and reflection activities"
           },
           "question": {
             "es": "Realizo actividades de reflexión y concentración profunda como meditar u otras equivalentes",
@@ -241,8 +241,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Estado de Calma",
-            "en": "State of Calm"
+            "es": "Estado de calma y plenitud",
+            "en": "State of calm and fullness"
           },
           "question": {
             "es": "Frecuentemente me siento en un estado de calma y plenitud que me permite disfrutar el presente y valorar mis logros",
@@ -253,8 +253,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Presencia",
-            "en": "Presence"
+            "es": "Presencia plena en relaciones familiares",
+            "en": "Full presence in family relationships"
           },
           "question": {
             "es": "Cuando estoy con mi familia estoy 100% presente",
@@ -267,8 +267,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Concentración",
-            "en": "Concentration"
+            "es": "Profundidad y duración de actividades de concentración",
+            "en": "Depth and duration of concentration activities"
           },
           "question": {
             "es": "En mi trabajo se me facilita sostener un alto nivel de concentración en un tema en particular, por amplios espacios de tiempo",
@@ -279,8 +279,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Multitarea",
-            "en": "Multitask"
+            "es": "Foco en tarea principal evitando la multitarea",
+            "en": "Focus on main task avoiding multitasking"
           },
           "question": {
             "es": "Nunca termino haciendo varias cosas a la vez sin tenerlo planeado",
@@ -291,8 +291,8 @@
           "index": ["burnoutIndividual"],
           "answers": 0,
           "reference": {
-            "es": "Jornadas laborales",
-            "en": "Labor journeys"
+            "es": "Trabajo en límites del horario laboral",
+            "en": "Work outside of business hours"
           },
           "question": {
             "es": "Salvo contadas excepciones, solo trabajo en días y horarios de mi jornada laboral",
@@ -303,8 +303,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Humor",
-            "en": "Humor"
+            "es": "Aproximación con humor a diferentes aspectos de la vida",
+            "en": "Humorous approach to different aspects of life"
           },
           "question": {
             "es": "Me reconocen por imprimirle buen humor a los diferentes aspectos de la vida",
@@ -319,8 +319,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Propósito personal",
-            "en": "personal purpose"
+            "es": "Propósito de vida claro y alineado con el trabajo",
+            "en": "Clear life purpose aligned with work"
           },
           "question": {
             "es": "Tengo un propósito de vida claro y mi trabajo actual está alineado con éste",
@@ -331,8 +331,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Impacto social",
-            "en": "Social impact"
+            "es": "Inversión de tiempo y energía en actividades con impacto social",
+            "en": "Investment of time and energy in activities with social impact"
           },
           "question": {
             "es": "Invierto tiempo y energía suficientes para marcar una diferencia positiva en la vida de otras personas",
@@ -343,8 +343,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Pasiones",
-            "en": "passions"
+            "es": "Dedicación de tiempo a actividades que generan pasión",
+            "en": "Dedication of time to activities that generate passion"
           },
           "question": {
             "es": "Dedico tiempo suficiente a las actividades que me apasionan",
@@ -355,8 +355,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Coherencia",
-            "en": "Coherence"
+            "es": "Coherencia entre lo que se dice y se hace",
+            "en": "Consistency between what is said and done"
           },
           "question": {
             "es": "Tengo coherencia total entre lo que es importante en mi vida y la forma como realmente vivo",
@@ -369,8 +369,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Socialización",
-            "en": "Socialization"
+            "es": "Propósito de vida claro y alineado con el trabajo",
+            "en": "Clear life purpose aligned with work"
           },
           "question": {
             "es": "Estoy satisfecho con el tiempo y energía que invierto en las personas que quiero y aprecio",
@@ -381,8 +381,8 @@
           "index": ["burnoutIndividual"],
           "answers": 0,
           "reference": {
-            "es": "Relaciones laborales",
-            "en": "Labor Relations"
+            "es": "Inversión de tiempo y energía en actividades con impacto social",
+            "en": "Investment of time and energy in activities with social impact"
           },
           "question": {
             "es": "Las relaciones con mis compañeros de trabajo siempre son transparentes, constructivas y cordiales",
@@ -393,8 +393,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Retroalimentación",
-            "en": "Feedback"
+            "es": "Dedicación de tiempo a actividades que generan pasión",
+            "en": "Dedication of time to activities that generate passion"
           },
           "question": {
             "es": "Acepto críticas y retroalimentación de manera humilde (no a la defensiva)",
@@ -405,8 +405,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Relacionamiento",
-            "en": "Relationship"
+            "es": "Coherencia entre lo que se dice y se hace",
+            "en": "Consistency between what is said and done"
           },
           "question": {
             "es": "Se me facilita construir las relaciones profesionales que necesito en el trabajo para ser exitoso (jefes, pares, subalternos, clientes, etc.)",
@@ -419,8 +419,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Actitud",
-            "en": "Attitude"
+            "es": "Actitud fuerte, entusiasta y optimista",
+            "en": "Strong, enthusiastic and optimistic attitude"
           },
           "question": {
             "es": "En general, durante el día me siento fuerte, entusiasta y optimista",
@@ -431,8 +431,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Manejo conflictos",
-            "en": "Conflict management"
+            "es": "Manejo asertivo de conflictos",
+            "en": "Assertive conflict management"
           },
           "question": {
             "es": "Siempre manejo los conflictos asertivamente buscando soluciones y evitando escalarlos",
@@ -443,8 +443,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Resiliencia",
-            "en": "Resilience"
+            "es": "Resiliencia ante adversidades y fracasos",
+            "en": "Resilience in the face of adversity and failure"
           },
           "question": {
             "es": "Soy persistente ante las adversidades y fracasos que enfrento",
@@ -455,8 +455,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Agradecimiento",
-            "en": "Gratitude"
+            "es": "Expresión de agradecimiento con los demás",
+            "en": "Expression of gratitude to others"
           },
           "question": {
             "es": "Me tomo el tiempo para expresar agradecimiento con los demás y celebrar mis logros ",
@@ -471,8 +471,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Hábitos",
-            "en": "Habits"
+            "es": "Aplicación disciplinada de hábitos positivos",
+            "en": "Disciplined application of positive habits"
           },
           "question": {
             "es": "Tengo excelentes hábitos profesionales (diarios, semanales, mensuales) que aplico con disciplina",
@@ -483,8 +483,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Tiempo",
-            "en": "Weather"
+            "es": "Manejo óptimo de tiempo y agenda",
+            "en": "Optimal time and schedule management"
           },
           "question": {
             "es": "Manejo de manera óptima mi tiempo y agenda",
@@ -495,8 +495,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Reuniones",
-            "en": "Meetings"
+            "es": "Número y frecuencia adecuada de reuniones",
+            "en": "Appropriate number and frequency of meetings"
           },
           "question": {
             "es": "Las reuniones (número / duración) e indicadores de seguimiento que uso en mi trabajo son óptimos para ser altamente eficiente",
@@ -507,8 +507,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Cumplimiento",
-            "en": "Compliance"
+            "es": "Cumplimiento oportuno y con calidad de compromisos",
+            "en": "Timely and quality compliance with commitments"
           },
           "question": {
             "es": "Cumplo en tiempo y calidad con todos los compromisos adquiridos",
@@ -521,8 +521,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Metas Carrera",
-            "en": "Career Goals"
+            "es": "Plan de carrera claro y alineado con el trabajo actual",
+            "en": "Clear career plan aligned with current job"
           },
           "question": {
             "es": "Tengo un plan de carrera claro y mi trabajo actual hace parte del mismo",
@@ -533,8 +533,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Desarrollo ",
-            "en": "Developing"
+            "es": "Documentación anual de plan de desarrollo ",
+            "en": "Annual development plan documentation"
           },
           "question": {
             "es": "Todos los años documento un plan personal de desarrollo para mejorar mi desempeño profesional",
@@ -545,8 +545,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Tiempo",
-            "en": "Weather"
+            "es": "Inversión de tiempo en desarrollo de nuevas habilidades y conocimientos",
+            "en": "Investment of time in developing new skills and knowledge"
           },
           "question": {
             "es": "Invierto suficiente tiempo para desarrollar nuevas habilidades y conocimientos útiles en mi trabajo y vida personal",
@@ -557,8 +557,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Autoconocimiento",
-            "en": "Self knowledge"
+            "es": "Retroalimentación del líder",
+            "en": "Leader Feedback"
           },
           "question": {
             "es": "Recibo retroalimentación frecuente y abierta de mi líder, que me permite entender mis áreas de oportunidad",
@@ -571,8 +571,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Tiempo pantalla",
-            "en": "Screen time"
+            "es": "Afectación de productividad por tiempo en pantalla",
+            "en": "Productivity impact due to screen time"
           },
           "question": {
             "es": "El tiempo que invierto en redes sociales, whatsapp y otros medios digitales no afecta mi productividad",
@@ -583,8 +583,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Procrastinación",
-            "en": "Procrastination"
+            "es": "Procrastinación de tareas y proyectos",
+            "en": "Procrastination of tasks and projects"
           },
           "question": {
             "es": "Rara vez aplazo tareas y proyectos importantes que tengo planeados de tiempo atrás",
@@ -595,8 +595,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Estrategia distractores",
-            "en": "Distractors strategy"
+            "es": "Estrategia para evitar distracciones",
+            "en": "Strategy to avoid distractions"
           },
           "question": {
             "es": "Tengo estrategias implementadas para bloquear distracciones y lograr el foco que requiero",
@@ -607,8 +607,8 @@
           "index": [],
           "answers": 0,
           "reference": {
-            "es": "Balance",
-            "en": "Balance"
+            "es": "Satisfacción por balance de tiempo entre trabajo y temas personales",
+            "en": "Satisfaction due to time balance between work and personal issues"
           },
           "question": {
             "es": "Estoy satisfecho(a) con el balance de tiempo que destino a mi trabajo y a otros temas personales",

@@ -3,8 +3,8 @@
   "index": ["generalHealth"],
   "answers": 3,
   "reference": {
-    "es": "Cigarrillo",
-    "en": "Cigarette"
+    "es": "Frecuencia de consumo de tabaco",
+    "en": "Frequency of tobacco use"
   },
   "question": {
     "es": "Consumo cigarrillos ",

@@ -3,8 +3,8 @@
   "index": ["generalHealth"],
   "answers": 0,
   "reference": {
-    "es": "Chequeos médicos",
-    "en": "Medical checkups"
+    "es": "Realización de chequeos médicos preventivos",
+    "en": "Carrying out preventive medical check-ups"
   },
   "question": {
     "es": "Tengo la disciplina de realizarme chequeos médicos preventivos",
