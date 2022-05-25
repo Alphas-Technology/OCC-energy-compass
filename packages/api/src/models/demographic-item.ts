@@ -13,4 +13,4 @@ export interface DemographicItem {
   additionalDemographic2Id: number;
   birthdate: Date;
   admission: Date;
-};
+}
