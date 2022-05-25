@@ -17,6 +17,15 @@
       <img src="/img/20200301_occ_solution_logo_only.png" style="height: 80%;" class="pl-2" alt="OCC - Solutions logo"/>
 
       <v-spacer></v-spacer>
+      <!--
+      <v-select dense hide-details
+        v-model="language"
+        :items="computedLanguages"
+        :menu-props="{ top: false, left: true, offsetY: true }"
+        class="styled-select mb-2 mr-3"
+        @change="changeLocale"
+      ></v-select>
+      -->
       <v-menu
         v-model="openMenu"
         :nudge-width="296"
@@ -25,9 +34,9 @@
         transition="slide-y-transition"
       >
         <template v-slot:activator="{ on }">
-          <v-btn
-            text
+          <v-btn text
             v-on="on"
+            class="mr-1"
           >
             <v-icon large>mdi-apps</v-icon>
           </v-btn>
@@ -77,7 +86,7 @@
           <v-btn text fab
             v-on="on"
             href="https://occ-solutions.com/ayuda/"
-            class="mx-1 elevation-0"
+            class="mr-1 elevation-0"
             target="_blank"
           >
             <v-icon>mdi-help-circle</v-icon>
@@ -200,7 +209,6 @@ export default {
       openMenu: false,
       confirmLogout: false,
       menu: false,
-      languages: [],
       language: 'es',
       // notifications: this.getNotifications(),
       notifications: [],
@@ -221,6 +229,14 @@ export default {
     }
   },
   computed: {
+    computedLanguages () {
+      const langs = []
+      const availableLanguages = this.$t('languages')
+      for (const key in availableLanguages) {
+        langs.push({ value: key, text: availableLanguages[key] })
+      }
+      return langs
+    },
     ...mapState({
       user: state => state.session.user
     })
@@ -233,6 +249,9 @@ export default {
     }
   },
   methods: {
+    changeLocale (e) {
+      this.$i18n.locale = e
+    },
     goProfile () {
       this.$router.push('/commercial-profile')
       this.menu = !this.menu
@@ -284,6 +303,8 @@ export default {
     }
   },
   created () {
+    this.language = this.user.lang
+    this.$i18n.locale = this.language
     this.$store.dispatch('loading/show')
     if (this.user.role === 'customer' && this.user.customer.type === 'commercial') {
       // this.fetchEnterprises()
@@ -329,6 +350,10 @@ export default {
 .styled-select label[for] {
   max-width: 100px;
   font-size: 10pt;
+}
+
+::v-deep .styled-select .v-select__selection {
+  font-size: 13px;
 }
 
 .unread {

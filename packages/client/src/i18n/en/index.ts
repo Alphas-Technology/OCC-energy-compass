@@ -1,4 +1,5 @@
 
+import languages from './languages'
 import auth from './auth'
 import errors from './errors'
 
@@ -23,6 +24,7 @@ export default {
   // tslint:disable-next-line:max-line-length
   maintenance_text: 'We work each day to achieve the objectives<br/>and give you the best results and experiences.',
   /* Labels grouped by modules or type */
+  languages,
   auth,
   errors,
   page_text: 'of'

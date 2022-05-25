@@ -2,6 +2,7 @@
 import Components from './components'
 import Views from './views'
 
+import languages from './languages'
 import auth from './auth'
 import errors from './errors'
 import help from './help'
@@ -28,6 +29,7 @@ export default {
   // tslint:disable-next-line:max-line-length
   maintenance_text: 'Trabajamos cada día para lograr los objetivos<br/>y darle mejores resultados y experiencias.',
   /* Labels grouped by modules or type */
+  languages,
   auth,
   errors,
   help,
