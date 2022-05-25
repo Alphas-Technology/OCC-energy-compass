@@ -19,7 +19,7 @@ class EditPopulation {
     const threadData = pendingOperationThread.data;
 
     // Get Population's base token
-    let generatedToken = await EvaluatedService.getEvaluationBaseToken(threadData._evaluation);
+    const generatedToken = await EvaluatedService.getEvaluationBaseToken(threadData._evaluation);
     if (generatedToken && generatedToken.baseToken) {
       const chunkSize = 100;
       const hasIncluded = threadData.included.length > 0;

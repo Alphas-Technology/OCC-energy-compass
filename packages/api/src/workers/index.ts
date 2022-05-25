@@ -1,10 +1,10 @@
 
 import * as ms from 'ms';
 
-import CreatePopulationWorker from './individual/create-population';
-import EditPopulationWorker from './individual/edit-population';
-import EvaluationWorker from './individual/check-start-end-dates';
-import EvaluationEmailsWorker from './individual/send-emails';
+import CreatePopulationWorker from './evaluation/create-population';
+import EditPopulationWorker from './evaluation/edit-population';
+import EvaluationWorker from './evaluation/check-start-end-dates';
+import EvaluationEmailsWorker from './evaluation/send-emails';
 
 export default () => {
   setInterval(() => { console.log('Updated at 2022-05-11 14:00'); }, 300000);
