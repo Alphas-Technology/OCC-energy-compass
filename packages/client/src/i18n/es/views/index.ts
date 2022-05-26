@@ -7,6 +7,7 @@ import Home from './home'
 import Indices from './indices'
 import Operations from './operations'
 import Questionnaires from './questionnaires'
+import OpenQuestions from './open-questions'
 
 export default {
   AppLayout,
@@ -16,5 +17,6 @@ export default {
   Home,
   Indices,
   Operations,
-  Questionnaires
+  Questionnaires,
+  OpenQuestions
 }
