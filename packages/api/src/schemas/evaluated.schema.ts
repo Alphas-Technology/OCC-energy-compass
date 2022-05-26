@@ -15,7 +15,7 @@ const EvaluatedSchema = new mongoose.Schema({
   indEmpEntId: { index: true, type: Number },
   employee: Object,
   evaluations: Object
-}, { timestamps: true });
+}, { timestamps: true, collection: 'evaluated' });
 
 
 const EvaluatedRepository = mongoose.model<EvaluatedType>('Evaluated', EvaluatedSchema);
