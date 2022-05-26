@@ -15,6 +15,9 @@ import EditQuestionnaireInfo from '../views/questionnaires/edit-questionnaire.vu
 // Indices
 import ListIndices from '../views/indices/list.vue'
 
+// Open Questions
+import ListOpenQuestions from '../views/open-questions/list.vue'
+
 // Evaluations
 import CreateEvaluation from '../views/evaluations/create.vue'
 import EditEvaluation from '../views/evaluations/edit.vue'
@@ -96,6 +99,11 @@ const routes = [
       {
         path: '/indices',
         component: ListIndices,
+        beforeEnter: RequireAdmin
+      },
+      {
+        path: '/open-questions',
+        component: ListOpenQuestions,
         beforeEnter: RequireAdmin
       },
       {
