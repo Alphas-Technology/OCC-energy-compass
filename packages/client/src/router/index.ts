@@ -12,6 +12,9 @@ import CreateQuestionnaires from '../views/questionnaires/create.vue'
 import EditQuestionnaires from '../views/questionnaires/edit.vue'
 import EditQuestionnaireInfo from '../views/questionnaires/edit-questionnaire.vue'
 
+// Indices
+import ListIndices from '../views/indices/list.vue'
+
 // Evaluations
 import CreateEvaluation from '../views/evaluations/create.vue'
 import EditEvaluation from '../views/evaluations/edit.vue'
@@ -88,6 +91,11 @@ const routes = [
       {
         path: '/questionnaires/:slug/edit-questionnaire',
         component: EditQuestionnaireInfo,
+        beforeEnter: RequireAdmin
+      },
+      {
+        path: '/indices',
+        component: ListIndices,
         beforeEnter: RequireAdmin
       },
       {
