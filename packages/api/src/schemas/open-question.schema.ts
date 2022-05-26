@@ -5,7 +5,7 @@ import { OpenQuestion } from '../models/open-question';
 export type OpenQuestionType = OpenQuestion & mongoose.Document;
 
 const OpenQuestionSchema = new mongoose.Schema({
-  name: { type: String, unique: true },
+  name: { index:true, type: String, unique: true },
   question: Object
 });
 
