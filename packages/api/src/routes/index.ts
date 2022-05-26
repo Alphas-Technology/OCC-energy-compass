@@ -6,6 +6,7 @@ import EvaluationsRouterFactory from './evaluations';
 import HostsRouterFactory from './hosts';
 import ProductServiceRouterFactory from './product-services';
 import QuestionnairesRouterfactory from './questionnaires';
+import OpenQuestionsRouterfactory from './open-question';
 
 export default (middlewares, services) => {
   const router = Router();
@@ -17,6 +18,7 @@ export default (middlewares, services) => {
   router.use(middlewares.jwt);
   router.use('/product-services', ProductServiceRouterFactory());
   router.use('/questionnaires', QuestionnairesRouterfactory());
+  router.use('/open-questions', OpenQuestionsRouterfactory());
 
   return router;
 };
