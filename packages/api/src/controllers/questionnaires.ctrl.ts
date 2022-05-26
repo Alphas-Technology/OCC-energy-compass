@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import slugify from 'slugify';
 
 import { default as QuestionnairesService } from '../services/questionnaires.srvc';
+import { default as QuestionsIndexService } from '../services/question-index.srvc';
 import IRequest from './contracts/request';
 
 class QuestionnairesController {
@@ -79,6 +80,29 @@ class QuestionnairesController {
 
   async updateInfo (req: Request, res: Response) {
     res.send(await QuestionnairesService.updateQuestionnaireInfo(req.params.slug, req.body.questionnaire));
+  }
+
+  async getIndicesGroups(req: Request, res: Response) {
+    const grouped: any = {};
+    const groups = ['generalHealth', 'burnoutOrganizational'];
+    const indexFields = 'idx answers reference question';
+    for (const group of groups) {
+      const indices = await QuestionsIndexService.listByIndexGroup(group, indexFields);
+      grouped[group] = indices;
+    }
+    res.send(grouped);
+  }
+
+  async editIndexQuestion(req: Request, res: Response) {
+    try {
+      res.send(await QuestionsIndexService.update(req.body.data));
+    } catch (error) {
+      console.log(error);
+      res.send({
+        msg: 'Not found',
+        status: 400
+      });
+    }
   }
 
 }
