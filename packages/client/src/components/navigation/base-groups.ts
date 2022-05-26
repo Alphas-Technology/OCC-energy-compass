@@ -15,6 +15,12 @@ const baseGroups: Array<IMenuGroup | IMenuLeaf> = [
     permission: 'questionnaires.listAll'
   },
   {
+    title: 'indices',
+    path: '/indices',
+    icon: 'fa-list-ul',
+    permission: 'questionnaires.listAll'
+  },
+  {
     title: 'evaluations',
     path: '/evaluations',
     icon: 'fa-chart-bar',
