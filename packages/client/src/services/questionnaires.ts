@@ -38,5 +38,11 @@ export default {
   },
   updateInfo: (slug: string, questionnaire: any) => {
     return service.post(`update-info/${slug}`, { questionnaire })
+  },
+  getIndices: () => {
+    return service.get('indices-groups')
+  },
+  editIndexQuestion: (data: any) => {
+    return service.put('edit-index-question', { data })
   }
 }
