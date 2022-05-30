@@ -296,27 +296,29 @@ class EvaluationsController {
 
     const evaluation: any = {
       name: input.name,
-      displayName: req.body.evaluation.displayName ? req.body.evaluation.displayName : '',
+      displayName: input.displayName ? input.displayName : '',
       customEmailReminder: input.customEmailReminder,
       reminders: [],
       populationSelectionDetails: oldEvaluation.populationSelectionDetails
     };
 
     if (oldEvaluation.status === 'pending') {
-      const questionnaire = await QuestionnairesService.findOneBySlug(req.body.evaluation.questionnaire);
+      const questionnaire = await QuestionnairesService.findOneBySlug(input.questionnaire);
       if (!questionnaire) {
         throw new BadRequestException('por-fail/questionnaire-not-found');
       }
-      evaluation.timeZone = req.body.evaluation.timeZone;
-      evaluation.deliveredAt = new Date(`${req.body.evaluation.deliveredAt.value} ${req.body.evaluation.deliveredAt.hour}`);
+      evaluation.questionnaire = questionnaire;
+      evaluation.timeZone = input.timeZone;
+      evaluation.deliveredAt = new Date(`${input.deliveredAt.value} ${input.deliveredAt.hour}`);
       evaluation.customEmailRelease = input.customEmailRelease;
+      evaluation.additionalSegmentation = input.additionalSegmentation;
     }
 
-    evaluation.validUntil = new Date(`${req.body.evaluation.validUntil.value} ${req.body.evaluation.validUntil.hour}`);
+    evaluation.validUntil = new Date(`${input.validUntil.value} ${input.validUntil.hour}`);
 
     // Reminders
-    if (req.body.evaluation.reminders) {
-      for (const reminder of req.body.evaluation.reminders) {
+    if (input.reminders) {
+      for (const reminder of input.reminders) {
         const rem = {
           dateTime: undefined,
           status: '',
@@ -330,8 +332,8 @@ class EvaluationsController {
           rem.dateTime = new Date(reminder.value + 'T' + reminder.hour + ':00Z');
           rem.status = 'pending';
           rem.customEmail = {
-            subject: req.body.evaluation.reminderMail.subject,
-            body: req.body.evaluation.reminderMail.body
+            subject: input.reminderMail.subject,
+            body: input.reminderMail.body
           };
 
           evaluation.reminders.push(rem);
