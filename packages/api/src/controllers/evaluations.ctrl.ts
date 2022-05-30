@@ -10,6 +10,9 @@ import { default as EvaluatedService } from '../services/evaluated.srvc';
 import { default as ProductServiceService } from '../services/product-service.srvc';
 import { default as QuestionnairesService } from '../services/questionnaires.srvc';
 import { default as OpenQuestionService } from '../services/open-question.srvc';
+import { default as QuestionsIndexService } from '../services/question-index.srvc';
+import { default as AnswersReferenceService } from '../services/answers-reference.srvc';
+
 import { default as OperationThreadsService } from '../services/operation-threads.srvc';
 
 import { UnauthorizedException, BadRequestException } from '../error';
@@ -111,8 +114,18 @@ class EvaluationsController {
       }
 
       const questionnaire = await QuestionnairesService.findOneBySlug(input.questionnaire);
+      let answersReferences: any = [];
+      const questionsIndices: any = [];
       if (!questionnaire) {
         throw new BadRequestException('por-fail/questionnaire-not-found');
+      } else {
+        // Fetch Questionnaire Indices & Answers Options (Eventually, may be filtered by questions relations)
+        answersReferences = await AnswersReferenceService.list();
+
+        const groups = ['generalHealth', 'burnoutOrganizational'];
+        for (const group of groups) {
+          questionsIndices.push(await QuestionsIndexService.listByIndexGroup(group));
+        }
       }
 
       const spend = await SpendRequest(req, 'OCC ENERGY COMPASS INDIVIDUAL', input.populationCount);
@@ -159,8 +172,8 @@ class EvaluationsController {
         questionnaire,
         additionalQuestions: input.additionalQuestions,
         openQuestions: await OpenQuestionService.findAll(),
-        answersReference: {},
-        questionsIndex: {},
+        answersReference: answersReferences,
+        questionsIndex: questionsIndices.flat(),
         deliveredAt: new Date(`${input.deliveredAt.value} ${input.deliveredAt.hour}`),
         validUntil: new Date(`${input.validUntil.value} ${input.validUntil.hour}`),
         timeZone: input.timeZone,
@@ -177,7 +190,7 @@ class EvaluationsController {
         populationSelectionDetails: criteria,
         populationCount: input.populationCount,
         populationCompletedCount: 0,
-        additionalSegmentation: []
+        additionalSegmentation: input.additionalSegmentation
       };
       const evaluation = await EvaluationsService.create(evaluationData);
 
