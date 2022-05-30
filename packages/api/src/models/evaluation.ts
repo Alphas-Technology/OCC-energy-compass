@@ -19,8 +19,8 @@ export interface Evaluation {
   questionnaire: Questionnaire;
   additionalQuestions: any,
   openQuestions: Array<OpenQuestion>,
-  // answersReference: AnswersReference;
-  // questionsIndex: QuestionsIndex;
+  answersReference: AnswersReference;
+  questionsIndex: QuestionsIndex;
   deliveredAt: Date;
   validUntil: Date;
   timeZone: string;
