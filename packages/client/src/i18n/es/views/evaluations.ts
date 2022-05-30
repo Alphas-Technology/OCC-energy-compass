@@ -35,6 +35,7 @@ export default {
     stepper_date: 'Fecha',
     stepper_questions: 'Preguntas',
     stepper_population: 'Participantes',
+    stepper_additional_segmentation: 'Segmentación Adicional',
     stepper_revition: 'Revisión y personalización',
     stepper_btn_next: 'Siguiente',
     stepper_btn_back: 'Atrás',
@@ -216,6 +217,11 @@ export default {
       support: 'Por favor no responda directamente a este correo. Las respuestas llegarán a un buzón automatizado y no nos será posible leer o contestar su correo. Para ponerse en contacto con nosotros envíe un correo a'
     }
   },
+  stepAdditionalSegmentation: {
+    title: 'Segmentación Adicional',
+    table_legend: 'Puedes seleccionar ??? Segmentaciones Adicionales para tu medición',
+    selected: 'Seleccionada(s):'
+  },
   edit: {
     title: 'Editar valoración',
     confirm_edit_title: 'Confirme la edición de la valoración<br/>Nuevos participantes',
@@ -224,7 +230,8 @@ export default {
     stepper_overview: 'Nombre de la encuesta',
     stepper_date: 'Fecha',
     stepper_questions: 'Preguntas',
-    stepper_team: 'Equipo',
+    stepper_population: 'Participantes',
+    stepper_additional_segmentation: 'Segmentación Adicional',
     stepper_revition: 'Revisión y personalización',
     stepper_btn_next: 'Siguiente',
     stepper_btn_back: 'Atrás',
