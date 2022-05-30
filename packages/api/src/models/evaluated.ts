@@ -1,15 +1,15 @@
 
 import { ObjectID } from 'mongodb';
 
-import { Dimention } from './dimention';
+import { EvaluatedAnswers } from './evaluated-answers';
 
 export interface Evaluated {
   evaluationRef?: ObjectID;
   baseToken?: string;
   token?: string;
   status?: string;
-  sensitiveDataTreatmentPolicyAccepted: boolean;
+  sensitiveDataTreatmentPolicyAccepted: any;
   indEmpEntId?: number;
   employee?: any;
-  evaluations: Dimention<Number>;
+  temp: EvaluatedAnswers;
 }
