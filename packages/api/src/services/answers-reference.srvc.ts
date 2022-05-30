@@ -15,6 +15,10 @@ class AnswersReferenceService {
     );
   }
 
+  async list(): Promise<AnswersReference[]> {
+    return AnswersReferenceRepository.find();
+  }
+
 }
 
 export default new AnswersReferenceService();
