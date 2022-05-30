@@ -8,98 +8,107 @@
     <v-row>
       <v-col cols="12" >
         <v-card class="mt-4">
-          <v-stepper v-model="step">
-            <v-stepper-header>
-              <template v-for="n in stepperHeaders.length">
-                <v-stepper-step
-                  :key="`${n}-step`"
-                  :complete="step > n"
-                  :step="n"
-                >
-                  {{ $t(stepperHeaders[n -1]) }}
-                </v-stepper-step>
-
-              </template>
-            </v-stepper-header>
-            <v-stepper-items>
-              <v-stepper-content
-                key="1-content"
+          <x-stepper
+            :step="step"
+            :headers="stepperHeaders"
+            :max-sm="1"
+            :max-md="2"
+            :max-lg="3"
+            :max-xl="4"
+            @step="step = $event"
+          >
+            <v-stepper-content
+              key="1-content"
+              step="1"
+            >
+              <x-step-overview
+                :evaluation="evaluation"
+                :total-receptors="countOldEvaluated"
+                :auto-switch-name="autoSwitchName"
                 step="1"
-              >
-                <x-step-overview
-                  :evaluation="evaluation"
-                  :total-receptors="countOldEvaluated"
-                  :auto-switch-name="autoSwitchName"
-                  step="1"
-                  nextAction="Views.Evaluations.edit.stepper_btn_next"
-                  prevAction="Views.Evaluations.edit.stepper_btn_cancel"
-                  @changeStep="verifyStepChanged"
-                />
-              </v-stepper-content>
-              <v-stepper-content
-                key="2-content"
+                nextAction="Views.Evaluations.edit.stepper_btn_next"
+                prevAction="Views.Evaluations.edit.stepper_btn_cancel"
+                @changeStep="verifyStepChanged"
+              />
+            </v-stepper-content>
+            <v-stepper-content
+              key="2-content"
+              step="2"
+            >
+              <x-step-date
+                :evaluation="evaluation"
+                :auto-switch-date="autoSwitchDate"
                 step="2"
-              >
-                <x-step-date
-                  :evaluation="evaluation"
-                  :auto-switch-date="autoSwitchDate"
-                  step="2"
-                  nextAction="Views.Evaluations.edit.stepper_btn_next"
-                  prevAction="Views.Evaluations.edit.stepper_btn_back"
-                  @changeStep="verifyStepChanged"
-                  :time-zones="timeZones"
-                ></x-step-date>
-              </v-stepper-content>
+                nextAction="Views.Evaluations.edit.stepper_btn_next"
+                prevAction="Views.Evaluations.edit.stepper_btn_back"
+                @changeStep="verifyStepChanged"
+                :time-zones="timeZones"
+              ></x-step-date>
+            </v-stepper-content>
 
-              <v-stepper-content
-                key="3-content"
+            <v-stepper-content
+              key="3-content"
+              step="3"
+            >
+              <x-step-question
+                :is-edit="true"
+                :evaluation="evaluation"
                 step="3"
-              >
-                <x-step-question
-                  :is-edit="true"
-                  :evaluation="evaluation"
-                  step="3"
-                  nextAction="Views.Evaluations.edit.stepper_btn_next"
-                  prevAction="Views.Evaluations.edit.stepper_btn_back"
-                  @changeStep="verifyStepChanged"
-                ></x-step-question>
-              </v-stepper-content>
-              <v-stepper-content
-                key="4-content"
+                nextAction="Views.Evaluations.edit.stepper_btn_next"
+                prevAction="Views.Evaluations.edit.stepper_btn_back"
+                @changeStep="verifyStepChanged"
+              ></x-step-question>
+            </v-stepper-content>
+            <v-stepper-content
+              key="4-content"
+              step="4"
+            >
+              <x-step-evaluated-selection
+                :is-edit="true"
+                :evaluation="evaluation"
+                :identify-types="identifyTypes"
                 step="4"
-              >
-                <x-step-evaluated-selection
-                  :is-edit="true"
-                  :evaluation="evaluation"
-                  :identify-types="identifyTypes"
-                  step="4"
-                  nextAction="Views.Evaluations.edit.stepper_btn_next"
-                  prevAction="Views.Evaluations.edit.stepper_btn_back"
-                  @changeStep="verifyStepChanged"
-                  :employees="employees"
-                ></x-step-evaluated-selection>
-              </v-stepper-content>
-              <v-stepper-content
-                key="5-content"
+                nextAction="Views.Evaluations.edit.stepper_btn_next"
+                prevAction="Views.Evaluations.edit.stepper_btn_back"
+                @changeStep="verifyStepChanged"
+                :employees="employees"
+              ></x-step-evaluated-selection>
+            </v-stepper-content>
+            <v-stepper-content
+              key="5-content"
+              step="5"
+            >
+              <x-step-additional-segmentation
+                :is-edit="true"
+                :evaluation="evaluation"
+                :user="user"
                 step="5"
-              >
-                <x-step-revition
-                  :evaluation="evaluation"
-                  :price="productService"
-                  step="5"
-                  :key="step"
-                  nextAction="Views.Evaluations.edit.stepper_btn_update"
-                  prevAction="Views.Evaluations.edit.stepper_btn_back"
-                  :balance="balance"
-                  :count-old-evaluated="countOldEvaluated"
-                  :identify-types="identifyTypes"
-                  @changeStep="verifyStepChanged"
-                  @delete-invitation-file="deleteInvitationFile"
-                  @delete-reminder-file="deleteReminderFile"
-                ></x-step-revition>
-              </v-stepper-content>
-            </v-stepper-items>
-          </v-stepper>
+                :current-step="step"
+                nextAction="Views.Evaluations.edit.stepper_btn_next"
+                prevAction="Views.Evaluations.edit.stepper_btn_back"
+                @changeStep="verifyStepChanged"
+              ></x-step-additional-segmentation>
+            </v-stepper-content>
+            <v-stepper-content
+              key="6-content"
+              step="6"
+            >
+              <x-step-revition
+                :evaluation="evaluation"
+                :price="productService"
+                step="6"
+                :key="step"
+                nextAction="Views.Evaluations.edit.stepper_btn_update"
+                prevAction="Views.Evaluations.edit.stepper_btn_back"
+                :balance="balance"
+                :count-old-evaluated="countOldEvaluated"
+                :identify-types="identifyTypes"
+                @changeStep="verifyStepChanged"
+                @delete-invitation-file="deleteInvitationFile"
+                @delete-reminder-file="deleteReminderFile"
+              ></x-step-revition>
+            </v-stepper-content>
+          </x-stepper>
         </v-card>
       </v-col>
     </v-row>
@@ -133,6 +142,7 @@ import XStepOverview from './steps/overview.vue'
 import XStepDate from './steps/date.vue'
 import XStepQuestion from './steps/question.vue'
 import XStepEvaluatedSelection from './steps/evaluated-selection.vue'
+import XStepAdditionalSegmentation from './steps/additional-segmentation.vue'
 import XStepRevition from './steps/revition.vue'
 
 export default Vue.extend({
@@ -141,6 +151,7 @@ export default Vue.extend({
     XStepDate,
     XStepQuestion,
     XStepEvaluatedSelection,
+    XStepAdditionalSegmentation,
     XStepRevition
   },
   data () {
@@ -149,7 +160,8 @@ export default Vue.extend({
         'Views.Evaluations.edit.stepper_overview',
         'Views.Evaluations.edit.stepper_date',
         'Views.Evaluations.edit.stepper_questions',
-        'Views.Evaluations.edit.stepper_team',
+        'Views.Evaluations.edit.stepper_population',
+        'Views.Evaluations.edit.stepper_additional_segmentation',
         'Views.Evaluations.edit.stepper_revition'
       ],
       evaluation: {
@@ -316,7 +328,7 @@ export default Vue.extend({
     verifyStepChanged (data, step) {
       switch (step) {
         case 0: return this.$router.push('/evaluations')
-        case 6: return this.toConfirm()
+        case 7: return this.toConfirm()
         default: this.step = step
       }
     },
@@ -362,6 +374,9 @@ export default Vue.extend({
         subject: this.evaluation.customEmailReminder.subject,
         body: this.evaluation.customEmailReminder.body,
         attachment: this.evaluation.customEmailReminder.attachment
+      }
+      if (res.additionalSegmentation) {
+        this.evaluation.additionalSegmentation = res.additionalSegmentation
       }
     },
     getFormattedReminders (reminders) {
