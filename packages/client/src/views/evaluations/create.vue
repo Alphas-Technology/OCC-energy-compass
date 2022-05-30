@@ -64,12 +64,23 @@
               />
             </v-stepper-content>
             <v-stepper-content key="5-content" step="5">
+              <x-step-additional-segmentation
+                :evaluation="evaluation"
+                :user="user"
+                step="5"
+                :current-step="step"
+                nextAction="Views.Evaluations.create.stepper_btn_next"
+                prevAction="Views.Evaluations.create.stepper_btn_back"
+                @changeStep="verifyStepChanged"
+              ></x-step-additional-segmentation>
+            </v-stepper-content>
+            <v-stepper-content key="6-content" step="6">
               <x-step-revition
-                v-if="step === 5"
+                v-if="step === 6"
                 :evaluation="evaluation"
                 :identify-types="identifyTypes"
                 :price="evaluation.price"
-                step="5"
+                step="6"
                 :key="step"
                 nextAction="Views.Evaluations.create.stepper_btn_confirm_create"
                 prevAction="Views.Evaluations.create.stepper_btn_back"
@@ -112,6 +123,7 @@ import XStepOverview from './steps/overview.vue'
 import XStepDate from './steps/date.vue'
 import XStepQuestion from './steps/question.vue'
 import XStepEvaluatedSelection from './steps/evaluated-selection.vue'
+import XStepAdditionalSegmentation from './steps/additional-segmentation.vue'
 import XStepRevition from './steps/revition.vue'
 
 export default Vue.extend({
@@ -120,6 +132,7 @@ export default Vue.extend({
     XStepDate,
     XStepQuestion,
     XStepEvaluatedSelection,
+    XStepAdditionalSegmentation,
     XStepRevition
   },
   data () {
@@ -129,6 +142,7 @@ export default Vue.extend({
         'Views.Evaluations.create.stepper_date',
         'Views.Evaluations.create.stepper_questions',
         'Views.Evaluations.create.stepper_population',
+        'Views.Evaluations.create.stepper_additional_segmentation',
         'Views.Evaluations.create.stepper_revition'
       ],
       evaluation: {
@@ -171,6 +185,7 @@ export default Vue.extend({
         active: null,
         price: 0,
         totalPrice: 0,
+        additionalSegmentation: {},
         demographicItems: {},
         // Demographic Selected Criteria
         departmentIds: [],
@@ -242,7 +257,7 @@ export default Vue.extend({
     verifyStepChanged (data, step) {
       switch (step) {
         case 0: return this.$router.push('/evaluations')
-        case 6: return this.toConfirm()
+        case 7: return this.toConfirm()
         default: return (this.step = step)
       }
     },
