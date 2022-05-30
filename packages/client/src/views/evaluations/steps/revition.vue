@@ -110,6 +110,44 @@
             </v-col>
           </v-row>
 
+          <!-- Additional Segmentation -->
+          <v-divider class="my-3" v-if="computedHasSegmentation"></v-divider>
+          <v-row class="mt-4" v-if="computedHasSegmentation">
+            <v-col cols="12">
+              <h6 class="title">{{ $t('Views.Evaluations.stepAdditionalSegmentation.title') }}</h6>
+              <v-list>
+                <template v-for="(item, $idx) in evaluation.additionalSegmentation">
+                  <v-list-group :key="$idx"
+                    v-if="item.selected"
+                    prepend-icon="mdi-comment-question"
+                    no-action
+                  >
+                    <template v-slot:activator>
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>{{ item.trans[user.lang].label }}</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+
+                    <v-list-item
+                      v-for="(subItem, $i) in item.details"
+                      :key="$i"
+                    >
+                      <v-list-item-content class="pl-4">
+                        <v-list-item-title>{{ subItem.trans[user.lang].label }}</v-list-item-title>
+                      </v-list-item-content>
+
+                      <v-list-item-action>
+                        <v-icon>mdi-radiobox-blank</v-icon>
+                      </v-list-item-action>
+                    </v-list-item>
+                  </v-list-group>
+                </template>
+              </v-list>
+            </v-col>
+          </v-row>
+
           <v-divider class="my-3"></v-divider>
           <v-row class="mt-4">
             <v-col cols="12" class="mb-3">
@@ -407,6 +445,18 @@ export default {
     }
   },
   computed: {
+    computedHasSegmentation () {
+      let cnt = 0
+      if (this.evaluation.additionalSegmentation) {
+        for (const key of Object.keys(this.evaluation.additionalSegmentation)) {
+          if (this.evaluation.additionalSegmentation[key].selected) {
+            cnt++
+          }
+        }
+      }
+
+      return cnt > 0
+    },
     computedPrice () {
       const evaluatedDiff = this.evaluation.populationCount - this.countOldEvaluated
       return evaluatedDiff <= 0 ? 0 : (evaluatedDiff * this.price)
@@ -426,7 +476,7 @@ export default {
       if (!this.evaluation.pollInvitation.body) {
         this.evaluation.pollInvitation.body = this.$t('Views.Evaluations.stepRevition.custom_msg')
       }
-      this.$emit('changeStep', this.evaluation, isBack ? +this.step - 1 : 6)
+      this.$emit('changeStep', this.evaluation, isBack ? +this.step - 1 : 7)
     },
     formatDate (data) {
       const [year, month, day] = data.value.split('-')
