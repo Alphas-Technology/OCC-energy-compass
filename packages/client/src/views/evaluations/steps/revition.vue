@@ -575,8 +575,16 @@ export default {
   created () {
     this.tabItems.forEach(item => { item.text = this.$t(item.text).toUpperCase() })
     this.editorOption.placeholder = this.$t('Views.Evaluations.stepRevition.body_message')
+    // Release Mail
+    if (!this.evaluation.pollInvitation.subject) {
+      this.evaluation.pollInvitation.subject = this.$t('Views.Evaluations.stepRevition.subject_msg')
+    }
     if (!this.evaluation.pollInvitation.body) {
       this.evaluation.pollInvitation.body = this.$t('Views.Evaluations.stepRevition.custom_msg')
+    }
+    // Reminder Mail
+    if (!this.evaluation.reminderMail.subject) {
+      this.evaluation.reminderMail.subject = this.$t('Views.Evaluations.stepRevition.subject_reminder')
     }
     if (!this.evaluation.reminderMail.body) {
       this.evaluation.reminderMail.body = this.$t('Views.Evaluations.stepRevition.custom_reminder')
