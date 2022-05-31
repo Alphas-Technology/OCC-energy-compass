@@ -188,22 +188,30 @@ export default {
     team: 'Equipo',
     team_members: 'Participantes',
     deleteFile: 'Eliminar archivo',
-    custom_msg: '<p>Bienvenido a la valoración de <b>Energy Compass Individual</b>, la cual recoge las percepciones sobre del trabajo en equipo con su auto-percepción. Esta información permite tener un panorama completo sobre el equipo y el impacto que está generando en su entorno laboral.</p>' +
-    '<p>Ésta es una encuesta de percepción; ninguna pregunta tiene respuesta correcta o incorrecta. Su <b>sinceridad y franqueza</b> son fundamentales para que los resultados sean útiles. <b>Sus respuestas son totalmente confidenciales.</b></p>' +
+    subject_msg: 'Bienvenido a la medición de Energía Personal',
+    custom_msg: '<p>Bienvenido(a) al proceso de valoración de Energía Personal, la cual te permitirá obtener información valiosa acerca de tus niveles de energía en cuatro dimensiones: física, mental, emocional y profesional.</p>' +
     '<p>Información clave sobre esta encuesta:</p>' +
-    '<p>La información entregada será manejada de manera <b>confidencial</b> y será utilizada con fines estadísticos.</p>' +
-    '<p>Para una mejor experiencia use <b>Google Chrome,</b> recuerde que debe estar conectado a Internet.</p>' +
-    '<p>Si tiene alguna duda o evidencia algún problema con la encuesta por favor no dude en contactarnos en el correo: <a href="mailto:info@occsolutions.org">info@occsolutions.org</a>.</p>' +
-    '<p>Recuerde que <b>este link es personal</b> y no se debe compartir.</p>' +
-    '<p>De antemano le agradecemos por su tiempo en este importante proceso.</p>',
-    custom_reminder: '<p>Le recordamos que tiene pendiente la valoración de <b>Energy Compass Individual</b>. Su opinión es muy importante en este proceso. Queremos recordarle que:</p>' +
-      '<p>Ésta es una encuesta de percepción; ninguna pregunta tiene respuesta correcta o incorrecta. Su <b>sinceridad y franqueza</b> son fundamentales para que los resultados sean útiles. <b>Sus respuestas son totalmente confidenciales.</b></p>' +
-      '<p>Información clave sobre esta encuesta:</p>' +
-      '<p>La información entregada será manejada de manera <b>confidencial</b> y será utilizada con fines estadísticos.</p>' +
-      '<p>Para una mejor experiencia use <b>Google Chrome,</b> recuerde que debe estar conectado a Internet.</p>' +
-      '<p>Si tiene alguna duda o evidencia algún problema con la encuesta por favor no dude en contactarnos en el correo: <b><a href="mailto:info@occsolutions.org">info@occsolutions.org</a>.</b></p>' +
-      '<p>Recuerde que <b>este link es personal</b> y no se debe compartir.</p>' +
-      '<p><b>De antemano le agradecemos por su tiempo en este importante proceso.</b></p>',
+    '<ul>' +
+    '<li>La valoración tarda menos de 15 minutos en completarse.</li>' +
+    '<li>La información entregada será manejada de manera confidencial y será utilizada con fines estadísticos. Nadie en la organización tendrá acceso a su informe individual.</li>' +
+    '<li>Por favor contestar con total objetividad.</li>' +
+    '<li>Para una mejor experiencia, utiliza <b>Google Chrome</b>. Recuerda que debes estar conectado(a) a Internet.</li>' +
+    '<li>Si tienes alguna duda o evidencia algún problema con la encuesta por favor no dude en contactarnos en el correo: <a href="mailto:info@occsolutions.org">info@occsolutions.org</a>.</li>' +
+    '<li>Recuerda que <b>este link es personal</b> y no se debe compartir.</li>' +
+    '</ul><br>' +
+    '<p>De antemano te agradecemos por tu tiempo y valiosos aportes en este proceso.</p>',
+    subject_reminder: 'Recordatorio medición Energía Personal',
+    custom_reminder: '<p>Te recordamos culminar el proceso de valoración de Energía Personal, la cual te permitirá obtener información valiosa acerca de tus niveles de energía en cuatro dimensiones: física, mental, emocional y profesional.</p>' +
+    '<p>Información clave sobre esta encuesta:</p>' +
+    '<ul>' +
+    '<li>La valoración tarda menos de 15 minutos en completarse.</li>' +
+    '<li>La información entregada será manejada de manera confidencial y será utilizada con fines estadísticos. Nadie en la organización tendrá acceso a su informe individual.</li>' +
+    '<li>Por favor contestar con total objetividad.</li>' +
+    '<li>Para una mejor experiencia, utiliza <b>Google Chrome</b>. Recuerda que debes estar conectado(a) a Internet.</li>' +
+    '<li>Si tienes alguna duda o evidencia algún problema con la encuesta por favor no dude en contactarnos en el correo: <a href="mailto:info@occsolutions.org">info@occsolutions.org</a>.</li>' +
+    '<li>Recuerda que <b>este link es personal</b> y no se debe compartir.</li>' +
+    '</ul><br>' +
+    '<p>De antemano te agradecemos por tu tiempo y valiosos aportes en este proceso.</p>',
     previewEmail: {
       subject: 'Asunto',
       hello: 'Hola',
