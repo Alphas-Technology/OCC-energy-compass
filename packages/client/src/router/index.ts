@@ -125,19 +125,15 @@ const routes = [
         path: '/evaluations/:slug/details',
         component: ShowEvaluation,
         beforeEnter: RequireAuthentication
-      },
-      {
-        path: '/evaluations/energy-compass/:tokenId',
-        component: Evaluation
       }
     ]
   },
   {
-    path: '/outside',
+    path: '/energy-compass',
     component: EvaluationLayout,
     children: [
       {
-        path: 'evaluations/energy-compass/:tokenId',
+        path: 'individual/:tokenId',
         component: Evaluation
       }
     ]
