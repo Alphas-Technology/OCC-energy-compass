@@ -283,9 +283,9 @@ export default {
   },
   evaluation: {
     evaluate: 'Participante',
-    information: 'Bienvenido(a) a la encuesta para valoración de Energy Compass Individual ®.',
-    information_2: 'La valoración está compuesta por una serie comportamientos y conductas relacionadas con las competencias y valores del Modelo POR, sobre las cuales cada evaluador califica la frecuencia entre 1 y 6 de acuerdo a la siguiente escala:',
-    information_3: 'Puede visualizar está y más información haciendo click en el botón de progreso, ubicado en el inferior derecho de la página',
+    information_1: 'Bienvenido(a) a la encuesta Energy Compass',
+    information_2: 'Energy Compass, es una medición de 59 preguntas que explora las 4 dimensiones de las personas de alta energía positiva: Física, Mental, Emocional y Profesional.',
+    information_3: 'El primer paso en este camino de mejoramiento personal, es el de generar auto-consciencia de tus fortalezas y áreas de oportunidad, por ello te invitamos a contestar de manera totalmente honesta cada una de las preguntas. Los resultados individuales son totalmente confidenciales y de uso personal.',
     score_label1: 'Nunca',
     score_label2: 'Casi nunca',
     score_label3: 'Ocasionalmente',
@@ -308,11 +308,12 @@ export default {
     input_back: 'Atras',
     input_next: 'Siguiente',
     wellcomeDialog: {
-      wellcome_title: 'Bienvenido a la valoración POR.',
-      wellcome_instructions: 'Bienvenido(a) a la encuesta para valoración de trabajo en equipo con el modelo POR® (Personas, Organización y Resultados).' +
-      '<br/><br/>A continuación encontrará 45 enunciados de conductas que debe tener un equipo de alto desempeño dentro de una organización. Para cada una de estas conductas, por favor indique como considera que usted (primera columna) y el equipo (segunda columna) actúan.' +
-      '<br/><br/>Califique todas las conductas utilizando una escala de 1 a 6, donde: (1) Nunca, (2) Casi nunca, (3) Ocasionalmente, (4) Con frecuencia, (5) Casi siempre, (6) Siempre.' +
-      '<br/><br/>Recuerde, para obtener resultados fieles a la realidad asegúrese de estar respondiendo de forma sincera. Su valoración no es ni buena ni mala, se trata de encontrar el valor que refleje con mayor fidelidad a la realidad. Confiamos en su criterio y sinceridad. Asegúrese de leer adecuadamente la información. El plazo máximo para completar la encuesta es: {deadline}',
+      wellcome_instructions: 'Energy Compass, es una medición de 59 preguntas que explora las 4 dimensiones de las personas de alta energía positiva: Física, Mental, Emocional y Profesional.' +
+      '<br/><br/>El primer paso en este camino de mejoramiento personal, es el de generar auto-consciencia de tus fortalezas y áreas de oportunidad, por ello te invitamos a contestar de manera totalmente honesta cada una de las preguntas. Los resultados individuales son totalmente confidenciales y de uso personal.' +
+      '<br/><br/>El plazo máximo para completar la encuesta es: {deadline}',
+      must_accept_policy_to_continue: 'Para continuar con la encuesta es indispensable que por favor aceptes las política de tratamiento de datos:',
+      i_accept_the: 'Acepto la',
+      policy: 'Política de Tratamiento de Datos',
       input_start_poll: 'Comenzar valoración'
     },
     middleDialog: {
