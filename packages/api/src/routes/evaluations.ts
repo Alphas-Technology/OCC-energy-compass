@@ -15,6 +15,11 @@ export default (middlewares, services) => {
   );
 
   EvaluationsRouter.put(
+    '/accept-policy/:tokenId',
+    EvaluationsController.acceptDataPolicy
+  );
+
+  EvaluationsRouter.put(
     '/set-answersDimention',
     EvaluationsController.setAnswersDimention
   );
@@ -24,6 +29,7 @@ export default (middlewares, services) => {
     EvaluationsController.updateAnswersDimention
   );
 
+  // Protected routes
   EvaluationsRouter.use(middlewares.jwt);
 
   EvaluationsRouter.get(
@@ -136,7 +142,7 @@ export default (middlewares, services) => {
 
   EvaluationsRouter.post(
     '/send-reminders',
-    EvaluationsController.sendRemineders
+    EvaluationsController.sendReminders
   );
 
   EvaluationsRouter.get(

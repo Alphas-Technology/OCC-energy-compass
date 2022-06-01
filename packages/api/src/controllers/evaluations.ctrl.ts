@@ -432,14 +432,10 @@ class EvaluationsController {
             msg: 'Evaluation not found'
           });
         } else {
-        // if (evaluation.enterprise.logo) {
-        //   evaluation.enterprise.logo = await this.services.storage.getImgUrl(evaluation.enterprise.logo);
-        // }
           resp.send({
             executed: true,
             data: evaluation,
-            evaluated: evaluated,
-            team: await EvaluatedService.getByEvaluationRef(evaluated.evaluationRef, 'employee.firstName employee.lastName')
+            evaluated: evaluated
           });
         }
       }
@@ -718,7 +714,7 @@ class EvaluationsController {
     res.send({ evaluated, errors });
   }
 
-  async sendRemineders (req: IRequest, res: Response) {
+  async sendReminders (req: IRequest, res: Response) {
     try {
       const evaluation = await EvaluationsService.findOneBySlug(req.body.slug);
       const getTokenAndPopulation = (evaluated): { population: Array<number>, tokens: {[key: string]: string}} => {
@@ -749,6 +745,15 @@ class EvaluationsController {
     } catch (error) {
       res.status(400);
       res.send({ error });
+    }
+  }
+
+  async acceptDataPolicy (req: IRequest, res: Response) {
+    try {
+      await EvaluatedService.setPolicyAccepted(req.params.tokenId, req.body.url);
+      res.send();
+    } catch (error) {
+      res.status(400).send(error);
     }
   }
 
