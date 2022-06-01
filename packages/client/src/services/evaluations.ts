@@ -90,6 +90,9 @@ export default {
   sendReminders: (slug: string) => {
     return service.post('send-reminders', { slug })
   },
+  acceptPolicy: (tokenId: string, url: string) => {
+    return service.put(`accept-policy/${tokenId}`, { url })
+  },
   closeEvaluation: (slug: string) => {
     return service.get(`close/${slug}`)
   },
