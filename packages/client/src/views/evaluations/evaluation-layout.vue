@@ -1,8 +1,8 @@
 
 <template>
   <v-app>
-    <v-row class="grey lighten-3">
-      <v-col cols="12">
+    <v-row no-gutters class="grey lighten-3">
+      <v-col cols="12" class="py-3 px-1">
         <router-view />
       </v-col>
     </v-row>
