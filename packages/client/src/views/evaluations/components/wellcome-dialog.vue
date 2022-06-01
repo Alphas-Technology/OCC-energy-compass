@@ -128,7 +128,7 @@ export default Vue.extend({
         .catch(err => {
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
         })
-        .finally(res => {
+        .finally(() => {
           this.loading = false
         })
     }
