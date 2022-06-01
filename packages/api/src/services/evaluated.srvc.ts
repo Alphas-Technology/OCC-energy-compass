@@ -116,6 +116,19 @@ class EvaluatedService {
     );
   }
 
+  async setPolicyAccepted(tokenId: string, url: string): Promise<EvaluatedType> {
+    const data = {
+      accepted: true,
+      timestamp: Date.now(),
+      url: url
+    };
+    return EvaluatedRepository.findOneAndUpdate(
+      {'token': tokenId},
+      { '$set': { 'sensitiveDataTreatmentPolicyAccepted': data }},
+      { new: true}
+    );
+  }
+
   async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
