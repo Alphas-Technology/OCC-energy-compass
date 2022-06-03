@@ -17,7 +17,7 @@ const EvaluationsSchema = new mongoose.Schema({
   additionalQuestions: [],
   openQuestions: [{
     name: String,
-    translation: {}
+    question: Object
   }],
   answersReference: Object,
   questionsIndex: Object,
