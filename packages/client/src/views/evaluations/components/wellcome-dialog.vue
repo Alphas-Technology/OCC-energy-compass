@@ -1,8 +1,6 @@
 <template>
-  <v-dialog
+  <v-dialog fullscreen hide-overlay persistent no-click-animation
     v-model="show"
-    fullscreen
-    hide-overlay
   >
     <v-card tile class="wellcome-dialog">
       <v-container fluid>
