@@ -305,8 +305,10 @@ export default {
     columm_auto_info: 'Las preguntas en esta columna se representan en primera persona y refieren a tu autoevaluación',
     columm_team_info: 'Las preguntas en esta columna se representan en tercera persona y refieren a la valoración del equipo',
     input_save: 'Guardar',
+    input_finish: 'Finalizar',
     input_back: 'Atras',
     input_next: 'Siguiente',
+    answer: 'Respuesta',
     wellcomeDialog: {
       wellcome_instructions: 'Energy Compass, es una medición de 59 preguntas que explora las 4 dimensiones de las personas de alta energía positiva: Física, Mental, Emocional y Profesional.' +
       '<br/><br/>El primer paso en este camino de mejoramiento personal, es el de generar auto-consciencia de tus fortalezas y áreas de oportunidad, por ello te invitamos a contestar de manera totalmente honesta cada una de las preguntas. Los resultados individuales son totalmente confidenciales y de uso personal.' +
