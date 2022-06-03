@@ -19,6 +19,10 @@ const EvaluatedSchema = new mongoose.Schema({
   indEmpEntId: { index: true, type: Number },
   employee: Object,
   temp: {
+    segmentation: [{
+      segmentationId: Number,
+      detailId: Number
+    }],
     evaluations: [{
       name: String,
       score: Number,
@@ -26,22 +30,20 @@ const EvaluatedSchema = new mongoose.Schema({
         score: Number
       }]
     }],
-    open: [{
-      question: String,
-      answer: []
+    indices: [{
+      idx: Number,
+      answer: Number
     }],
     additional: [{
       question: String,
       answer: []
     }],
-    indices: [{
-      idx: Number,
-      answer: Number
+    open: [{
+      question: String,
+      answer: []
     }],
-    segmentation: Object,
   }
 }, { timestamps: true, collection: 'evaluated' });
-
 
 const EvaluatedRepository = mongoose.model<EvaluatedType>('Evaluated', EvaluatedSchema);
 export default EvaluatedRepository;
