@@ -213,7 +213,7 @@
     </v-card>
 
     <img
-      src="/img/20200301_occ_solution_logo_only.png"
+      src="/img/20220531_occ_energy_logo.png"
       style="visibility:hidden;"
       id="occEnergyCompassLogo"
       width="0"
