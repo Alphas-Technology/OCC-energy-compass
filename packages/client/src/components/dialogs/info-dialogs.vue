@@ -6,8 +6,8 @@
       hide-overlay
     >
       <v-card>
-        <v-container fluid>
-          <v-row justify="center" align-content="center" align="center">
+        <v-container fluid style="height: 100vh;">
+          <v-row justify="center" align-content="center" align="center" class="fill-height">
             <v-col
               cols="12"
               class="text-center grey--text text--darken-1"
