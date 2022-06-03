@@ -3,9 +3,9 @@ import { Dimention } from './dimention';
 import { AnswerOpenQuestion } from './answer-open-question';
 
 export type EvaluatedAnswers = {
+  segmentation: Array<{ segmentationId: Number, detailId: Number }>;
   evaluations: Dimention<Number>;
-  open: Array<AnswerOpenQuestion>;
-  additional: Array<AnswerOpenQuestion>;
   indices: Array<{ idx: Number, answer: Number }>;
-  segmentation: Array<any>;
+  additional: Array<AnswerOpenQuestion>;
+  open: Array<AnswerOpenQuestion>;
 };
