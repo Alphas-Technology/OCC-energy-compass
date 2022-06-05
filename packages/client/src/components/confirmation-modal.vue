@@ -3,7 +3,7 @@
   <v-dialog
     v-model="show"
     persistent
-    max-width="600px">
+    max-width="560px">
     <v-card>
       <v-toolbar light flat>
         <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -19,8 +19,9 @@
           <slot name="question"></slot>
         </div>
         <div v-if="!reversible">
-          <br>
-          <div class="text-center"> {{ $t('Components.ConfirmationModal.no_reversible_msg') }} </div>
+          <div class="mt-9 mb-5 body-2 text-center red--text">
+            {{ $t('Components.ConfirmationModal.no_reversible_msg') }}
+          </div>
         </div>
       </v-card-text>
       <v-card-actions>
