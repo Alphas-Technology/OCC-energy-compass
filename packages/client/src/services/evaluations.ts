@@ -45,8 +45,11 @@ export default {
   findByTokenId: (tokenId: string) => {
     return service.get(`find-by-token-id/${tokenId}`)
   },
-  findById: (id: string) => {
-    return service.get(`find-by-id/${id}`)
+  saveEvaluatedTempAnswers: (tokenId: string, temp: any) => {
+    return service.put('save-temp-answers', { tokenId: tokenId, data: temp })
+  },
+  finishPoll: (tokenId: string) => {
+    return service.put('finish-poll', { tokenId: tokenId })
   },
   findByIdToReport: (id: string) => {
     return service.get(`find-by-id-to-report/${id}`)
@@ -77,15 +80,6 @@ export default {
   },
   generateTemplate: () => {
     return service.get('generate-template')
-  },
-  setAnswersDimention: (tokenId: string, answersDimention: any) => {
-    return service.put('set-answersDimention', { tokenId: tokenId, data: answersDimention })
-  },
-  updateAnswersDimention: (tokenId: string, dimention: string, attribute: string, behavior: string, scoreKey: string, scoreValue: number) => {
-    return service.put('update-answersDimention', { tokenId: tokenId, path: `${dimention}.${attribute}.${behavior}.${scoreKey}`, score: scoreValue })
-  },
-  updateEvaluation: (tokenId: string, answersDimention: object) => {
-    return service.put('update-evaluation', { tokenId, answersDimention })
   },
   sendReminders: (slug: string) => {
     return service.post('send-reminders', { slug })
