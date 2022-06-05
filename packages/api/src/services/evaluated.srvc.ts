@@ -129,32 +129,18 @@ class EvaluatedService {
     );
   }
 
-  async setAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatedType> {
+  async updateTempAnswers(tokenId: string, temp: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
-      { '$set': { 'answersDimention': answersDimention, 'status': 'in_progress' }},
+      { '$set': { 'temp': temp }},
       { new: true}
     );
   }
 
-  async updateAnswersDimention(tokenId: string, path: string, score: number): Promise<EvaluatedType> {
-    const data: any = {
-      $set : {
-        status: 'in_progress'
-      }
-    };
-    data.$set[`answersDimention.${path}`] = score;
+  async setPollCompleted(tokenId: string): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
-      data,
-      { new: true}
-    );
-  }
-
-  async completeAnswersDimention(tokenId: string, answersDimention: any): Promise<EvaluatedType> {
-    return EvaluatedRepository.findOneAndUpdate(
-      {'token': tokenId},
-      { '$set': { 'answersDimention': answersDimention, 'status': 'completed' }},
+      { '$set': { 'status': 'completed' }},
       { new: true}
     );
   }
