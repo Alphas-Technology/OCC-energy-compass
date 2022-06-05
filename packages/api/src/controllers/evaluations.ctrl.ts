@@ -28,13 +28,6 @@ const promisify = require('util.promisify');
 
 class EvaluationsController {
 
-  private services: any;
-
-  async useServices(services): Promise<any> {
-    this.services = services;
-    return Promise.resolve();
-  }
-
   async list(req: IRequest, res: Response) {
     let evaluations = undefined;
     const selectFields = 'displayName name questionnaire.name  status deliveredAt validUntil slug _id';
@@ -47,9 +40,9 @@ class EvaluationsController {
     res.send({ items: evaluations });
   }
 
-  async setAnswersDimention(req: Request, resp: Response) {
+  async saveTempAnswers(req: Request, resp: Response) {
     try {
-      await EvaluatedService.setAnswersDimention(req.body.tokenId, req.body.data);
+      await EvaluatedService.updateTempAnswers(req.body.tokenId, req.body.data);
       resp.send();
     } catch (error) {
       resp.send({
@@ -60,10 +53,11 @@ class EvaluationsController {
     }
   }
 
-  async updateAnswersDimention(req: Request, resp: Response) {
+  async finishPollByToken(req: Request, resp: Response) {
     try {
-      await EvaluatedService.updateAnswersDimention(req.body.tokenId, req.body.path, req.body.score);
-      resp.send({success: true});
+      const closedPoll = await EvaluatedService.setPollCompleted(req.body.tokenId);
+      // Must store anonymous Answers
+      resp.send(closedPoll.temp);
     } catch (error) {
       resp.send({
         msg: 'Not found',

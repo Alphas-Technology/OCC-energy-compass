@@ -20,13 +20,13 @@ export default (middlewares, services) => {
   );
 
   EvaluationsRouter.put(
-    '/set-answersDimention',
-    EvaluationsController.setAnswersDimention
+    '/save-temp-answers',
+    EvaluationsController.saveTempAnswers
   );
 
   EvaluationsRouter.put(
-    '/update-answersDimention',
-    EvaluationsController.updateAnswersDimention
+    '/finish-poll',
+    EvaluationsController.finishPollByToken
   );
 
   // Protected routes
