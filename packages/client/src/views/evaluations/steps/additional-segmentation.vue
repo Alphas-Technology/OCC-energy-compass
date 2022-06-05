@@ -45,23 +45,26 @@
                   v-for="(seg, i) in segmentations"
                   :key="`s-${i}-${seg.id}`"
                 >
-                  <td class="pr-0 pl-3">
-                    <v-checkbox dense hide-details
-                      v-model="evaluation.additionalSegmentation[seg.code].selected"
-                      :ripple="false"
-                      color="primary"
-                      class="mt-1 mb-2 small-label"
-                      :label="seg.trans[user.lang].label"
-                      @click="selectedSegmentationsCounter()"
-                    ></v-checkbox>
-                  </td>
-                  <td class="text-left spaced-cell">
-                    <ul>
-                      <li v-for="det in seg.details" :key="det.name" class="caption">
-                        {{ det.trans[user.lang].label }}
-                      </li>
-                    </ul>
-                  </td>
+                  <template v-if="evaluation.additionalSegmentation[seg.code]">
+                    <td class="pr-0 pl-3">
+                      <v-checkbox dense hide-details
+                        v-model="evaluation.additionalSegmentation[seg.code].selected"
+                        :ripple="false"
+                        :label="seg.trans[user.lang].label"
+                        :disabled="evaluation.status === 'in_progress'"
+                        color="primary"
+                        class="mt-1 mb-2 small-label"
+                        @click="selectedSegmentationsCounter()"
+                      ></v-checkbox>
+                    </td>
+                    <td class="text-left spaced-cell">
+                      <ul>
+                        <li v-for="det in seg.details" :key="det.name" class="caption">
+                          {{ det.trans[user.lang].label }}
+                        </li>
+                      </ul>
+                    </td>
+                  </template>
                 </tr>
               </tbody>
             </template>
@@ -164,8 +167,12 @@ export default Vue.extend({
   },
   methods: {
     getSegmentations () {
+      const service = this.isEdit
+        ? additionalSegmentationService.list()
+        : additionalSegmentationService.listActive()
+
       this.loadingSegmentations = true
-      additionalSegmentationService.list()
+      service
         .then((res) => {
           if (res.items) {
             this.mapItems(res.items)
@@ -196,7 +203,9 @@ export default Vue.extend({
           })
         })
 
-        if (!this.isEdit) {
+        if (this.isEdit) {
+          this.selectedSegmentationsCounter()
+        } else {
           this.evaluation.additionalSegmentation[item.code] = {
             id: item.id,
             selected: false,
