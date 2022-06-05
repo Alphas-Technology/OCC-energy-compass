@@ -292,7 +292,7 @@ export default {
     score_label4: 'Con frecuencia',
     score_label5: 'Casi siempre',
     score_label6: 'Siempre',
-    confirmation_modal_title: 'Guardar respuestas',
+    confirmation_modal_title: 'Finalizar encuesta',
     confirmation_modal_des: 'Asegúrese de verificar sus respuestas, ya que una vez guardadas no se pueden modificar',
     expiration_date: 'La encuesta a la que se está intentando ingresar ha terminado',
     wellcome_instructions: 'Recuerde, para obtener resultados fieles a la realidad asegúrese de estar respondiendo de forma sincera. Su valoración no es ni buena ni mala, se trata de encontrar el valor que refleje con mayor fidelidad a la realidad. Confiamos en su criterio y sinceridad. Asegúrese de leer adecuadamente la información. El plazo máximo para completar la encuesta es: {deadline}',
@@ -338,7 +338,8 @@ export default {
       progress_team_info: 'Progreso de respuestas por valoración al equipo',
       progress_info: 'Progreso de respuestas general',
       members_info: 'Participantes del equipo'
-    }
+    },
+    must_answer_all_questions: 'Debes responder todas las preguntas'
   },
   report: {
     no_answers_modal_msg: 'La encuesta actual no posee respuestas, por lo cual no será posible generar un reporte.',
