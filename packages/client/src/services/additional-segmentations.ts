@@ -10,7 +10,8 @@ export default {
   listActive: () => {
     return service.suiteOperation(() => service.get('list-active-by-enterprise'))
   },
+  // Currently unused by client (running async by api worker)
   saveEmployeeDetail: (detailId: number, employeeEnterpriseId: number) => {
-    return service.suiteOperation(() => service.put(`save-employee-detail/${detailId}/${employeeEnterpriseId}`))
+    return service.suiteOperation(() => service.post(`save-employee-detail/${detailId}/${employeeEnterpriseId}`))
   }
 }
