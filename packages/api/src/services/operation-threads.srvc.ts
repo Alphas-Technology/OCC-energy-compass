@@ -43,6 +43,15 @@ class OperationThreadsService {
   }
 
   /**
+   * @description Fetches multiple operation threads by operation type and status
+   * @param name
+   * @returns {Promise<OperationThreads>}
+   */
+  async findBatchByOperationAndStatus(operation: string, status: string, limit?: number): Promise<OperationThreads[]|OperationThreadsType[]> {
+    return OperationThreadsRepository.find({ operation, status }).limit(limit || 20);
+  }
+
+  /**
    * @description Saves the question service in the storage
    * @param {OperationThreads} OperationThreads
    * @returns {Promise<OperationThreads>}
