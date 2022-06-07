@@ -8,63 +8,116 @@ import { default as EvaluatedService } from '../services/evaluated.srvc';
 
 import IRequest from './contracts/request';
 
+const calculateProgress = (evaluatedTemp, questions) => {
+  let totalQuestions = 0;
+  let answeredCount = 0;
+  for (const key of Object.keys(questions)) {
+    switch (key) {
+      case 'segmentation':
+        const additionalSegmentations = Object.keys(questions[key]);
+        if (additionalSegmentations.length > 0) {
+          // Questions Count
+          totalQuestions += additionalSegmentations.length;
+          // Answers Count
+          if (evaluatedTemp[key]) {
+            evaluatedTemp[key].forEach(a => {
+              if (a.detailId) {
+                answeredCount++;
+              }
+            });
+          }
+        }
+        break;
+
+      case 'evaluations':
+        // Questions Count
+        for (const dimKey of Object.keys(questions[key])) {
+          for (const varKey of Object.keys(questions[key][dimKey])) {
+            for (const qKey of Object.keys(questions[key][dimKey][varKey])) {
+              totalQuestions++;
+            }
+          }
+        }
+        // Answers Count
+        if (evaluatedTemp[key]) {
+          evaluatedTemp[key].forEach(a => {
+            a.variable.forEach(v => {
+              if (v.score) {
+                answeredCount++;
+              }
+            });
+          });
+        }
+        break;
+
+      case 'indices':
+      case 'additional':
+        // Questions Count
+        totalQuestions += questions[key].length;
+        // Answers Count
+        if (evaluatedTemp[key]) {
+          evaluatedTemp[key].forEach(a => {
+            if (a.answer) {
+              answeredCount++;
+            }
+          });
+        }
+        break;
+
+      case 'open':
+        // Questions Count
+        totalQuestions += (questions[key].length * 3);
+        // Answers Count
+        if (evaluatedTemp[key]) {
+          evaluatedTemp[key].forEach(a => {
+            a.answer.forEach(oq => {
+              if (oq) {
+                answeredCount++;
+              }
+            });
+          });
+        }
+        break;
+    }
+  }
+
+  return Math.round((answeredCount * 100) / totalQuestions);
+};
+
 class DashboardController {
 
   async getEmployeeInfo(req: Request, res: Response) {
     const response = [];
     let evaluationsEmployee = undefined;
-    const populationFields = 'status employee.enterpriseId token evaluationRef answersDimention';
+    const populationFields = 'status token evaluationRef temp';
     if (req.body.employeeId) {
       evaluationsEmployee = await EvaluatedService.findManyByEmployeeId(req.body.employeeId, populationFields);
     } else {
       evaluationsEmployee = await EvaluatedService.findManyByEmployeeEnterpriseId(req.body.employeeEnterpriseId, populationFields);
     }
-    const productService = await ProductServiceService.findByName('OCC POR REPORTE INDIVIDUAL');
+    const productService = await ProductServiceService.findByName('OCC ENERGY COMPASS INDIVIDUAL');
 
-    const getProgress = (answersDimention) => {
-      let questionCount = 0;
-      let counterAnsweredQuestionsAuto = 0;
-      let counterAnsweredQuestionsTeam = 0;
+    for (const evaluated of evaluationsEmployee) {
+      const evaluation = await EvaluationsService.findInProgressById(evaluated.evaluationRef, 'name displayName status additionalSegmentation questionnaire.evaluations questionsIndex additionalQuestions openQuestions');
+      if (!evaluation) continue;
 
-      for (const dimention in answersDimention) {
-        if (Object.prototype.hasOwnProperty.call(answersDimention, dimention)) {
-          const attributes = answersDimention[dimention];
-          for (const behaviors in attributes) {
-            if (Object.prototype.hasOwnProperty.call(attributes, behaviors)) {
-              const questions = attributes[behaviors];
-              for (const question in questions) {
-                if (Object.prototype.hasOwnProperty.call(questions, question)) {
-                  const element = questions[question];
-                  questionCount++;
-                  if (element.auto >= 1 && element.auto <= 6) counterAnsweredQuestionsAuto++;
-                  if (element.team >= 1 && element.team <= 6) counterAnsweredQuestionsTeam++;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      return ((counterAnsweredQuestionsAuto + counterAnsweredQuestionsTeam) / (questionCount * 2)) * 100;
-    };
-
-    for (const employee of evaluationsEmployee) {
-      const evaluation = await EvaluationsService.findById(employee.evaluationRef, 'name displayName status');
-      if (evaluation.status !== 'in_progress') {
-        continue;
-      }
-
+      const evaluationQuestions = {
+        segmentation: evaluation.additionalSegmentation,
+        evaluations: evaluation.questionnaire.evaluations,
+        indices: evaluation.questionsIndex,
+        additional: evaluation.additionalQuestions,
+        open: evaluation.openQuestions
+      };
 
       response.push({
         productService,
-        token: employee.token,
+        token: evaluated.token,
         evaluation: {
           _id: evaluation._id,
           name: evaluation.name,
-          displayName: evaluation.displayName,
-          population: [employee]
+          displayName: evaluation.displayName
         },
-        score: employee.answersDimention ? getProgress(employee.answersDimention) : 0
+        score: evaluated.temp ? calculateProgress(evaluated.temp, evaluationQuestions) : 0
       });
     }
     res.send(response);
@@ -97,6 +150,7 @@ class DashboardController {
       evaluations: response
     });
   }
+
 }
 
 export default new DashboardController();
