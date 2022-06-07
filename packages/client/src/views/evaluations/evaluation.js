@@ -1,20 +1,17 @@
 
 import Vue from 'vue'
-import { mapState } from 'vuex'
 
 import evaluationsService from '../../services/evaluations'
 
-import XColQuestion from './components/col-question.vue'
-import XHelpDialog from './components/help-dialog.vue'
-import XMiddleDialog from './components/middle-dialog.vue'
 import XWellcomeDialog from './components/wellcome-dialog.vue'
+import XMiddleDialog from './components/middle-dialog.vue'
+import XEndDialog from './components/end-dialog.vue'
 
 export default Vue.extend({
   components: {
-    XColQuestion,
-    XHelpDialog,
+    XWellcomeDialog,
     XMiddleDialog,
-    XWellcomeDialog
+    XEndDialog
   },
   data () {
     return {
@@ -41,9 +38,10 @@ export default Vue.extend({
       dialogText: '',
       startDialog: false,
       middleDialog: false,
-      helpDialog: false,
       displayedMiddleDialog: false,
-      showConfirmation: false
+      showConfirmation: false,
+      endDialog: false,
+      alreadySentEmail: ''
     }
   },
   watch: {
@@ -56,6 +54,9 @@ export default Vue.extend({
     outIntervalDialog (val) {
       document.querySelector('html').style.overflow = val ? 'hidden' : null
     },
+    endDialog (val) {
+      document.querySelector('html').style.overflow = val ? 'hidden' : null
+    },
     progress () {
       if (this.progress >= 50 && !this.displayedMiddleDialog && !this.startDialog) {
         this.middleDialog = this.displayedMiddleDialog = true
@@ -63,9 +64,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.session.user
-    }),
     colorProgress () {
       if (this.progress >= 0 && this.progress < 20) return '#BB3E3E'
       if (this.progress >= 20 && this.progress < 40) return '#B8663D'
@@ -167,19 +165,25 @@ export default Vue.extend({
       this.progress = prog
     },
     showDialog (icon, text) {
-      this.outIntervalDialog = true
       this.dialogIcon = icon
       this.dialogText = text
+      this.outIntervalDialog = true
     },
     getEvaluation () {
       this.$store.dispatch('loading/show')
       return evaluationsService.findByTokenId(this.$route.params.tokenId)
         .then((res) => {
           if (res.executed) {
+            this.evaluated = res.evaluated
+            this.alreadySentEmail = this.evaluated.alreadySentEmail || ''
             if (res.data.status === 'completed') {
               this.completed = true
               this.$store.dispatch('loading/hide')
-              this.showDialog('/img/expiracion.png', this.$t('Views.Evaluations.evaluation.expiration_date'))
+              if (this.evaluated.status === 'completed') {
+                this.endDialog = true
+              } else {
+                this.showDialog('/img/expiracion.png', this.$t('Views.Evaluations.evaluation.expiration_date'))
+              }
             } else {
               this.evaluation = res.data
               const releasedAtParsed = Date.parse(res.data.deliveredAt.split('Z')[0]) / 1000
@@ -191,10 +195,9 @@ export default Vue.extend({
               } else if (res.data.status === 'pending') {
                 this.showDialog('/img/reloj.png', this.$t('Views.Evaluations.evaluation.not_available'))
               } else {
-                this.evaluated = res.evaluated
                 if (this.evaluated.status === 'completed') {
                   this.completed = true
-                  this.showDialog('/img/expiracion.png', this.$t('Views.Evaluations.evaluation.evaluation_completed'))
+                  this.endDialog = true
                 } else {
                   if (!this.evaluated.sensitiveDataTreatmentPolicyAccepted || !this.evaluated.sensitiveDataTreatmentPolicyAccepted.accepted) {
                     this.startDialog = true
@@ -294,7 +297,7 @@ export default Vue.extend({
       // Initial answers structure
       if (notAnsweredQuestions) {
         for (const openQ of this.evaluation.openQuestions) {
-          this.evaluated.temp.open.push({ question: openQ.question[this.lang], answer: [null, null, null] })
+          this.evaluated.temp.open.push({ question: openQ.name, answer: [null, null, null] })
         }
       }
 
@@ -320,7 +323,7 @@ export default Vue.extend({
           setTimeout(() => this.setProgress(), 140)
         })
         .catch((err) => {
-          console.log(err)
+          this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
         })
         .finally(() => {
           this.$store.dispatch('loading/hide')
@@ -329,12 +332,16 @@ export default Vue.extend({
     finishEvaluatedPoll () {
       this.$store.dispatch('loading/show')
       evaluationsService.finishPoll(this.$route.params.tokenId)
-        .then((res) => {
+        .then(() => {
           this.completed = true
-          this.showDialog('/img/expiracion.png', this.$t('Views.Evaluations.evaluation.evaluation_completed'))
+          this.endDialog = true
         })
         .catch((err) => {
-          console.log(err)
+          if (err.code === 'evaluation-has-ended') {
+            this.showDialog('/img/expiracion.png', this.$t('Views.Evaluations.evaluation.expiration_date'))
+          } else {
+            this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
+          }
         })
         .finally(() => {
           this.showConfirmation = false

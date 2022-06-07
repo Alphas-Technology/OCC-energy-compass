@@ -188,7 +188,7 @@
               </v-row>
             </div>
           </template>
-      </ValidationObserver>
+        </ValidationObserver>
       </v-card-text>
     </v-card>
 
@@ -215,7 +215,7 @@
           {{ $t('Views.Evaluations.evaluation.input_next') }}
         </v-btn>
 
-        <v-btn large v-else
+        <v-btn large v-else-if="!completed"
           color="primary"
           class="px-6"
           :disabled="progress !== 100"
@@ -227,7 +227,9 @@
     </v-row>
 
     <!-- FAB Button -->
-    <v-fab-transition style="bottom: 10px;">
+    <v-fab-transition v-if="!completed"
+      style="bottom: 10px;"
+    >
       <v-btn dark fixed bottom right fab x-large
         :color="colorProgress"
       >
@@ -245,11 +247,6 @@
       :middle-dialog="middleDialog"
       @close="() => this.middleDialog = false"
     ></x-middle-dialog>
-    <x-help-dialog
-      :help-dialog="helpDialog"
-      :progress="progress"
-      @close="() => this.helpDialog = false"
-    ></x-help-dialog>
     <x-info-dialog
       :dialog="outIntervalDialog"
       :icon="dialogIcon"
@@ -266,6 +263,12 @@
         {{ $t('Views.Evaluations.evaluation.confirmation_modal_des') }}
       </template>
     </x-confirmation-modal>
+    <x-end-dialog
+      :lang="$i18n.locale"
+      :evaluated-employee="evaluated && evaluated.employee ? evaluated.employee : {}"
+      :show-dialog="endDialog"
+      :sent-email="alreadySentEmail"
+    ></x-end-dialog>
 
     <x-loading></x-loading>
     <x-alert></x-alert>
