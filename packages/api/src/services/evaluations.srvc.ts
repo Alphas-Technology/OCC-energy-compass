@@ -35,6 +35,13 @@ class EvaluationsService {
     return EvaluationRepository.findOne({_id: new ObjectID(id)}, select || undefined);
   }
 
+  async findInProgressById(id: string, select?: undefined|any): Promise<Evaluation> {
+    return EvaluationRepository.findOne({
+      _id: new ObjectID(id),
+      status: 'in_progress'
+    }, select || undefined);
+  }
+
   async updateBySlug(slug: string, evaluation: Evaluation): Promise<Evaluation> {
     return EvaluationRepository.updateOne({ slug: slug }, {...evaluation});
   }
@@ -64,6 +71,12 @@ class EvaluationsService {
     return EvaluationRepository.updateMany(
       { _id: { $in: data } },
       { status: status });
+  }
+
+  async updateEvaluatedCount(id: string, count: number): Promise<Evaluation> {
+    return EvaluationRepository.findByIdAndUpdate(
+      new ObjectID(id),
+      { populationCount: count });
   }
 
   async closeEvaluation(slug: string): Promise<Evaluation> {

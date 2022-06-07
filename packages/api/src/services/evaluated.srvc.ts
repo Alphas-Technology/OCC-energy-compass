@@ -45,6 +45,21 @@ class EvaluatedService {
     });
   }
 
+  async findOneCompletedByEvaluationRefAndId(evaluationRef: any, id: any): Promise<EvaluatedType> {
+    return EvaluatedRepository.findOne({
+      _id: new ObjectID(id),
+      evaluationRef: new ObjectID(evaluationRef),
+      status: 'completed'
+    });
+  }
+
+  async getAtLeastOneActiveParticipant(evaluationRef: any): Promise<EvaluatedType> {
+    return EvaluatedRepository.findOne({
+      evaluationRef: new ObjectID(evaluationRef),
+      status: {$in: ['pending', 'in_progress']}
+    });
+  }
+
   async countByEvaluationRef(evaluationRef: any): Promise<number> {
     return EvaluatedRepository.countDocuments({ evaluationRef: new ObjectID(evaluationRef), status: { $ne : 'excluded'}  }, (err, result) => result);
   }
@@ -141,6 +156,14 @@ class EvaluatedService {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
       { '$set': { 'status': 'completed' }},
+      { new: true}
+    );
+  }
+
+  async setResultsRecipient(tokenId: string, email: string): Promise<EvaluatedType> {
+    return EvaluatedRepository.findOneAndUpdate(
+      {'token': tokenId},
+      { '$set': { 'alreadySentEmail': email }},
       { new: true}
     );
   }
