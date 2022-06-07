@@ -55,17 +55,79 @@ class EvaluationsController {
 
   async finishPollByToken(req: Request, resp: Response) {
     try {
+      // Find Evaluated
+      const evaluated = await EvaluatedService.getOneByToken(req.body.tokenId);
+      // Find Evaluation
+      const evaluation = await EvaluationsService.findById(evaluated.evaluationRef as any);
+      if (evaluation.status === 'completed') {
+        throw new BadRequestException('evaluation-has-ended');
+      }
+      // Finish Poll
       const closedPoll = await EvaluatedService.setPollCompleted(req.body.tokenId);
-      // Must store anonymous Answers
+
+      // Check if there are still uncompleted participants
+      const isInProgress = await EvaluatedService.getAtLeastOneActiveParticipant(evaluation._id);
+      if (!isInProgress) {
+        await EvaluationsService.closeEvaluationById(evaluation._id);
+      }
+
+      // Save anonymous Answers in temporary collection to be managed by worker
+      await OperationThreadsService.save({
+        operation: 'TempAnswers',
+        status: 'pending',
+        createdAt: new Date(),
+        data: {
+          enterpriseId: evaluation.enterpriseId,
+          evaluationRef: evaluation._id,
+          populationRef: closedPoll._id,
+          questionnaire: evaluation.questionnaire.evaluations,
+          employee: closedPoll.employee,
+          tempAnswers: closedPoll.temp
+        }
+      });
+
       resp.send(closedPoll.temp);
     } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        er: error,
-        status: 404
-      });
+      if (error._code && error._httpCode) {
+        resp.status(error._httpCode).send({ code: error._code });
+      } else {
+        resp.send({
+          msg: 'Not found',
+          er: error,
+          status: 404
+        });
+      }
     }
   }
+
+  async sendIndividualResults(req: Request, resp: Response) {
+    try {
+      // Queue email in SUITE
+      const suiteRes = await RunHttpRequest.suitePost(undefined,
+        'emails/send-energy-compass-individual-results',
+        req.body.data
+      );
+      if (!suiteRes.success) {
+        throw new BadRequestException('Suite communication failed');
+      }
+
+      // Save recipient
+      await EvaluatedService.setResultsRecipient(req.params.tokenId, req.body.data.email);
+
+      resp.send();
+    } catch (error) {
+      if (error._code && error._httpCode) {
+        resp.status(error._httpCode).send({ code: error._code });
+      } else {
+        resp.send({
+          msg: 'Not found',
+          er: error,
+          status: 404
+        });
+      }
+    }
+  }
+
 
   async updateActivityStatus(evaluationsIds: any[]) {
     const evaluations = await EvaluationsService.findManyById(evaluationsIds);
@@ -398,7 +460,7 @@ class EvaluationsController {
   }
 
   async getOneToShow(req: IRequest, res: Response) {
-    const evaluation = await EvaluationsService.findOneBySlug(req.params.slug, 'name displayName slug status timeZone deliveredAt validUntil reminders enterpriseId');
+    const evaluation = await EvaluationsService.findOneBySlug(req.params.slug, 'name displayName slug status timeZone deliveredAt validUntil reminders enterpriseId populationCount populationCompletedCount');
     if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
       throw new BadRequestException('evaluation-not-found');
     }
