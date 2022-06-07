@@ -202,6 +202,8 @@ class EditPopulation {
       // When ALL population has been updated
       if (finishedIncluding && finishedExcluding) {
         try {
+          const newEvaluatedCnt = await EvaluatedService.countByEvaluationRef(threadData._evaluation);
+          await EvaluationService.updateEvaluatedCount(threadData._evaluation, newEvaluatedCnt);
           await EvaluationService.updateStatus(threadData.evaluationStatus, threadData._evaluation);
           await OperationThreadsService.findOneAndUpdateStatus(pendingOperationThread._id, 'completed');
         } catch (error) {
