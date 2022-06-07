@@ -339,7 +339,18 @@ export default {
       progress_info: 'Progreso de respuestas general',
       members_info: 'Participantes del equipo'
     },
-    must_answer_all_questions: 'Debes responder todas las preguntas'
+    must_answer_all_questions: 'Debes responder todas las preguntas',
+    endDialog: {
+      text_1: 'Si deseas descargar tu reporte individual haz click en el siguiente botón:',
+      text_2: 'O si prefieres que enviemos el reporte a tu correo electrónico, por favor escríbelo en el siguiente campo y haz click en enviar:',
+      text_3: 'Tu reporte a sido enviado a la siguiente dirección de correo electrónico. Si aún no lo has recibido, haz click en reenviar:',
+      btn_report: 'Ver reporte',
+      btn_send: 'Enviar',
+      btn_resend: 'Reenviar',
+      email_subject: 'Resultados Energy Compass',
+      email_body: '<p>Gracias por participar</p>',
+      email_sent: 'Mensaje enviado exitosamente'
+    }
   },
   report: {
     no_answers_modal_msg: 'La encuesta actual no posee respuestas, por lo cual no será posible generar un reporte.',
