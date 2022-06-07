@@ -5,11 +5,12 @@ import CreatePopulationWorker from './evaluation/create-population';
 import EditPopulationWorker from './evaluation/edit-population';
 import EvaluationWorker from './evaluation/check-start-end-dates';
 import EvaluationEmailsWorker from './evaluation/send-emails';
+import TempAnswersWorker from './evaluation/temp-answers';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default () => {
-  setInterval(() => { console.log('Updated at 2022-05-11 14:00'); }, 300000);
+  setInterval(() => { console.log('Updated at 2022-05-11 14:00'); }, ms('5m'));
   const quarter = '15m';
   const minutes = '5m';
 
@@ -72,4 +73,14 @@ export default () => {
       console.log('Send Evaluation Email error:', error);
     });
   }, ms('4m'));
+
+  setInterval(async () => {
+    TempAnswersWorker.processAnswers().then((res) => {
+      // tslint:disable-next-line: no-console
+      console.log('Saved TempAnswers:', res);
+    }).catch((error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Save TempAnswers error:', error);
+    });
+  }, ms('1m'));
 };
