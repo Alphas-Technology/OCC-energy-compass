@@ -23,9 +23,10 @@ import CreateEvaluation from '../views/evaluations/create.vue'
 import EditEvaluation from '../views/evaluations/edit.vue'
 import ListEvaluations from '../views/evaluations/list.vue'
 import ShowEvaluation from '../views/evaluations/show.vue'
-import Evaluation from '../views/evaluations/evaluation.vue'
 
 import EvaluationLayout from '../views/evaluations/evaluation-layout.vue'
+import Evaluation from '../views/evaluations/evaluation.vue'
+import IndividualResults from '../views/reports/individual/results.vue'
 
 // Operations summary
 import OperationSummary from '../views/operations/summary.vue'
@@ -135,6 +136,11 @@ const routes = [
       {
         path: 'individual/:tokenId',
         component: Evaluation
+      },
+      {
+        name: 'individualResults',
+        path: 'individual-results/:tokenId',
+        component: IndividualResults
       }
     ]
   },
