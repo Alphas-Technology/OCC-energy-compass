@@ -22,26 +22,39 @@ const EvaluationAnswersSchema = new mongoose.Schema({
     birthdate: Date,
     admission: Date
   },
+  segmentation: [{
+    segmentationId: Number,
+    detailId: Number
+  }],
   evaluations: [{
     name: String,
     score: Number,
-    dimension: [{
+    variables: [{
       name: String,
       score: Number,
-      variables: [{
+      questions: [{
+        name: String,
         score: Number
       }]
     }]
+  }],
+  indices: [{
+    name: String,
+    score: Number,
+    answers: [{
+      idx: Number,
+      score: Number
+    }]
+  }],
+  additionalQuestions: [{
+    question: { type: String, index: true },
+    answer: []
   }],
   openQuestions: [{
     question: {
       name: String,
       translation: {}
     },
-    answer: []
-  }],
-  additionalQuestions: [{
-    question: { type: String, index: true },
     answer: []
   }]
 }, {timestamps: true});
