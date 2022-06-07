@@ -42,7 +42,8 @@ const EvaluatedSchema = new mongoose.Schema({
       question: String,
       answer: []
     }],
-  }
+  },
+  alreadySentEmail: String
 }, { timestamps: true, collection: 'evaluated' });
 
 const EvaluatedRepository = mongoose.model<EvaluatedType>('Evaluated', EvaluatedSchema);

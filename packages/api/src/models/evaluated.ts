@@ -12,4 +12,5 @@ export interface Evaluated {
   indEmpEntId?: number;
   employee?: any;
   temp: EvaluatedAnswers;
+  alreadySentEmail?: string;
 }
