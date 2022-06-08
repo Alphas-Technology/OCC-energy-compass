@@ -99,19 +99,14 @@ export default (middlewares, services) => {
     EvaluationsController.getOne
   );
 
-  EvaluationsRouter.get(
-    '/find-by-id-to-report/:id',
-    EvaluationsController.findByIdToReport
+  EvaluationsRouter.post(
+    '/generate-organizational-report/:id',
+    EvaluationsController.generateOrganizationalReport
   );
 
   EvaluationsRouter.post(
-    '/open-report/:id',
-    EvaluationsController.openReport
-  );
-
-  EvaluationsRouter.post(
-    '/open-report-individual/:id',
-    EvaluationsController.openReportIndividual
+    '/generate-demographic-report/:id',
+    EvaluationsController.generateDemographicReport
   );
 
   EvaluationsRouter.get(
@@ -122,6 +117,11 @@ export default (middlewares, services) => {
   EvaluationsRouter.post(
     '/open-thread-report/:id',
     EvaluationsController.openThreadReport
+  );
+
+  EvaluationsRouter.get(
+    '/get-additional-question-answers/:pollId/:question',
+    EvaluationsController.getAdditionalQuestionAnswers
   );
 
   EvaluationsRouter.get(

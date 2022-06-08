@@ -7,6 +7,7 @@ import * as xlsx from 'xlsx';
 
 import { default as EvaluationsService } from '../services/evaluations.srvc';
 import { default as EvaluatedService } from '../services/evaluated.srvc';
+import { default as EvaluationAnswersService } from '../services/evaluation-answers.srvc';
 import { default as ProductServiceService } from '../services/product-service.srvc';
 import { default as QuestionnairesService } from '../services/questionnaires.srvc';
 import { default as OpenQuestionService } from '../services/open-question.srvc';
@@ -518,32 +519,23 @@ class EvaluationsController {
     }
   }
 
-  async findByIdToReport(req: IRequest, resp: Response) {
-    try {
-      const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName slug status enterpriseId');
-      if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
-        throw new BadRequestException('evaluation-not-found');
-      }
-      // evaluation.evaluated = await EvaluatedService.getByEvaluationRef(evaluation._id, 'status employee');
-      resp.send(evaluation);
-    } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        status: 404
-      });
-    }
-  }
-
-  async openReport(req: IRequest, resp: Response) {
+  async generateOrganizationalReport(req: IRequest, resp: Response) {
     try {
       const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise deliveredAt validUntil');
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
+
+      const answeredCount = await EvaluationAnswersService.countByEvaluationId(evaluation._id);
+      if (!answeredCount) {
+        throw new BadRequestException('evaluation-no-answers');
+      }
+
       const spend = await SpendRequest(req, 'ENERGY COMPASS ORGANIZACIONAL', 1);
       if (typeof spend === 'string') {
         throw new BadRequestException('suite-fail/evaluation/spend-fail');
       }
+
       const productService = await ProductServiceService.findByName('ENERGY COMPASS ORGANIZACIONAL');
       await RunHttpRequest.suitePost(req, 'activities/create-activity', {
         service: {
@@ -558,35 +550,33 @@ class EvaluationsController {
         status: 'pending',
         createdAt: new Date(),
         data: {
-          _id: evaluation._id,
-          evaluation: {
-            enterpriseId: evaluation.enterpriseId,
-            questionnaire: evaluation.questionnaire,
-            name: evaluation.name,
-            displayName: evaluation.displayName,
-            deliveredAt: evaluation.deliveredAt,
-            validUntil: evaluation.validUntil,
-            status: evaluation.status
-          },
-          evaluated: await EvaluatedService.countByEvaluationRef(evaluation._id),
-          step: 0,
-          progress: 0,
+          _evaluation: evaluation._id,
+          operations: spend,
+          enterpriseId: evaluation.enterpriseId,
+          questionnaire: evaluation.questionnaire.slug,
+          evaluationSlug: evaluation.slug,
+          evaluationStatus: evaluation.status,
           type: 'organizational',
-          individualReference: undefined,
-          lang: req.user.lang
+          step: 0,
+          progress: 0
         }
       });
 
       resp.send({ _id: evaluation._id});
     } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        status: 404
-      });
+      if (error._code && error._httpCode) {
+        resp.status(error._httpCode).send({ code: error._code });
+      } else {
+        resp.send({
+          msg: 'Not found',
+          er: error,
+          status: 404
+        });
+      }
     }
   }
 
-  async openReportIndividual(req: IRequest, resp: Response) {
+  async generateDemographicReport(req: IRequest, resp: Response) {
     try {
       const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise deliveredAt validUntil');
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
@@ -632,7 +622,7 @@ class EvaluationsController {
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
-      resp.send(await OperationThreadsService.findDownloadReportsByPollId(evaluation._id, '_id status data.type data.progress data.individualReference'));
+      resp.send(await OperationThreadsService.findDownloadReportsByPollId(evaluation._id, '_id status data.type data.progress'));
     } catch (error) {
       resp.status(404).send({
         msg: 'Not found',
@@ -662,6 +652,11 @@ class EvaluationsController {
         status: 404
       });
     }
+  }
+
+  async getAdditionalQuestionAnswers(req: Request, res: Response) {
+    const answers = await EvaluationAnswersService.findByQuestion(req.params.pollId, req.params.question);
+    res.send({ answers });
   }
 
   async checkBalance(req: IRequest, resp: Response) {
