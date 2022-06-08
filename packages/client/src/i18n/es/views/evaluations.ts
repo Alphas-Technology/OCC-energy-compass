@@ -353,17 +353,27 @@ export default {
     }
   },
   report: {
-    no_answers_modal_msg: 'La encuesta actual no posee respuestas, por lo cual no será posible generar un reporte.',
+    no_answers_modal_msg: 'Esta valoración no posee respuestas, por lo cual no será posible generar reportes.',
+    open_questions_button: 'Gráficas de preguntas adicionales',
+    open_question_select_label: 'Seleccione una pregunta',
+    please_wait: 'Por favor espere',
     select_report_type: 'Seleccione el tipo de reporte que desea generar',
-    required_general_title: 'Reporte Organizacional',
-    required_general_desc: 'Este reporte muestra los resultados de la apreciación de todos los participantes del equipo con respecto al mismo.',
+    general_title: 'Reporte Organizacional',
+    general_desc: 'Este reporte muestra los resultados de la apreciación de todos los participantes de la medición.',
     no_members: 'No hubo participación de los miembros',
-    general_report: 'Generar reporte',
-    individual_title: 'Reportes individuales',
-    individual_desc: 'Cada reporte cuenta con los resultados de la valoración realizada por cada miembro del equipo.',
-    header_members: 'Participantes',
-    header_action: 'Acción',
-    input_back: 'Atras',
-    input_accept: 'Aceptar'
+    demographic_title: 'Reporte por corte demográfico',
+    demographic_desc: 'Este reporte cuenta con los resultados de la medición, segmentado por cortes demográficos.',
+    generate_report: 'Generar reporte',
+    generated_reports: 'Reportes Generados',
+    generated_reports_desc: 'En esta sección encontrarás todos los reportes que has generado.<br>Dependiendo del número de participantes cada reporte puede tardar hasta 30 minutos en generarse. Puedes actualizar el progreso recargando la página.<br>Se recomienda generar un máximo de 5 reportes a la vez, para mejorar el rendimiento de la plataforma.',
+    input_update_progress: 'Actualizar progreso',
+    input_back: 'Atrás',
+    input_accept: 'Aceptar',
+    confirm_report_title: 'Confirme la generación del reporte',
+    report_cost: 'Costo del reporte',
+    organizational: {
+      already_generated_report: 'Este reporte ya ha sido generado. Puedes descargarlo en la parte inferior, donde se encuentran todos los reportes generados.',
+      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos'
+    }
   }
 }

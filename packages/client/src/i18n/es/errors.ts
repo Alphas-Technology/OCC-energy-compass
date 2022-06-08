@@ -50,6 +50,8 @@ export default {
   // tslint:disable-next-line:max-line-length
   'pulses/poll-employee-not-found': 'La encuesta a la que intenta acceder no existe.<br/><br/>Por favor verifique su participación e intente nuevamente.',
   'pulses/missing-extra-questions': 'Todas las preguntas adicionales deben ser respondidas.',
+  'evaluation-not-found': 'Valoración no existe',
+  'evaluation-no-answers': 'Esta valoración no posee respuestas',
   undefined: 'Ha ocurrido un error en el sistema.',
   timezone: 'La hora seleccionada no es válida para esa zona horaria.',
   question_emply: 'La pregunta no puede estar vacía.',
