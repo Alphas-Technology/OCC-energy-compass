@@ -51,13 +51,25 @@ const calculateProgress = (evaluatedTemp, questions) => {
         break;
 
       case 'indices':
-      case 'additional':
         // Questions Count
         totalQuestions += questions[key].length;
         // Answers Count
         if (evaluatedTemp[key]) {
           evaluatedTemp[key].forEach(a => {
             if (a.answer) {
+              answeredCount++;
+            }
+          });
+        }
+        break;
+
+      case 'additional':
+        // Questions Count
+        totalQuestions += questions[key].length;
+        // Answers Count
+        if (evaluatedTemp[key]) {
+          evaluatedTemp[key].forEach(a => {
+            if (a.answer[0]) {
               answeredCount++;
             }
           });
