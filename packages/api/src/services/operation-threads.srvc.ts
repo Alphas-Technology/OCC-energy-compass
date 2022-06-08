@@ -1,4 +1,5 @@
 
+import { ObjectID } from 'mongodb';
 import { OperationThreads } from '../models/operation-threads';
 import OperationThreadsRepository, { OperationThreadsType } from '../schemas/operation-threads.schema';
 
@@ -13,10 +14,9 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findDownloadReportsByPollId(id: string, select?: undefined|any): Promise<OperationThreads[]> {
-    const ObjectID = require('mongodb').ObjectID;
     return OperationThreadsRepository.find({
       operation: 'DownloadReport',
-      'data._id': new ObjectID(id)
+      'data._evaluation': new ObjectID(id)
     }, select || undefined);
   }
 
@@ -26,7 +26,6 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findOneDownloadReportById(id: string, select?: undefined|any): Promise<OperationThreads> {
-    const ObjectID = require('mongodb').ObjectID;
     return OperationThreadsRepository.findOne({
       operation: 'DownloadReport',
       '_id': new ObjectID(id)
@@ -66,9 +65,7 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findOneAndUpdateStatus(id: string, status: string): Promise<OperationThreads|OperationThreadsType> {
-    const ObjectID = require('mongodb').ObjectID;
     return await OperationThreadsRepository.updateOne(
-    // return await OperationThreadsRepository.findOneAndUpdate(
       {_id: new ObjectID(id)},
       { status }
       // { new: true}
@@ -81,8 +78,6 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findOneAndUpdateData(id: string, data: {[key: string]: any}): Promise<OperationThreads|OperationThreadsType> {
-    const ObjectID = require('mongodb').ObjectID;
-    // return await OperationThreadsRepository.findOneAndUpdate(
     return await OperationThreadsRepository.updateOne(
       {_id: new ObjectID(id)},
       { data }
@@ -97,7 +92,6 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findOneAndUpdateStatusData(id: string, status: string, data: {[key: string]: any}): Promise<OperationThreads|OperationThreadsType> {
-    const ObjectID = require('mongodb').ObjectID;
     return await OperationThreadsRepository.updateOne(
       {_id: new ObjectID(id)},
       { status, data }
@@ -111,8 +105,6 @@ class OperationThreadsService {
    * @returns {Promise<OperationThreads>}
    */
   async findOneAndSaveFail(id: string, data: {[key: string]: any}): Promise<OperationThreads|OperationThreadsType> {
-    const ObjectID = require('mongodb').ObjectID;
-    // return await OperationThreadsRepository.findOneAndUpdate(
     return await OperationThreadsRepository.updateOne(
       {_id: new ObjectID(id)},
       { status: 'failed', dataFail: data }
