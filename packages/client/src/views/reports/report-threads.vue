@@ -62,15 +62,13 @@
         <v-row>
           <v-col cols="12" class="text-center pt-0">
             <!-- ORGANIZATIONAL EXEC -->
-            <!--
-            <x-thread-organizational-report-exec
+            <x-download-organizational-report
               v-if="thread.data.type === 'organizational'"
               :key="orgKey"
               :poll-id="$route.params.id"
               :thread="thread"
               @pdfRenderedOrg="orgKey++"
-            ></x-thread-organizational-report-exec>
-            -->
+            ></x-download-organizational-report>
 
             <!-- DEMOGRAPHIC EXEC -->
             <!--
@@ -100,14 +98,14 @@
 
 import { mapState } from 'vuex'
 
-// import XThreadOrganizationalReportExec from './thread_organizational_report_exec'
-// import XThreadDemographicReportExec from './thread_demographic_report_exec'
+import XDownloadOrganizationalReport from './organizational/download-report'
+// import XDownloadDemographicReport from './demographic/download-report'
 
 export default {
   name: 'report-threads',
   components: {
-    // XThreadOrganizationalReportExec,
-    // XThreadDemographicReportExec
+    XDownloadOrganizationalReport
+    // XDownloadDemographicReport
   },
   props: {
     threads: Array,
@@ -116,7 +114,6 @@ export default {
   data () {
     return {
       orgKey: 1,
-      indKey: 1,
       demoKey: 1
     }
   },
