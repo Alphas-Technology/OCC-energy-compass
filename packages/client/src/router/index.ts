@@ -26,6 +26,9 @@ import ShowEvaluation from '../views/evaluations/show.vue'
 
 import EvaluationLayout from '../views/evaluations/evaluation-layout.vue'
 import Evaluation from '../views/evaluations/evaluation.vue'
+
+// Reports
+import Reports from '../views/evaluations/reports.vue'
 import IndividualResults from '../views/reports/individual/results.vue'
 
 // Operations summary
@@ -125,6 +128,11 @@ const routes = [
       {
         path: '/evaluations/:slug/details',
         component: ShowEvaluation,
+        beforeEnter: RequireAuthentication
+      },
+      {
+        path: '/evaluations/reports/:id',
+        component: Reports,
         beforeEnter: RequireAuthentication
       }
     ]
