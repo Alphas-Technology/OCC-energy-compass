@@ -181,6 +181,7 @@
                       :maxlength="18"
                       :placeholder="`${$t('Views.Evaluations.evaluation.answer')} ${oq + 1}`"
                       @keyup="!valid ? setProgress() : ''"
+                      @keyup.enter="valid ? saveAnswers() : ''"
                       @blur="valid ? saveAnswers() : setProgress()"
                     ></v-text-field>
                   </ValidationProvider>

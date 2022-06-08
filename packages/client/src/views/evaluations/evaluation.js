@@ -138,7 +138,7 @@ export default Vue.extend({
             this.pageAnswerCnt[qPage + 1] = 0
             if (this.hasAdditionalQuestions) {
               this.evaluated.temp[key].forEach(a => {
-                if (a.answer) {
+                if (a.answer[0]) {
                   answered++
                   this.pageAnswerCnt[qPage + 1]++
                 }
@@ -227,6 +227,18 @@ export default Vue.extend({
         const seg = []
         for (const key of Object.keys(this.evaluation.additionalSegmentation)) {
           this.totalQuestionsCount++
+
+          // Add "Prefer not to answer" option
+          this.evaluation.additionalSegmentation[key].details.push({
+            asId: 0,
+            id: -1,
+            code: 'prefer_not_to_answer',
+            trans: {
+              en: { label: 'Prefer not to answer' },
+              es: { label: 'Prefiero no responder' }
+            }
+          })
+
           seg.push(this.evaluation.additionalSegmentation[key])
           // Initial answers structure
           if (notAnsweredSeg) {
