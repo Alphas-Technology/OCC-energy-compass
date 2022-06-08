@@ -74,8 +74,10 @@ class SaveTempAnswers {
               answerStructure.segmentation = tempAnswers[key];
               // Save Employee Segmentation into SUITE
               for (const segmentation of tempAnswers[key]) {
-                const suiteRes = await RunHttpRequest.suitePost(undefined, `additional-segmentation/save-employee-detail/${segmentation.detailId}/${employeeData.id}`);
-                if (!suiteRes.success) throw 'Suite communication failed';
+                if (segmentation.detailId !== -1) {
+                  const suiteRes = await RunHttpRequest.suitePost(undefined, `additional-segmentation/save-employee-detail/${segmentation.detailId}/${employeeData.id}`);
+                  if (!suiteRes.success) throw 'Suite communication failed';
+                }
               }
               break;
             case 'evaluations':
