@@ -4,18 +4,18 @@ import AnswersReferenceRepository, { AnswersReferenceType } from '../schemas/ans
 
 class AnswersReferenceService {
 
-  async create(answersReference: AnswersReference): Promise<AnswersReference> {
+  async create(answersReference: AnswersReference): Promise<AnswersReference|AnswersReferenceType> {
     return (await new AnswersReferenceRepository(answersReference).save());
   }
 
-  async update(answersReference: AnswersReference): Promise<AnswersReference> {
+  async update(answersReference: AnswersReference): Promise<AnswersReference|AnswersReferenceType> {
     return AnswersReferenceRepository.updateOne(
       { idx: answersReference.idx },
       answersReference
     );
   }
 
-  async list(): Promise<AnswersReference[]> {
+  async list(): Promise<AnswersReference[]|AnswersReferenceType[]> {
     return AnswersReferenceRepository.find();
   }
 
