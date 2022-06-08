@@ -39,6 +39,9 @@ export default {
   getOne: (slug: string) => {
     return service.get(`get-one/${slug}`)
   },
+  getOneById: (id: string) => {
+    return service.get(`find-by-id/${id}`)
+  },
   getCountEvaluated: (slug: string) => {
     return service.get(`get-count-evaluated/${slug}`)
   },
@@ -54,20 +57,20 @@ export default {
   sendIndividualResultsEmail: (tokenId: string, data: any) => {
     return service.post(`send-individual-results/${tokenId}`, { data })
   },
-  findByIdToReport: (id: string) => {
-    return service.get(`find-by-id-to-report/${id}`)
+  generateReportOrganizational: (id: number) => {
+    return service.post(`generate-organizational-report/${id}`)
   },
-  openReportOneById: (id: number) => {
-    return service.post(`open-report/${id}`)
-  },
-  openReportIndividualOneById: (id: number, evaluatedId: number) => {
-    return service.post(`open-report-individual/${id}`, { evaluatedId })
+  generateReportDemographic: (id: number, criteria: any) => {
+    return service.post(`generate-demographic-report/${id}`, { criteria })
   },
   currentThreadsById: (id: number) => {
     return service.get(`current-threads/${id}`)
   },
   getOneReportByThreadId: (id: number, pollId: number) => {
     return service.post(`open-thread-report/${id}`, { id: pollId })
+  },
+  getAdditionalQuestionAnswers: (pollId: string, question: string) => {
+    return service.get(`get-additional-question-answers/${pollId}/${question}`)
   },
   edit: (slug: string, evaluation: any) => {
     return service.post(`edit/${slug}`, { evaluation })
