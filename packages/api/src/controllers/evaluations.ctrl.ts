@@ -589,7 +589,7 @@ class EvaluationsController {
       for (const segment of req.body.criteria) {
         if (segment.type === 'demographic') {
           const demoFilters = {};
-          demoFilters[`demographicItems.${segment.field}`] = { '$ne': null };
+          demoFilters[`demographicItems.${segment.field}`] = { '$ne': undefined };
           filters.$or.push(demoFilters);
         }
 
@@ -884,7 +884,7 @@ class EvaluationsController {
 
       for (const segment of data) {
         if (type === 'demographic') {
-          filters[`demographicItems.${segment.field}`] = { $ne: null };
+          filters[`demographicItems.${segment.field}`] = { $ne: undefined };
         }
         if (type === 'segmentation') {
           filters['segmentation.segmentationId'] = segment.id;
