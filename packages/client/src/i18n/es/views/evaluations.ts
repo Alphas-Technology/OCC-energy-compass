@@ -377,6 +377,13 @@ export default {
     organizational: {
       already_generated_report: 'Este reporte ya ha sido generado. Puedes descargarlo en la parte inferior, donde se encuentran todos los reportes generados.',
       operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos'
+    },
+    demographic: {
+      selected: 'Seleccionado(s)',
+      demographic_cuts: 'Cortes Demográficos',
+      additional_segmentation: 'Segmentación Adicional',
+      table_legend: 'Puedes seleccionar ???',
+      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte por Cortes Demográficos". Este proceso puede tardar varios minutos'
     }
   }
 }
