@@ -240,6 +240,15 @@ export default Vue.extend({
         this.evaluation.price = res.balance.productService
       })
   },
+  watch: {
+    step (val) {
+      if (val === 6 && this.evaluation.additionalQuestions.length > 1) {
+        if (this.evaluation.additionalQuestions[this.evaluation.additionalQuestions.length - 1].question === '') {
+          this.evaluation.additionalQuestions.pop()
+        }
+      }
+    }
+  },
   methods: {
     getInitials (text) {
       return text.trim().split(' ').map(t => t.slice(0, 1)).join('').toUpperCase()

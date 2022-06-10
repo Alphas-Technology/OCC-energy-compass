@@ -73,8 +73,8 @@
           </v-row>
 
           <!-- Additional Questions -->
-          <v-divider class="my-3" v-if="evaluation.switchAdditionalQuestion"></v-divider>
-          <v-row class="mt-4" v-if="evaluation.switchAdditionalQuestion">
+          <v-divider class="my-3" v-if="computedShowAdditionalQuestions"></v-divider>
+          <v-row class="mt-4" v-if="computedShowAdditionalQuestions">
             <v-col cols="12">
               <h6 class="title">{{ $t('Views.Evaluations.stepQuestion.open_question') }}</h6>
               <v-list>
@@ -445,6 +445,10 @@ export default {
     }
   },
   computed: {
+    computedShowAdditionalQuestions () {
+      return this.evaluation.switchAdditionalQuestion &&
+        this.evaluation.additionalQuestions[0].question !== ''
+    },
     computedHasSegmentation () {
       let cnt = 0
       if (this.evaluation.additionalSegmentation) {

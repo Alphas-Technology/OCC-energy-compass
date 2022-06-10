@@ -257,6 +257,11 @@ export default Vue.extend({
       if (val === 4 && this.evaluation.selectionType === '') {
         this.evaluation.selectionType = this.selType
       }
+      if (val === 6 && this.evaluation.additionalQuestions.length > 1) {
+        if (this.evaluation.additionalQuestions[this.evaluation.additionalQuestions.length - 1].question === '') {
+          this.evaluation.additionalQuestions.pop()
+        }
+      }
     }
   },
   methods: {
