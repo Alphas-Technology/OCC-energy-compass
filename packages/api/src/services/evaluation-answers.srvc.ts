@@ -1,4 +1,5 @@
 
+import { ObjectID } from 'mongodb';
 import { EvaluationAnswers } from '../models/evaluation-answers';
 import EvaluationAnswersRepository from '../schemas/evaluation-answers.schema';
 
@@ -40,7 +41,6 @@ class EvaluationAnswersService {
     skip: number,
     qty: number,
     select?: undefined|any): Promise<EvaluationAnswers[]> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationAnswersRepository.find(
       { evaluationRef: new ObjectID(evaluationId), ...filter },
       select || undefined,
@@ -72,8 +72,9 @@ class EvaluationAnswersService {
    * @returns {Promise<EvaluationAnswers[]>}
    */
   async countByEvaluationId(evaluationId: any): Promise<number> {
-    const ObjectID = require('mongodb').ObjectID;
-    return EvaluationAnswersRepository.countDocuments({ evaluationRef: new ObjectID(evaluationId) }, (err, result) => result);
+    return EvaluationAnswersRepository.countDocuments({
+      evaluationRef: new ObjectID(evaluationId)
+    }, (err, result) => result);
   }
 
   /**
@@ -82,11 +83,9 @@ class EvaluationAnswersService {
    * @returns {Promise<EvaluationAnswers[]>}
    */
   async countByEvaluationIdAndFilterItems(evaluationId: any, filter): Promise<number> {
-    const ObjectID = require('mongodb').ObjectID;
-    return EvaluationAnswersRepository.countDocuments(
-        { evaluationRef: new ObjectID(evaluationId), ...filter },
-        (err, result) => result
-      );
+    return EvaluationAnswersRepository.countDocuments({
+      evaluationRef: new ObjectID(evaluationId), ...filter
+    }, (err, result) => result);
   }
 
   /**
@@ -110,7 +109,6 @@ class EvaluationAnswersService {
    * @returns {Promise<EvaluationAnswers[]>}
    */
   async findByQuestion(evaluationId: any, value: string): Promise<any> {
-    const ObjectID = require('mongodb').ObjectID;
     return EvaluationAnswersRepository.find(
       // Filter
       {
