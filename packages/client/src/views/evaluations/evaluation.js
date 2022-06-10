@@ -221,7 +221,11 @@ export default Vue.extend({
       this.answersRefs = this.evaluation.answersReference
 
       // Additional Segmentation
-      this.hasSegmentation = Object.keys(this.evaluation.additionalSegmentation).length !== 0
+      if (this.evaluation.additionalSegmentation &&
+        Object.keys(this.evaluation.additionalSegmentation).length !== 0
+      ) {
+        this.hasSegmentation = true
+      }
       if (this.hasSegmentation) {
         const notAnsweredSeg = !this.evaluated.temp.segmentation.length
         const seg = []
