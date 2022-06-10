@@ -224,32 +224,40 @@ export default Vue.extend({
       if (this.evaluation.additionalSegmentation &&
         Object.keys(this.evaluation.additionalSegmentation).length !== 0
       ) {
-        this.hasSegmentation = true
+        let selectedCnt = 0
+        for (const key of Object.keys(this.evaluation.additionalSegmentation)) {
+          if (this.evaluation.additionalSegmentation[key].selected) {
+            selectedCnt++
+          }
+        }
+
+        this.hasSegmentation = selectedCnt > 0
       }
       if (this.hasSegmentation) {
         const notAnsweredSeg = !this.evaluated.temp.segmentation.length
         const seg = []
         for (const key of Object.keys(this.evaluation.additionalSegmentation)) {
-          this.totalQuestionsCount++
-
-          // Add "Prefer not to answer" option
-          this.evaluation.additionalSegmentation[key].details.push({
-            asId: 0,
-            id: -1,
-            code: 'prefer_not_to_answer',
-            trans: {
-              en: { label: 'Prefer not to answer' },
-              es: { label: 'Prefiero no responder' }
-            }
-          })
-
-          seg.push(this.evaluation.additionalSegmentation[key])
-          // Initial answers structure
-          if (notAnsweredSeg) {
-            this.evaluated.temp.segmentation.push({
-              segmentationId: this.evaluation.additionalSegmentation[key].id,
-              detailId: null
+          if (this.evaluation.additionalSegmentation[key].selected) {
+            this.totalQuestionsCount++
+            // Add "Prefer not to answer" option
+            this.evaluation.additionalSegmentation[key].details.push({
+              asId: 0,
+              id: -1,
+              code: 'prefer_not_to_answer',
+              trans: {
+                en: { label: 'Prefer not to answer' },
+                es: { label: 'Prefiero no responder' }
+              }
             })
+
+            seg.push(this.evaluation.additionalSegmentation[key])
+            // Initial answers structure
+            if (notAnsweredSeg) {
+              this.evaluated.temp.segmentation.push({
+                segmentationId: this.evaluation.additionalSegmentation[key].id,
+                detailId: null
+              })
+            }
           }
         }
         this.pages.push(seg)
