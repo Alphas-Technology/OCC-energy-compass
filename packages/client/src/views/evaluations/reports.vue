@@ -57,21 +57,16 @@
             <h5 class="headline mb-2">{{ $t('Views.Evaluations.report.demographic_title') }}</h5>
 
             <p>{{ $t('Views.Evaluations.report.demographic_desc') }}</p>
-            <p class="mt-8 text-center">
-            | ----------------------------------------------------------------------
-            Selectores aquí
-            ---------------------------------------------------------------------- |
-            </p>
-            <!--
-            <x-report
-              :demographics-selected="cutsSelected.totalPopulation"
-              :list-of-demographics="{}"
-              :poll-id="Number.parseInt($route.params.id)"
-              :disable-button="disableButton"
-              :button-text="$t('Views.Evaluations.report.general_button')"
-              report-type="general"
-            ></x-report>
-            -->
+            <x-generate-demographic-report
+              :key="demographicItemsFetched"
+              :demographics-fetched="demographicItemsFetched"
+              :poll-id="$route.params.id"
+              :demographic-items="demographicItems"
+              :additional-segmentation="evaluation.additionalSegmentation"
+              :disable-button="disableNoAnswers"
+              :lang="user.lang"
+              @reportGenerated="demographicReportGenerated"
+            ></x-generate-demographic-report>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -113,7 +108,7 @@
               <v-col cols="12" class="my-0 pt-4 py-0">
                 <x-report-threads
                   :threads="reportThreads"
-                  :demographics="demographicsSelects"
+                  :demographics="demographicItems"
                 ></x-report-threads>
               </v-col>
             </v-row>
@@ -160,19 +155,19 @@
 <script>
 
 import { mapState } from 'vuex'
-import resolver from '../../utils/resolver'
 
 import evaluationsService from '../../services/evaluations'
+import demographicItemsService from '../../services/demographic-items'
 
 import XGenerateOrganizationalReport from '../reports/organizational/generate_report'
-// import XGenerateDemographicReport from '../reports/demographic/generate_report'
+import XGenerateDemographicReport from '../reports/demographic/generate_report'
 import XReportThreads from '../reports/report-threads'
 import XOpenPie from '../reports/open-pie'
 
 export default {
   components: {
     XGenerateOrganizationalReport,
-    // XGenerateDemographicReport,
+    XGenerateDemographicReport,
     XReportThreads,
     XOpenPie
   },
@@ -184,26 +179,24 @@ export default {
         { name: this.$t('Views.Evaluations.report.general_title'), value: 'organizational' },
         { name: this.$t('Views.Evaluations.report.demographic_title'), value: 'by_demographic' }
       ],
-      cutsSelected: {},
-      displayCuts: false,
-      disableButton: false,
-      disableBottomButton: false,
-      evaluation: {},
-      displayReport: true,
-      openAnswers: [],
       disableNoAnswers: false,
-      demographicsFiltered: [],
-      demographicsSelects: {},
+      evaluation: {},
+      loadingDemographics: false,
+      demographicItemsFetched: false,
+      demographicItems: {},
+      cutsSelected: {},
       showModal: false,
       reportThreads: [],
       loading: false,
-      loadingFilters: false,
-      loadingRefresh: false,
-      limit: 15000,
-      totalOpenAnswers: 0
+      loadingRefresh: false
     }
   },
   watch: {
+    reportType (val) {
+      if (val === 'by_demographic' && !this.demographicItemsFetched) {
+        this.getDemographicItems()
+      }
+    },
     loading (val) {
       val
         ? this.$store.dispatch('loading/show')
@@ -248,15 +241,11 @@ export default {
   methods: {
     getInitialData () {
       this.loading = true
-      resolver
-        .all({
-          evaluation: evaluationsService.getOneById(this.$route.params.id)
-          // demographics??
-        })
-        .then(({ evaluation }) => {
-          this.evaluation = evaluation
+      evaluationsService.getOneById(this.$route.params.id)
+        .then((res) => {
+          this.evaluation = res
           this.dataFetched = true
-          if (evaluation.populationCompletedCount > 0) {
+          if (res.populationCompletedCount > 0) {
             this.getThreads()
           } else {
             this.disableNoAnswers = true
@@ -282,6 +271,33 @@ export default {
         .finally(() => {
           this.loadingRefresh = false
         })
+    },
+    getDemographicItems () {
+      this.loadingDemographics = true
+      demographicItemsService.list()
+        .then((res) => {
+          if (res.items) {
+            res.items.forEach(item => {
+              this.demographicItems[item.code] = {
+                id: item.id,
+                optional: item.optional,
+                label: item.translate.label
+              }
+            })
+            this.demographicItemsFetched = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.$store.dispatch('alert/error', this.$t(err.code))
+        })
+        .then(() => {
+          this.loadingDemographics = false
+        })
+    },
+    demographicReportGenerated () {
+      this.reportType = 'organizational'
+      this.refreshThreads()
     },
     refreshThreads () {
       this.loadingRefresh = true
