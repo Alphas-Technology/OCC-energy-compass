@@ -583,36 +583,83 @@ class EvaluationsController {
         throw new BadRequestException('evaluation-not-found');
       }
 
+      const filters = {
+        $or: []
+      };
+      for (const segment of req.body.criteria) {
+        if (segment.type === 'demographic') {
+          const demoFilters = {};
+          demoFilters[`demographicItems.${segment.field}`] = { '$ne': null };
+          filters.$or.push(demoFilters);
+        }
+
+        if (segment.type === 'segmentation') {
+          const segFilters = {
+            $and: []
+          };
+          const tmpObj1 = {};
+          tmpObj1['segmentation.segmentationId'] = segment.id;
+          segFilters.$and.push(tmpObj1);
+          const tmpObj2 = {};
+          tmpObj2['segmentation.detailId'] = { $ne: -1 };
+          segFilters.$and.push(tmpObj2);
+
+          filters.$or.push(segFilters);
+        }
+      }
+
+      const answeredCount = await EvaluationAnswersService.countByEvaluationIdAndFilterItems(
+        evaluation._id,
+        filters
+      );
+      if (!answeredCount) {
+        throw new BadRequestException('evaluation-no-answers');
+      }
+
+      const spend = await SpendRequest(req, 'ENERGY COMPASS POR POBLACION', 1);
+      if (typeof spend === 'string') {
+        throw new BadRequestException('suite-fail/evaluation/spend-fail');
+      }
+
+      const productService = await ProductServiceService.findByName('ENERGY COMPASS POR POBLACION');
+      await RunHttpRequest.suitePost(req, 'activities/create-activity', {
+        service: {
+          enterpriseId: req.user.enterprise.id,
+          _id: evaluation._id
+        },
+        productService: productService.code
+      });
+
       await OperationThreadsService.save({
         operation: 'DownloadReport',
         status: 'pending',
         createdAt: new Date(),
         data: {
-          _id: evaluation._id,
-          evaluation: {
-            enterpriseId: evaluation.enterpriseId,
-            questionnaire: evaluation.questionnaire,
-            name: evaluation.name,
-            displayName: evaluation.displayName,
-            deliveredAt: evaluation.deliveredAt,
-            validUntil: evaluation.validUntil,
-            status: evaluation.status
-          },
-          evaluated: await EvaluatedService.countByEvaluationRef(evaluation._id),
+          _evaluation: evaluation._id,
+          operations: spend,
+          enterpriseId: evaluation.enterpriseId,
+          questionnaire: evaluation.questionnaire.slug,
+          evaluationSlug: evaluation.slug,
+          evaluationStatus: evaluation.status,
+          answeredCount,
+          criteria: req.body.criteria,
+          type: 'by_demographic',
           step: 0,
-          progress: 0,
-          type: 'individual',
-          individualReference: req.body.evaluatedId,
-          lang: req.user.lang
+          progress: 0
         }
       });
 
       resp.send({ _id: evaluation._id});
     } catch (error) {
-      resp.send({
-        msg: 'Not found',
-        status: 404
-      });
+      if (error._code && error._httpCode) {
+        resp.status(error._httpCode).send({ code: error._code });
+      } else {
+        resp.send({
+          msg: 'Not found',
+          er: error,
+          status: 404
+        });
+      }
     }
   }
 
@@ -825,6 +872,34 @@ class EvaluationsController {
     } catch (error) {
       res.status(400);
       res.send({ error });
+    }
+  }
+
+  async countSegmentedAnswers (req: IRequest, res: Response) {
+    try {
+      const countRes = {};
+      const type = req.body.type;
+      const data = req.body.data;
+      const filters = {};
+
+      for (const segment of data) {
+        if (type === 'demographic') {
+          filters[`demographicItems.${segment.field}`] = { $ne: null };
+        }
+        if (type === 'segmentation') {
+          filters['segmentation.segmentationId'] = segment.id;
+          filters['segmentation.detailId'] = { $ne: -1 };
+        }
+
+        countRes[segment.code] = await EvaluationAnswersService.countByEvaluationIdAndFilterItems(
+          req.params.evaluationId,
+          filters
+        );
+      }
+
+      res.send(countRes);
+    } catch (error) {
+      res.status(400).send({ error });
     }
   }
 }
