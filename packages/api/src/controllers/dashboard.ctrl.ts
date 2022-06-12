@@ -17,7 +17,11 @@ const calculateProgress = (evaluatedTemp, questions) => {
         const additionalSegmentations = Object.keys(questions[key]);
         if (additionalSegmentations.length > 0) {
           // Questions Count
-          totalQuestions += additionalSegmentations.length;
+          for (const ky of additionalSegmentations) {
+            if (questions[key][ky].selected) {
+              totalQuestions++;
+            }
+          }
           // Answers Count
           if (evaluatedTemp[key]) {
             evaluatedTemp[key].forEach(a => {
