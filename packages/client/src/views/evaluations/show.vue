@@ -12,7 +12,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-card>
+    <v-card class="mb-12">
       <v-toolbar color="primary" flat class="white--text">
         <v-btn icon to="/evaluations" color="primary" large>
           <v-icon color="white">fa-chevron-left</v-icon>
@@ -49,6 +49,13 @@
               <v-list-item-title>{{ $t('Views.Evaluations.show.edit') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
+              v-if="evaluation.status === 'in_progress'"
+              @click="$router.push(`/followup/energy-compass/${evaluation._id}`)"
+            >
+              <v-icon class="mr-2" small>fa-eye</v-icon>
+              <v-list-item-title>{{ $t('Views.Evaluations.show.tracking') }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item
               @click="openConfirmationModal('reminders')"
               v-if="evaluation.status === 'in_progress'"
             >
@@ -70,13 +77,13 @@
           <v-progress-circular
             :rotate="-90"
             :size="150"
-            :value="((evaluation.answers * 100) / totalEvaluations).toFixed(2)"
+            :value="((evaluation.populationCompletedCount * 100) / evaluation.populationCount).toFixed(2)"
             :width="15"
             color="primary"
           >
             <p>
               <span class="display-2">
-                {{ totalEvaluations }}
+                {{ evaluation.populationCount }}
               </span> <br>
               <span class="title text-uppercase">
                 {{ $t('Views.Evaluations.show.total') }}
@@ -88,13 +95,13 @@
           <v-row>
             <v-col cols="6" align="center">
               <h1 class="text-uppercase">{{ $t('Views.Evaluations.show.pending_evaluations') }}</h1>
-              <h1 class="display-3" style="color: darkred">{{ totalEvaluations - evaluation.answers }}</h1>
-              <h1>{{ (((totalEvaluations - evaluation.answers) * 100) / totalEvaluations).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
+              <h1 class="display-3" style="color: darkred">{{ evaluation.populationCount - evaluation.populationCompletedCount }}</h1>
+              <h1>{{ (((evaluation.populationCount - evaluation.populationCompletedCount) * 100) / evaluation.populationCount).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
             </v-col>
             <v-col cols="6" align="center">
               <h1 class="text-uppercase">{{ $t('Views.Evaluations.show.finished_evaluations') }}</h1>
-              <h1 color="primary" class="display-3" style="color: #51c7af">{{ evaluation.answers }}</h1>
-              <h1>{{ ((evaluation.answers * 100) / totalEvaluations).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
+              <h1 color="primary" class="display-3" style="color: #51c7af">{{ evaluation.populationCompletedCount }}</h1>
+              <h1>{{ ((evaluation.populationCompletedCount * 100) / evaluation.populationCount).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
             </v-col>
           </v-row>
         </v-col>
@@ -144,19 +151,53 @@
           >
             <v-icon>mdi-information</v-icon>
           </v-btn>
-          {{ $t('Views.Evaluations.stepRevition.team') }} ({{ evaluation.evaluated.length }} {{ $t('Views.Evaluations.stepRevition.team_members') }})
+          ({{ evaluation.populationCount }} {{ $t('Views.Evaluations.stepRevition.team_members') }})
         </v-col>
-        <v-col cols="12">
-          <v-chip
-            class="ma-2"
-            :color="eva.status === 'completed' ? 'success' : (eva.status === 'in_progress' ? 'info' : 'default')"
-            v-for="eva in evaluation.evaluated" :key="eva.id"
-          >
-          {{ eva.employee.firstName }} {{ eva.employee.lastName }} ({{ identifyTypes[eva.employee.identifyTypeId] }}{{ eva.employee.identifyDocument }})
-          </v-chip>
+      </v-row>
+      <v-row>
+        <v-col>
+          <div v-if="evaluation._id">
+            <v-layout row wrap class="ml-3">
+              <v-col cols="12" sm="3">
+                <v-autocomplete
+                  v-model="filterByStatus"
+                  :items="filters"
+                  :label="$t('Views.Evaluations.list.input_filter_by')"
+                  prepend-inner-icon="mdi-filter-outline"
+                  @change="filterItems()"
+                ></v-autocomplete>
+              </v-col>
+              <v-spacer></v-spacer>
+              <v-col cols="12" sm="6" md="6" lg="6" class="mr-6">
+                <v-text-field
+                  v-model.lazy="tableOptions.search"
+                  append-icon="mdi-magnify"
+                  :label="$t('Views.Evaluations.show.look_for_name')"
+                  single-line
+                  hide-details
+                  @input="makeSearch()"
+                ></v-text-field>
+              </v-col>
+            </v-layout>
+            <x-data-table
+              :parent-fetch-data="getEvaluated"
+              :options="tableOptions"
+              :headers="[]"
+              no-data="Views.Evaluations.list.table_no_data"
+            >
+              <template v-slot:structure="prop">
+                <td class="text-center" style="vertical-align: middle;">
+                  <v-chip :color="getColor(prop.item.status)">
+                    {{ `${prop.item.employee.employeeEnterprise.firstName} ${prop.item.employee.employeeEnterprise.lastName}` }}
+                  </v-chip>
+                </td>
+              </template>
+            </x-data-table>
+          </div>
         </v-col>
       </v-row>
     </v-card>
+
     <x-confirmation-modal
       :show.sync="showModal"
       :reversible="typeModal !== 'close'"
@@ -201,6 +242,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 
 import evaluationsService from '../../services/evaluations'
+import evaluatedService from '../../services/evaluated'
 import identifyTypesService from '../../services/identify-types'
 
 export default Vue.extend({
@@ -214,7 +256,22 @@ export default Vue.extend({
       typeModal: '',
       showModal: false,
       showModalChip: false,
-      identifyTypes: {}
+      identifyTypes: {},
+      tableHeaders: [
+        'Views.Evaluations.show.evaluated_list.table_name'
+      ],
+      tableOptions: {
+        filter: null,
+        search: null
+      },
+      filterByStatus: '',
+      filters: [
+        { text: 'Todos', value: null },
+        { text: 'Pendiente', value: 'pending' },
+        { text: 'En progreso', value: 'in_progress' },
+        { text: 'Completada', value: 'completed' }
+      ],
+      evaluatedFetchTimerId: undefined
     }
   },
   computed: {
@@ -272,20 +329,28 @@ export default Vue.extend({
       this.$store.dispatch('loading/show')
       return evaluationsService.getOneToShow(this.$route.params.slug)
         .then((res) => {
-          this.baseEvaluation = res
           this.evaluation = JSON.parse(JSON.stringify(res))
           this.totalEvaluations = this.evaluation.answers = 0
-          for (const evaluated of this.evaluation.evaluated) {
-            this.totalEvaluations += 1
-            if (evaluated.status === 'completed') {
-              this.evaluation.answers++
-            }
-          }
           this.$store.dispatch('loading/hide')
         }).catch((err) => {
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
           this.$store.dispatch('loading/hide')
         })
+    },
+    getEvaluated (options) {
+      return evaluatedService.list(this.evaluation._id, options)
+    },
+    makeSearch () {
+      clearTimeout(this.evaluatedFetchTimerId)
+      this.evaluatedFetchTimerId = setTimeout(() => {
+        this.filterItems()
+      }, 500)
+    },
+    filterItems () {
+      this.tableOptions = {
+        ...this.tableOptions,
+        filter: this.filterByStatus
+      }
     }
   }
 })
