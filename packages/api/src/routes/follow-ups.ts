@@ -90,7 +90,7 @@ const getSuiteEmployees = async (participants, filters, req) => {
   const ids = totalFilteredEmployees.body.map(x => x.id);
   // Employees who completed the poll
   const filteredEmployeesCompleted = participants.filter(e => {
-    return e.status === 'finished' && ids.includes(e.indEmpEntId);
+    return e.status === 'completed' && ids.includes(e.indEmpEntId);
   });
 
   return {
