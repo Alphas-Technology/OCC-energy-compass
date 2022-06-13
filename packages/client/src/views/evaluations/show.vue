@@ -5,10 +5,12 @@
         <v-row justify="space-between" class="px-8">
           <h4 class="display-1 left">{{ evaluation.name }}</h4>
           <v-chip
-            class="mb-3 white--text right"
-            color="primary"
             v-if="evaluation.displayName"
-          >{{ evaluation.displayName }}</v-chip>
+            color="primary"
+            class="mb-3 white--text right"
+          >
+            {{ evaluation.displayName }}
+          </v-chip>
         </v-row>
       </v-col>
     </v-row>
@@ -80,8 +82,9 @@
             :value="((evaluation.populationCompletedCount * 100) / evaluation.populationCount).toFixed(2)"
             :width="15"
             color="primary"
+            class="pt-8"
           >
-            <p>
+            <p class="mb-0">
               <span class="display-2">
                 {{ evaluation.populationCount }}
               </span> <br>
@@ -93,15 +96,27 @@
         </v-col>
         <v-col xs="12" sm="4" align="center">
           <v-row>
+            <!-- Pending -->
             <v-col cols="6" align="center">
               <h1 class="text-uppercase">{{ $t('Views.Evaluations.show.pending_evaluations') }}</h1>
-              <h1 class="display-3" style="color: darkred">{{ evaluation.populationCount - evaluation.populationCompletedCount }}</h1>
-              <h1>{{ (((evaluation.populationCount - evaluation.populationCompletedCount) * 100) / evaluation.populationCount).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
+              <h1 class="display-3" style="color: darkred">
+                {{ computedPendingPopulation }}
+              </h1>
+              <h1>
+                {{ computedPendingPercentage }}% {{ $t('Views.Evaluations.show.of_polls') }}
+              </h1>
             </v-col>
+            <!-- Completed -->
             <v-col cols="6" align="center">
-              <h1 class="text-uppercase">{{ $t('Views.Evaluations.show.finished_evaluations') }}</h1>
-              <h1 color="primary" class="display-3" style="color: #51c7af">{{ evaluation.populationCompletedCount }}</h1>
-              <h1>{{ ((evaluation.populationCompletedCount * 100) / evaluation.populationCount).toFixed(2) }}% {{ $t('Views.Evaluations.show.of_polls') }}</h1>
+              <h1 class="text-uppercase">
+                {{ $t('Views.Evaluations.show.finished_evaluations') }}
+              </h1>
+              <h1 color="primary" class="display-3" style="color: #51c7af">
+                {{ evaluation.populationCompletedCount ? evaluation.populationCompletedCount : 0 }}
+              </h1>
+              <h1>
+                {{ computedCompletedPercentage }}% {{ $t('Views.Evaluations.show.of_polls') }}
+              </h1>
             </v-col>
           </v-row>
         </v-col>
@@ -252,7 +267,7 @@ export default Vue.extend({
         reminders: [],
         evaluated: []
       },
-      totalEvaluations: 0,
+      dataFetched: false,
       typeModal: '',
       showModal: false,
       showModalChip: false,
@@ -277,7 +292,25 @@ export default Vue.extend({
   computed: {
     ...mapState({
       user: (state) => state.session.user
-    })
+    }),
+    computedPendingPopulation () {
+      if (this.dataFetched) {
+        return this.evaluation.populationCount - this.evaluation.populationCompletedCount
+      }
+      return 0
+    },
+    computedPendingPercentage () {
+      if (this.dataFetched) {
+        return (((this.evaluation.populationCount - this.evaluation.populationCompletedCount) * 100) / this.evaluation.populationCount).toFixed(2)
+      }
+      return 0
+    },
+    computedCompletedPercentage () {
+      if (this.dataFetched) {
+        return ((this.evaluation.populationCompletedCount * 100) / this.evaluation.populationCount).toFixed(2)
+      }
+      return 0
+    }
   },
   created () {
     this.$store.dispatch('loading/show')
@@ -329,11 +362,13 @@ export default Vue.extend({
       this.$store.dispatch('loading/show')
       return evaluationsService.getOneToShow(this.$route.params.slug)
         .then((res) => {
-          this.evaluation = JSON.parse(JSON.stringify(res))
-          this.totalEvaluations = this.evaluation.answers = 0
-          this.$store.dispatch('loading/hide')
-        }).catch((err) => {
+          this.evaluation = res
+          this.dataFetched = true
+        })
+        .catch((err) => {
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
+        })
+        .finally(() => {
           this.$store.dispatch('loading/hide')
         })
     },
