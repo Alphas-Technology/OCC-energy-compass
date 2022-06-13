@@ -101,5 +101,6 @@ export default {
   'demographic_report/002': 'Id es requerido',
   'demographic_report/003': 'Debe tener por lo menos un corte demográfico',
   'demographic_report/004': 'No se encontraron resultados para la evaluación actual',
-  'demographic_report/005': 'Error interno al consignar el reporte'
+  'demographic_report/005': 'Error interno al consignar el reporte',
+  'energy-compass/closed': 'Esta medición ha sido cerrada'
 }
