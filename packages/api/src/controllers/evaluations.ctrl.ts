@@ -502,6 +502,9 @@ class EvaluationsController {
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
+      if (evaluation.status !== 'completed') {
+        throw new BadRequestException('evaluation-not-completed');
+      }
 
       const answeredCount = await EvaluationAnswersService.countByEvaluationId(evaluation._id);
       if (!answeredCount) {
@@ -528,14 +531,12 @@ class EvaluationsController {
         createdAt: new Date(),
         data: {
           _evaluation: evaluation._id,
+          evaluationSlug: evaluation.slug,
           operations: spend,
           enterpriseId: evaluation.enterpriseId,
           questionnaire: evaluation.questionnaire.slug,
-          evaluationSlug: evaluation.slug,
-          evaluationStatus: evaluation.status,
-          type: 'organizational',
-          step: 0,
-          progress: 0
+          answeredCount,
+          type: 'organizational'
         }
       });
 
@@ -558,6 +559,9 @@ class EvaluationsController {
       const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise deliveredAt validUntil');
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
+      }
+      if (evaluation.status !== 'completed') {
+        throw new BadRequestException('evaluation-not-completed');
       }
 
       const filters = {
@@ -613,16 +617,13 @@ class EvaluationsController {
         createdAt: new Date(),
         data: {
           _evaluation: evaluation._id,
+          evaluationSlug: evaluation.slug,
           operations: spend,
           enterpriseId: evaluation.enterpriseId,
           questionnaire: evaluation.questionnaire.slug,
-          evaluationSlug: evaluation.slug,
-          evaluationStatus: evaluation.status,
           answeredCount,
-          criteria: req.body.criteria,
           type: 'by_demographic',
-          step: 0,
-          progress: 0
+          criteria: req.body.criteria
         }
       });
 
