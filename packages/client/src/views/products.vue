@@ -17,8 +17,6 @@ export default Vue.extend({
   },
   computed: {},
   watch: {},
-  created () {
-  },
   methods: {}
 })
 </script>

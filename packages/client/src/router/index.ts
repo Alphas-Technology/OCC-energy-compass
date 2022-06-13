@@ -43,6 +43,8 @@ import RequireProductView from '../views/errors/require-product.vue'
 import Home from '../views/home.vue'
 import Maintenance from '../views/maintenance.vue'
 
+import FollowUps from '../views/follow-ups/index.vue'
+
 import RequireProduct from './guards/require-product'
 import RequireAdmin from './guards/require-admin'
 import RequireAuthentication from './guards/require-authentication'
@@ -128,6 +130,11 @@ const routes = [
       {
         path: '/evaluations/:slug/details',
         component: ShowEvaluation,
+        beforeEnter: RequireAuthentication
+      },
+      {
+        path: '/followup/:type/:pollId',
+        component: FollowUps,
         beforeEnter: RequireAuthentication
       },
       {
