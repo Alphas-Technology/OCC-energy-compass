@@ -37,14 +37,15 @@ class EvaluationAnswersService {
    */
   async findByBatchByEvaluationIdAndFilterItems(
     evaluationId: any,
-    filter: {[key: string]: {$in: Array<number>}},
+    filter: {[key: string]: Array<any>},
+    // filter: {[key: string]: {$in: Array<number>}},
     skip: number,
     qty: number,
     select?: undefined|any): Promise<EvaluationAnswers[]> {
     return EvaluationAnswersRepository.find(
       { evaluationRef: new ObjectID(evaluationId), ...filter },
       select || undefined,
-      { skip: Number(skip * qty), limit: Number(qty) }
+      { skip: Number(skip), limit: Number(qty) }
     );
   }
 
