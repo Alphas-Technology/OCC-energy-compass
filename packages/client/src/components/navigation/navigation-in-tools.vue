@@ -55,8 +55,6 @@ export default Vue.extend({
     }
   },
   created () {
-    let suiteHost = '';
-    
     this.$store.dispatch('session/getEnergyHost')
       .then(res => {
         this.host = res
