@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { default as ProductServiceService } from '../services/product-service.srvc';
 import HttpSuperagentRequest from '../utils/http-superagent-request';
-import { UnauthorizedException, BadRequestException } from '../error';
+import { UnauthorizedException } from '../error';
 
 
 class ProductServiceController {

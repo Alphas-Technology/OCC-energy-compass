@@ -2,7 +2,6 @@
 import * as mongoose from 'mongoose';
 
 import { AnswersReference } from '../models/answers-reference';
-import { ObjectID } from 'mongodb';
 
 export type AnswersReferenceType = AnswersReference & mongoose.Document;
 

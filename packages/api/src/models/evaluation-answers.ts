@@ -1,5 +1,4 @@
 
-import { Dimention } from './dimention';
 import { DemographicItem } from './demographic-item';
 import { AnswerOpenQuestion } from './answer-open-question';
 

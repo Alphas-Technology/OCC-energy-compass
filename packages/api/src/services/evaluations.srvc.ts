@@ -1,7 +1,7 @@
 
 import { ObjectID } from 'mongodb';
 import { Evaluation } from '../models/evaluation';
-import EvaluationRepository, { EvaluationsType } from '../schemas/evaluation.schema';
+import EvaluationRepository from '../schemas/evaluation.schema';
 
 import ProductServiceService from './product-service.srvc';
 import RunHttpRequest from '../utils/run-http-request';
@@ -99,20 +99,8 @@ class EvaluationsService {
     return EvaluationRepository.find({ enterpriseId: enterpriseId }, 'slug name status');
   }
 
-  async getPreviousByIdAndEnterprise(id: string, enterpriseId: number, deliveredAt: any, select?: undefined|any): Promise<Evaluation[]> {
-    return EvaluationRepository.find({
-        $and: [{
-          _id: {$ne: new ObjectID(id)} },
-          {enterpriseId: enterpriseId},
-          {status: 'completed'},
-          {deliveredAt: {$lt: deliveredAt}}
-        ]
-      }, select || undefined)
-    .sort({'deliveredAt': -1});
-  }
-
   /**
-   * @description Update a evaluation's answered polls count
+   * @description Update an evaluation's answered polls count
    * @returns {Promise<void>}
    */
   async updateAnsweredCount(id: string, populationCompletedCount: number): Promise<Evaluation> {

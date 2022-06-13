@@ -16,12 +16,10 @@ import { default as AnswersReferenceService } from '../services/answers-referenc
 
 import { default as OperationThreadsService } from '../services/operation-threads.srvc';
 
-import { UnauthorizedException, BadRequestException } from '../error';
+import { BadRequestException } from '../error';
 
 import IRequest from './contracts/request';
 
-import TokenUtils from '../utils/token-utils';
-import HttpSuperagentRequest from '../utils/http-superagent-request';
 import RunHttpRequest from '../utils/run-http-request';
 import SpendRequest from '../utils/spend-request';
 
@@ -127,27 +125,6 @@ class EvaluationsController {
         });
       }
     }
-  }
-
-
-  async updateActivityStatus(evaluationsIds: any[]) {
-    const evaluations = await EvaluationsService.findManyById(evaluationsIds);
-    evaluations.forEach(async evaluation => {
-      try {
-        await HttpSuperagentRequest.sendRequest({
-          product: 'suite',
-          path: 'activities/energy-compass-individual/update-status',
-          method: 'POST',
-          data: {
-            evaluation: evaluation,
-            productId: 3,
-            serviceId: 6
-          }
-        });
-      } catch (error) {
-        console.log('activities/energy-compass-individual/update-status', error);
-      }
-    });
   }
 
   async create(req: IRequest, res: Response) {

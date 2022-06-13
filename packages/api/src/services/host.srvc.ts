@@ -8,8 +8,8 @@ class HostService {
 
   /**
    * @description Fetches single host from the storage by product name
-   * @param email
    * @returns {Promise<Host>}
+   * @param productName
    */
   async findByProductName(productName: string): Promise<Host> {
     return HostRepository.findOne({productName: new RegExp('^' + productName + '$', 'i')});

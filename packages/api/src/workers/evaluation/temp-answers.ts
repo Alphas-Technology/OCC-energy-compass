@@ -8,8 +8,6 @@ import { default as OperationThreadsService } from '../../services/operation-thr
 
 import RunHttpRequest from '../../utils/run-http-request';
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
 class SaveTempAnswers {
 
   static readonly indices = ['generalHealth', 'burnoutIndividual', 'burnoutOrganizational'];

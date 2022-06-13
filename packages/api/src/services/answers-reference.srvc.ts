@@ -1,6 +1,6 @@
 
 import { AnswersReference } from '../models/answers-reference';
-import AnswersReferenceRepository, { AnswersReferenceType } from '../schemas/answers-reference.schema';
+import AnswersReferenceRepository from '../schemas/answers-reference.schema';
 
 class AnswersReferenceService {
 

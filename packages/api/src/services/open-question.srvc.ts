@@ -1,5 +1,4 @@
 
-import { ObjectID } from 'mongodb';
 import { OpenQuestion } from '../models/open-question';
 import OpenQuestionRepository, { OpenQuestionType } from '../schemas/open-question.schema';
 

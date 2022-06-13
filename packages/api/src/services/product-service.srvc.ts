@@ -27,8 +27,8 @@ class ProductServiceService {
 
   /**
    * @description Fetches single product service by id and sets active flag
-   * @param activationToken
    * @returns {Promise<ProductService>}
+   * @param id
    */
   async findOneAndUpdate(id: string): Promise<ProductService | ProductServiceType> {
     const productService = ProductServiceRepository.findOneAndUpdate({ _id: id }, { active: true }, { new: true });

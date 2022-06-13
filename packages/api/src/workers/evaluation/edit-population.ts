@@ -4,7 +4,6 @@ import { default as EvaluatedService } from '../../services/evaluated.srvc';
 import { default as OperationThreadsService } from '../../services/operation-threads.srvc';
 
 import RunHttpRequest from '../../utils/run-http-request';
-import TokenUtils from '../../utils/token-utils';
 
 class EditPopulation {
 
