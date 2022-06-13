@@ -8,6 +8,7 @@ import ProductServiceRouterFactory from './product-services';
 import QuestionnairesRouterfactory from './questionnaires';
 import OpenQuestionsRouterfactory from './open-question';
 import EvaluatedRouterFactory from './evaluated';
+import FollowUpsRouterFactory from './follow-ups';
 
 
 export default (middlewares, services) => {
@@ -22,6 +23,7 @@ export default (middlewares, services) => {
   router.use('/questionnaires', QuestionnairesRouterfactory());
   router.use('/open-questions', OpenQuestionsRouterfactory());
   router.use('/evaluated', EvaluatedRouterFactory(middlewares));
+  router.use('/follow-ups', FollowUpsRouterFactory());
 
   return router;
 };
