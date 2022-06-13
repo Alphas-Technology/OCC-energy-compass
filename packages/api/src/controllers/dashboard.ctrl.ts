@@ -18,7 +18,7 @@ const calculateProgress = (evaluatedTemp, questions) => {
         if (additionalSegmentations.length > 0) {
           // Questions Count
           for (const ky of additionalSegmentations) {
-            if (questions[key][ky].selected) {
+            if (questions[key][ky] && questions[key][ky].selected) {
               totalQuestions++;
             }
           }
