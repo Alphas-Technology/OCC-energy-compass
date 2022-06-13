@@ -36,13 +36,13 @@
       <v-simple-table dense
         v-else
         fixed-header
-        height="422px"
+        height="468px"
         style="border: 1px solid #DDDDDD;"
       >
         <template v-slot:default>
           <thead>
             <tr class="grey lighten-1">
-              <th class="grey lighten-1 text-uppercase body-2 font-weight-bold">
+              <th class="py-5 grey lighten-1 text-uppercase body-2 font-weight-bold">
                 {{ $t('Views.FollowUpReport.demographic_cuts') }}
               </th>
               <th width="70px" class="px-0 grey lighten-1 text-right">
@@ -59,7 +59,7 @@
           </thead>
           <tbody>
             <tr v-for="cut in demographicCuts" :key="cut.id">
-              <td class="body-2">
+              <td class="py-2 body-2">
                 {{ cut.demographicItem.translate.label }}
               </td>
               <td>
@@ -68,7 +68,7 @@
                   :ripple="false"
                   :disabled="selectedCount > 1 && !selectedCuts[cut.id].selected"
                   color="primary"
-                  class="mt-0 mb-1 float-right"
+                  class="mt-1 mb-1 float-right"
                   @change="selectedCounter()"
                 ></v-checkbox>
               </td>
@@ -119,22 +119,28 @@
       >
          <template v-slot:item="{ item, index }">
           <tr :class="{ 'font-weight-bold': index + 1 === results.length }">
-            <td :class="{ 'text-right ': index + 1 === results.length }">
+            <td :class="{ 'text-right ': index + 1 === results.length, 'py-1': true }">
               {{ $te(`Views.FollowUpReport.${item.demo1}`) ? $t(`Views.FollowUpReport.${item.demo1}`) : item.demo1 }}
             </td>
-            <td v-if="item.demo2" :class="{ 'text-right': index + 1 === results.length }">
-              {{ $te(`Views.FollowUpReport.${item.demo2}`) ? $t(`Views.FollowUpReport.${item.demo2}`) : item.demo2 }}
+            <td v-if="item.demo2"
+              :class="{ 'text-right': index + 1 === results.length, 'py-1': true }"
+            >
+              {{
+                $te(`Views.FollowUpReport.${item.demo2}`)
+                  ? $t(`Views.FollowUpReport.${item.demo2}`)
+                  : item.demo2
+              }}
             </td>
-            <td class="text-center">
+            <td class="py-1 text-center">
               {{ item.total ? item.total : '-' }}
             </td>
-            <td class="text-center">
+            <td class="py-1 text-center">
               {{ item.obtained ? item.obtained : '-' }}
               <small v-if="index + 1 === results.length">
                 ({{ getPercent(item.obtained, item.total) }}%)
               </small>
             </td>
-            <td class="text-center">
+            <td class="py-1 text-center">
               {{ item.total - item.obtained > 0 ? item.total - item.obtained : '-' }}
               <small v-if="index + 1 === results.length">
                 ({{ getPercent((item.total - item.obtained), item.total) }}%)
@@ -159,4 +165,3 @@
 </template>
 
 <script src="./index.js"></script>
-
