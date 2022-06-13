@@ -8,6 +8,7 @@ import Indices from './indices'
 import Operations from './operations'
 import Questionnaires from './questionnaires'
 import OpenQuestions from './open-questions'
+import FollowUpReport from './followup-report'
 
 export default {
   AppLayout,
@@ -18,5 +19,6 @@ export default {
   Indices,
   Operations,
   Questionnaires,
-  OpenQuestions
+  OpenQuestions,
+  FollowUpReport
 }

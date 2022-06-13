@@ -279,7 +279,13 @@ export default {
     modal_chip_default: 'No han iniciado o ingresado a responder la valoración',
     modal_chip_info: 'Ha ingresado a responder la valoración',
     modal_chip_success: 'Ha finalizado de responder la valoración',
-    modal_input_close: 'Cerrar'
+    modal_input_close: 'Cerrar',
+    look_for_name: 'Buscar por nombre...',
+    tracking: 'Seguimiento',
+    evaluated_list: {
+      table_name: 'Nombre',
+      table_status: 'Estado'
+    }
   },
   evaluation: {
     evaluate: 'Participante',
