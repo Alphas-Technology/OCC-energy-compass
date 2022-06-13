@@ -48,6 +48,9 @@ export default {
   findByTokenId: (tokenId: string) => {
     return service.get(`find-by-token-id/${tokenId}`)
   },
+  findById: (id: string) => {
+    return service.get(`find-by-id/${id}`)
+  },
   saveEvaluatedTempAnswers: (tokenId: string, temp: any) => {
     return service.put('save-temp-answers', { tokenId: tokenId, data: temp })
   },
