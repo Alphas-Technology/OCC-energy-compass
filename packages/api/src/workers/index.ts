@@ -6,6 +6,8 @@ import EditPopulationWorker from './evaluation/edit-population';
 import EvaluationWorker from './evaluation/check-start-end-dates';
 import EvaluationEmailsWorker from './evaluation/send-emails';
 import TempAnswersWorker from './evaluation/temp-answers';
+import ReportCheck from './reports/check-pending-reports';
+import ProcessReportOrganizational from './reports/organizational';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -13,6 +15,27 @@ export default () => {
   setInterval(() => { console.log('Updated at 2022-05-11 14:00'); }, ms('5m'));
   const quarter = '15m';
   const minutes = '5m';
+  const seconds = '30s';
+
+  setInterval(() => {
+    ReportCheck.checkReportRequests().then((res) => {
+      // tslint:disable-next-line: no-console
+      console.log('Check Report Request:', res);
+    }).catch((error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Check Report Request error:', error);
+    });
+  }, ms('2m'));
+
+  setInterval(() => {
+    ProcessReportOrganizational.processReportResults().then((res) => {
+      // tslint:disable-next-line: no-console
+      console.log('Processed Report:', res);
+    }).catch((error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Processing Report error:', error);
+    });
+  }, ms(seconds));
 
   setInterval(async () => {
     CreatePopulationWorker.checkCreatePopulation().then((res) => {
@@ -54,7 +77,7 @@ export default () => {
     });
   }, ms('2m'));
 
-  setInterval(async () => {
+  setInterval(() => {
     EvaluationWorker.checkStartEndDates().then((res) => {
       // tslint:disable-next-line: no-console
       console.log('EvaluationStartCheckStartEndDates exec:', res);
@@ -64,7 +87,7 @@ export default () => {
     });
   }, ms(quarter));
 
-  setInterval(async () => {
+  setInterval(() => {
     EvaluationEmailsWorker.sendEmails().then((res) => {
       // tslint:disable-next-line: no-console
       console.log('Send Evaluation Email:', res);
@@ -74,7 +97,7 @@ export default () => {
     });
   }, ms('4m'));
 
-  setInterval(async () => {
+  setInterval(() => {
     TempAnswersWorker.processAnswers().then((res) => {
       // tslint:disable-next-line: no-console
       console.log('Saved TempAnswers:', res);
