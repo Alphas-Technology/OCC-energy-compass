@@ -52,17 +52,17 @@ export default {
     d_mental: 'Mental',
     d_emotional: 'Emocional',
     d_professional: 'Profesional',
-    v_foodAndHydration: 'Alimentación e hidratación',
+    v_foodAndHydration: 'Alimentación',
     v_physicalActivity: 'Actividad física',
-    v_rest: 'Descanso',
+    v_rest: 'Recuperación',
     v_stress: 'Estrés',
-    v_mindfulness: 'Consciencia',
+    v_mindfulness: 'Conciencia',
     v_productivity: 'Productividad',
-    v_purpose: 'Objetivo',
+    v_purpose: 'Propósito',
     v_constructiveRelationships: 'Relaciones constructivas',
-    v_positivePsychology: 'Psicologia POSITIVA',
+    v_positivePsychology: 'Psicología Positiva',
     v_professionalHabits: 'Hábitos profesionales',
     v_personalDevelopment: 'Desarrollo personal',
-    v_distractorManagement: 'Manejo de distractores'
+    v_distractorManagement: 'Gestión de distractores'
   }
 }
