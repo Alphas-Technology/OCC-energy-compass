@@ -50,6 +50,20 @@ class EvaluationAnswersService {
   }
 
   /**
+   * @description Get evaluations answers by IDs & filters
+   * @returns {Promise<EvaluationAnswers[]>}
+   */
+  async findBatchByIdsAndFilterItems(
+    ids: any,
+    filter: {[key: string]: Array<any>},
+    select?: undefined|any): Promise<EvaluationAnswers[]> {
+    return EvaluationAnswersRepository.find(
+      { _id: { $in: ids }, ...filter },
+      select || undefined
+    );
+  }
+
+  /**
    * @description Get all participants in an evaluation
    * @param {any} evaluationId
    * @returns {Promise<EvaluationAnswers[]>}
