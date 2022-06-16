@@ -3,6 +3,7 @@ import { DemographicItem } from './demographic-item';
 import { AnswerOpenQuestion } from './answer-open-question';
 
 export interface EvaluationAnswers {
+  _id?: any;
   evaluationRef: any,
   _populationId: any,
   demographicItems: DemographicItem,
