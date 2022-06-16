@@ -31,10 +31,10 @@
             </v-col>
             <v-col cols="12" sm="5" class="pt-6 text-right">
               <v-btn dark small
-                class="white--text"
-                color="primary"
-                style="margin-right=100%;"
-                @click="getPdf(item)"
+                     class="white--text"
+                     color="primary"
+                     style="margin-right:100%;"
+                     @click="getPdf(item)"
               >
                 {{$t('Views.Evaluations.stepQuestion.inputDownload')}}
                 <v-icon dark right small>mdi-file-pdf</v-icon>
@@ -59,7 +59,7 @@
                 @click:append="$store.dispatch('help/display', $t('help.pulse.create.open'))"
               ></v-switch>
               <x-info v-if="evaluation.switchAdditionalQuestion"
-                :text="$t('Views.Evaluations.stepQuestion.open_question_info')"
+                      :text="$t('Views.Evaluations.stepQuestion.open_question_info')"
               ></x-info>
             </v-col>
           </v-row>
@@ -102,26 +102,26 @@
 
             <!-- Questions -->
             <v-col cols="12" sm="6"
-              v-for="(additional, idx) in evaluation.additionalQuestions"
-              :key="`q${idx}`"
-              class="px-5 pb-6"
+                   v-for="(additional, idx) in evaluation.additionalQuestions"
+                   :key="`q${idx}`"
+                   class="px-5 pb-6"
             >
               <v-row>
                 <v-col cols="12">
                   <ValidationProvider v-slot="{ errors }"
-                    :name="$t('Views.Evaluations.stepQuestion.additional_n', {n: idx + 1})"
-                    :rules="{
+                                      :name="$t('Views.Evaluations.stepQuestion.additional_n', {n: idx + 1})"
+                                      :rules="{
                       required: hasOptions(additional)
                     }"
-                    mode="lazy"
+                                      mode="lazy"
                   >
                     <v-text-field light
-                      v-model="additional.question"
-                      :label="$t('Views.Evaluations.stepQuestion.insert_question', {n: idx + 1})"
-                      :name="`external_name${idx}`"
-                      :readonly="evaluation.status !== 'pending'"
-                      :disabled="evaluation.status !== 'pending'"
-                      :error-messages="errors[0]"
+                                  v-model="additional.question"
+                                  :label="$t('Views.Evaluations.stepQuestion.insert_question', {n: idx + 1})"
+                                  :name="`external_name${idx}`"
+                                  :readonly="evaluation.status !== 'pending'"
+                                  :disabled="evaluation.status !== 'pending'"
+                                  :error-messages="errors[0]"
                     >
                       <template #append>
                         <v-tooltip :disabled="additional.options.length === maxOptionOpenQuestion || evaluation.status !== 'pending'" bottom color="green lighten-3">
@@ -145,32 +145,32 @@
                 </v-col>
                 <!-- Options -->
                 <v-col cols="12" xs="11" offset-xs="1" v-for="(option, $i) in additional.options" :key="$i"
-                  class="pl-7"
+                       class="pl-7"
                 >
                   <ValidationProvider v-slot="{ errors }"
-                    :name="$t('Views.Evaluations.stepQuestion.option_n', {n: $i + 1})"
-                    :rules="{
+                                      :name="$t('Views.Evaluations.stepQuestion.option_n', {n: $i + 1})"
+                                      :rules="{
                       required: additional.question !== ''
                     }"
-                    mode="eager"
+                                      mode="eager"
                   >
                     <v-text-field light
-                      v-model="additional.options[$i]"
-                      :label="$t('Views.Evaluations.stepQuestion.insert_question_option', {n: idx + 1, o: $i + 1})"
-                      :name="`external_name${idx}${$i}`"
-                      :readonly="evaluation.status !== 'pending'"
-                      :disabled="evaluation.status !== 'pending'"
-                      :error-messages="errors[0]"
+                                  v-model="additional.options[$i]"
+                                  :label="$t('Views.Evaluations.stepQuestion.insert_question_option', {n: idx + 1, o: $i + 1})"
+                                  :name="`external_name${idx}${$i}`"
+                                  :readonly="evaluation.status !== 'pending'"
+                                  :disabled="evaluation.status !== 'pending'"
+                                  :error-messages="errors[0]"
                     >
                       <template v-slot:append>
                         <v-tooltip :disabled="additional.options.length === minOptionOpenQuestion || evaluation.status !== 'pending'" bottom color="red">
                           <template v-slot:activator="{ on }">
                             <v-btn fab small
-                              v-on="on"
-                              color="#f65871"
-                              class="white--text"
-                              :disabled="additional.options.length === minOptionOpenQuestion || evaluation.status !== 'pending'"
-                              @click="removeOptionOpenQuestion(additional, $i)"
+                                   v-on="on"
+                                   color="#f65871"
+                                   class="white--text"
+                                   :disabled="additional.options.length === minOptionOpenQuestion || evaluation.status !== 'pending'"
+                                   @click="removeOptionOpenQuestion(additional, $i)"
                             >
                               <v-icon>mdi-minus</v-icon>
                             </v-btn>
@@ -192,23 +192,23 @@
             <v-row>
               <v-col cols="12" sm="6" class="pb-1">
                 <v-btn large block
-                  @click="changeStep(true)"
+                       @click="changeStep(true)"
                 >
                   {{ $t(prevAction) }}
                 </v-btn>
               </v-col>
               <v-col cols="12" sm="6" class="pb-1">
                 <v-btn large block
-                  color="primary"
-                  :disabled="!questionnaires.length"
-                  type="submit"
+                       color="primary"
+                       :disabled="!questionnaires.length"
+                       type="submit"
                 >
                   {{ $t(nextAction) }}
                 </v-btn>
               </v-col>
             </v-row>
           </v-card-actions>
-          </v-form>
+        </v-form>
       </ValidationObserver>
     </v-card>
 
@@ -246,6 +246,7 @@ export default {
   data () {
     return {
       questionnaires: [],
+      indexes: {},
       minOpenQuestion: 1,
       maxOpenQuestion: 3,
       minOptionOpenQuestion: 2,
@@ -375,32 +376,67 @@ export default {
     getPdf (questionnaire) {
       this.$store.dispatch('loading/show')
       const details = []
-      for (const dimensionKey in questionnaire.evaluations) {
-        const dimension = questionnaire.evaluations[dimensionKey]
+      let dimensionsCount = 0
+      for (const [dimensionKey, variables] of Object.entries(questionnaire.evaluations)) {
         details.push({
-          text: dimension.name[this.user.lang].toUpperCase(),
+          text: this.$t(`Views.Questionnaires.edit.d_${dimensionKey}`).toUpperCase(),
           bold: true,
-          fontSize: 15,
-          pageBreak: dimensionKey !== 'persons' ? 'before' : '',
-          margin: dimensionKey !== 'persons' ? [0, 5, 0, 0] : []
+          fontSize: 16,
+          pageBreak: dimensionsCount > 0 ? 'before' : '',
+          margin: [0, (dimensionsCount > 0 ? 20 : 10), 0, 5]
         })
-        for (let attrNum = 1; attrNum <= 3; attrNum++) {
-          const attribute = dimension[`attr_${attrNum}`]
-          for (const key of ['autoEvaluation', 'generalEvaluation']) {
-            details.push({
-              text: `${attribute.name[this.user.lang]} - ${this.$t(`Views.Evaluations.stepQuestion.${key}`)}`,
-              bold: true,
-              fontSize: 12
-            })
-            const questions = []
-            for (let behaviorNum = 1; behaviorNum <= 5; behaviorNum++) {
-              const behavior = attribute[`behavior_0${behaviorNum}`]
-              questions.push(behavior[key][this.user.lang])
-            }
-            details.push({ ul: questions, margin: [15, 0, 0, 15] })
-            if (key === 'generalEvaluation') break
+
+        for (const [variableKey, variableItems] of Object.entries(variables)) {
+          const variablesData = {
+            ul: []
           }
+
+          variablesData.ul.push({
+            text: this.$t(`Views.Questionnaires.edit.v_${variableKey}`),
+            bold: true,
+            fontSize: 14,
+            pageBreak: '',
+            margin: [8, 15, 20, 10]
+          })
+
+          details.push(variablesData)
+
+          details.push({
+            ul: Object.entries(variableItems).map(vItem => ({
+              text: vItem[1].question[this.user.lang],
+              bold: false,
+              fontSize: 11,
+              margin: [16, 5, 20, 0]
+            }))
+          })
         }
+        dimensionsCount++
+      }
+
+      details.push({
+        text: this.$t('Views.Indices.list.title').toUpperCase(),
+        bold: true,
+        fontSize: 16,
+        pageBreak: 'before',
+        margin: [0, 20, 0, 5]
+      })
+
+      for (const [indexKey, indexItems] of Object.entries(this.indexes)) {
+        details.push({
+          text: this.$t(`Views.Indices.list.i_${indexKey}`),
+          bold: true,
+          fontSize: 14,
+          margin: [0, 10, 0, 5]
+        })
+
+        details.push({
+          ul: Object.entries(indexItems).map(iItem => ({
+            text: iItem[1].question[this.user.lang],
+            bold: false,
+            fontSize: 12,
+            margin: [16, 5, 20, 0]
+          }))
+        })
       }
 
       const configuration = {
@@ -420,7 +456,7 @@ export default {
             image: this.energyLogoBase64,
             height: 45,
             width: 117,
-            margin: [15, 0, 25, 15]
+            margin: [15, 0, 25, 40]
           }]
         },
         footer: () => {
@@ -481,21 +517,29 @@ export default {
     getQuestionnaires () {
       this.$store.dispatch('loading/show')
       return questionnairesService.listFiltered()
-        .then((res) => {
-          this.questionnaires = res.items
-          if (!this.$route.params.slug && this.questionnaires.length) {
-            this.evaluation.questionnaire = this.questionnaires[0].slug
-          } else {
-            if (this.evaluation.questionnaire.slug) {
-              this.evaluation.questionnaire = this.evaluation.questionnaire.slug
-            }
-          }
-          this.$store.dispatch('loading/hide')
-        })
+    },
+    getIndexes () {
+      this.$store.dispatch('loading/show')
+      return questionnairesService.getIndices()
     }
   },
   created () {
-    this.getQuestionnaires()
+    Promise.all([
+      this.getQuestionnaires(),
+      this.getIndexes()
+    ]).then(resp => {
+      const [questionnaires, indexes] = resp
+      this.questionnaires = questionnaires.items
+      if (!this.$route.params.slug && this.questionnaires.length) {
+        this.evaluation.questionnaire = this.questionnaires[0].slug
+      } else {
+        if (this.evaluation.questionnaire.slug) {
+          this.evaluation.questionnaire = this.evaluation.questionnaire.slug
+        }
+      }
+      this.indexes = indexes
+      this.$store.dispatch('loading/hide')
+    })
   },
   mounted () {
     this.energyLogoSrc = document.getElementById('occEnergyCompassLogo').src
