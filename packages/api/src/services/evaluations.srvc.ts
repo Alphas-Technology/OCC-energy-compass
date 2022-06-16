@@ -100,6 +100,22 @@ class EvaluationsService {
   }
 
   /**
+   * @description Find a previous evaluation
+   * @returns {Promise<void>}
+   */
+  async findOnePrevious(id: string, enterpriseId: number, questionnaire: any, deliveredAt: any, select?: undefined|any): Promise<Evaluation> {
+    return EvaluationRepository.findOne({
+      _id: { $ne: new ObjectID(id) },
+      enterpriseId: enterpriseId,
+      status: 'completed',
+      deliveredAt: { $lt: deliveredAt },
+      'questionnaire._id': questionnaire._id,
+      'questionnaire.updatedAt': questionnaire.updatedAt
+    }, select || undefined)
+    .sort({'deliveredAt': -1});
+  }
+
+  /**
    * @description Update an evaluation's answered polls count
    * @returns {Promise<void>}
    */
