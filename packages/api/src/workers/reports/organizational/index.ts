@@ -117,7 +117,9 @@ class ReportMethods {
             threadData.answersForScatter
           );
 
-          threadData.scatterDimension = tempStepFive;
+          threadData.scatterDimension = tempStepFive.scatter;
+          threadData.highestScatter = tempStepFive.highest;
+          threadData.lowestScatter = tempStepFive.lowest;
 
           threadData.step = 6;
           threadData.progress = 90;
@@ -128,17 +130,18 @@ class ReportMethods {
           );
 
           threadData.groupedWords = tempStepSix.grouped;
-          threadData.wordsCloud = tempStepSix.indexed;
+          threadData.wordsCloud = tempStepSix.weighted;
 
           threadData.progress = 100;
+
+          delete threadData.tempData;
           break;
       }
 
-      await OperationThreadsService.findOneAndUpdateStatusData(pendingOperationThread._id, 'in_progress', threadData);
+      const status = threadData.step === 6 && threadData.progress === 100 ? 'completed' : 'in_progress';
 
-      if (threadData.step === 6 && threadData.progress === 100) {
-        await OperationThreadsService.findOneAndUpdateStatus(pendingOperationThread._id, 'completed');
-      }
+      await OperationThreadsService.findOneAndUpdateStatusData(pendingOperationThread._id, status, threadData);
+
     } catch (error) {
       return await this.saveFailed(pendingOperationThread._id, 'Process Report Results Error', {
         step: threadData.step,
