@@ -51,6 +51,8 @@ export default async (
     return Math.sqrt(distanceSum / scores.length);
   };
 
+  const higherLower: any = [];
+
   // Dimensions
   for (const dimKey of Object.keys(answersForScatter)) {
 
@@ -64,12 +66,26 @@ export default async (
         const data = answersForScatter[dimKey].variables[varKey].questions[qKey].scatter;
         const media = data.average;
         const scores = data.scores;
-
         const scatter = getScatter(scores, media);
+
+        higherLower.push({
+          dimension: dimKey,
+          variable: varKey,
+          question: qKey,
+          scatter
+        });
+
         scatterDimension[dimKey].variables[varKey].questions[qKey].scatter = scatter;
       }
     }
   }
 
-  return scatterDimension;
+  const highest = higherLower.sort((a, b) => b.score - a.score).slice(0, 6);
+  const lowest = higherLower.sort((a, b) => a.score - b.score).slice(0, 6);
+
+  return {
+    scatter: scatterDimension,
+    highest,
+    lowest
+  };
 };
