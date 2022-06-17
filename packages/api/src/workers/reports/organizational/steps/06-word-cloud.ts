@@ -69,11 +69,10 @@ export default async (
     questionWords[key] = countedWords;
 
     const top = countedWords[0].count;
-    indexedWords[key] = countedWords.map((w, i) => ({
+    indexedWords[key] = countedWords.map(w => ({
       name: w.word,
-      occurrences: w.count,
       weighing: (w.count / top) * 100,
-      value: 200 - i
+      value: w.count
     }));
   });
 
