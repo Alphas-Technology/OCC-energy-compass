@@ -56,7 +56,7 @@ export default {
     v_physicalActivity: 'Actividad física',
     v_rest: 'Recuperación',
     v_stress: 'Estrés',
-    v_mindfulness: 'Conciencia',
+    v_mindfulness: 'Mindfulness',
     v_productivity: 'Productividad',
     v_purpose: 'Propósito',
     v_constructiveRelationships: 'Relaciones constructivas',
