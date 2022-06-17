@@ -487,7 +487,13 @@ class EvaluationsController {
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
-      resp.status(200).send(evaluation);
+
+      const response = await RunHttpRequest.suiteGet(req, 'enterprises/get-base64-logo');
+      if (response.success) {
+        evaluation.enterprise.logo = response.res.logo;
+      }
+
+      resp.send(evaluation);
     } catch (error) {
       resp.send({
         msg: 'Not found',
