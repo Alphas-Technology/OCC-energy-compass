@@ -67,6 +67,7 @@
               :key="orgKey"
               :poll-id="$route.params.id"
               :thread="thread"
+              :evaluation-data="evaluation"
               @pdfRenderedOrg="orgKey++"
             ></x-download-organizational-report>
 
@@ -109,6 +110,7 @@ export default {
   },
   props: {
     threads: Array,
+    evaluation: Object,
     demographics: Object
   },
   data () {

@@ -109,6 +109,7 @@
                 <x-report-threads
                   :threads="reportThreads"
                   :demographics="demographicItems"
+                  :evaluation="evaluation"
                 ></x-report-threads>
               </v-col>
             </v-row>
