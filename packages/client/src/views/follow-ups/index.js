@@ -116,7 +116,7 @@ export default {
     },
     getPoll () {
       this.loadingInitial = true
-      evaluationsService.findById(this.$route.params.pollId)
+      evaluationsService.getOneById(this.$route.params.pollId)
         .then((res) => {
           this.poll = res
           if (this.poll.status !== 'in_progress') {
