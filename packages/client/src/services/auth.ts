@@ -16,6 +16,9 @@ export default {
   isValid: () => {
     return service.get('validate')
   },
+  identifyTypes: () => {
+    return service.suiteOperation(() => service.get('list-identify-types'))
+  },
   checkActivity: (id: number) => {
     return service.suiteOperation(() => service.get(`check-activity/${id}`))
   }
