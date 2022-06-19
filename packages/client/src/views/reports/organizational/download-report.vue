@@ -26,15 +26,6 @@
       </span>
     </v-btn>
 
-    <!-- Energy Compass page Header Logo -->
-    <img
-      src="/img/20220531_occ_energy_logo.png"
-      style="visibility:hidden;"
-      id="occEnergyCover"
-      alt="hidden"
-      width="0"
-      height="0"
-    />
     <!-- Empty img container to load Enterprise Logo if any -->
     <img
       v-if="enterpriseLogo"
@@ -52,9 +43,9 @@ import is from 'is_js'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts.js'
 
-// import initial from './mixins/00-initial'
-// import cover from './mixins/01-cover'
-// import index from './mixins/02-index'
+import initial from './mixins/00-initial'
+import cover from './mixins/01-cover'
+import index from './mixins/02-index'
 // import scores from './mixins/03-scores'
 // import dimResults from './mixins/04-dim-results'
 // import varResults from './mixins/05-var-results'
@@ -64,21 +55,26 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   name: 'thread-organizational-report-exec',
   mixins: [
-    // initial,
-    // cover,
-    // index,
+    initial,
+    cover,
+    index
     // scores,
     // dimResults,
     // varResults,
   ],
   props: {
     pollId: String,
+    evaluationData: Object,
     thread: Object
   },
   data () {
     return {
+      occGreen: '#51c7af',
+      occGrey: '#7d838d',
+      occRed: '#ec604d',
+      occBlue: '#1999da',
       downloadPdf: true,
-      energyCoverSrc: null,
+      enterpriseLogoSrc: null,
       enterpriseLogo: null,
       lockPdfButton: false,
       evaluation: {},
@@ -89,13 +85,13 @@ export default {
     }
   },
   mounted () {
-    this.energyCoverSrc = document.getElementById('occEnergyCover').src
+    this.enterpriseLogoSrc = `data:image/png;base64,${this.evaluationData.enterprise.logo}`
   },
   watch: {
-    energyCoverSrc (val) {
+    enterpriseLogoSrc (val) {
       if (val) {
-        this.toDataURL(this.energyCoverSrc, (dataURL) => {
-          this.cultureCoverBase64 = dataURL
+        this.toDataURL(this.enterpriseLogoSrc, (dataURL) => {
+          this.enterpriseLogo = dataURL
         })
       }
     }
@@ -119,11 +115,11 @@ export default {
         if (is.edge() || is.ie()) {
           const pdfDocGenerator = pdfMake.createPdf(configuration)
           pdfDocGenerator.getBlob((blob) => {
-            window.navigator.msSaveBlob(blob, `${this.evaluation.name}.pdf`)
+            window.navigator.msSaveBlob(blob, `${this.evaluationData.name}.pdf`)
             this.closeRenderPdf()
           })
         } else {
-          pdfMake.createPdf(configuration).download(`${this.evaluation.name}.pdf`, () => {
+          pdfMake.createPdf(configuration).download(`${this.evaluationData.name}.pdf`, () => {
             this.closeRenderPdf()
           })
         }
@@ -150,6 +146,11 @@ export default {
       }
 
       xhr.send()
+    },
+    getDateString () {
+      const today = new Date()
+      const monthName = this.$t(`Views.Evaluations.report.months.${[today.getMonth()]}`)
+      return `${monthName} - ${today.getFullYear()}`
     },
     round (value, decimals) {
       if (isNaN(Number(value))) {
