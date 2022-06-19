@@ -380,16 +380,59 @@ export default {
     input_accept: 'Aceptar',
     confirm_report_title: 'Confirme la generación del reporte',
     report_cost: 'Costo del reporte',
+    individual: {
+      title: 'Reporte Individual',
+      subject: 'Reporte Individual Energy Compass'
+    },
     organizational: {
+      title: 'Reporte Organizacional',
+      subject: 'Reporte Organizacional Energy Compass',
       already_generated_report: 'Este reporte ya ha sido generado. Puedes descargarlo en la parte inferior, donde se encuentran todos los reportes generados.',
       operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos'
     },
     demographic: {
+      title: 'Reporte por Población',
+      subject: 'Reporte por Población Energy Compass',
       selected: 'Seleccionado(s)',
       demographic_cuts: 'Cortes Demográficos',
       additional_segmentation: 'Segmentación Adicional',
       table_legend: 'Puedes seleccionar ???',
       operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte por Cortes Demográficos". Este proceso puede tardar varios minutos'
+    },
+    months: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    ],
+    // Table of Contents
+    toc: {
+      index: 'ÍNDICE',
+      introduction: 'Introducción',
+      methodology: 'Metodología',
+      model: 'Modelo Energy Compass',
+      response_rate: 'Nivel de respuesta',
+      general_scores: 'Resultado General',
+      dimensions_variables_scores: 'Resultados por Dimensión/Variable',
+      detailed_scores_dim_physical: 'Detalle Dimensión Física',
+      detailed_scores_dim_mental: 'Detalle Dimensión Mental',
+      detailed_scores_dim_emotional: 'Detalle Dimensión Emocional',
+      detailed_scores_dim_professional: 'Detalle Dimensión Profesional',
+      highest_scores: 'Atributos con puntaje más Alto',
+      lowest_scores: 'Atributos con puntaje más Bajo',
+      highest_scatter: 'Atributos con dispersión más Alta',
+      lowest_scatter: 'Atributos con dispersión más Baja',
+      burnout_index: 'Índice de Burnout',
+      health_index: 'Índice de Salud',
+      word_clouds: 'Preguntas Abiertas'
     }
   }
 }
