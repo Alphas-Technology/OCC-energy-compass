@@ -13,9 +13,9 @@ import StepSix from './steps/06-word-cloud';
 class ReportMethods {
 
   /**
-  * @description Runs result processing for a report
-  * @returns {object}
-  */
+   * @description Runs result processing for a report
+   * @returns {object}
+   */
   public async processReportResults() {
     const pendingOperationThread = await OperationThreadsService.findByOperationStatusAndDataType(
       'DownloadReport',
@@ -30,7 +30,7 @@ class ReportMethods {
 
     try {
       await OperationThreadsService.findOneAndUpdateStatus(pendingOperationThread._id, 'in_action');
-      
+
       switch (threadData.step) {
         case 1: // Get Answers
           const tempStepOne = await StepOne(

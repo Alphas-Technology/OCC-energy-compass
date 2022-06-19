@@ -7,9 +7,9 @@ import InitOrganizational from './organizational/steps/00-init-data';
 class ReportChecker {
 
   /**
-  * @description Checks if there are report requests pending for generation & sets initial data
-  * @returns {string}
-  */
+   * @description Checks if there are report requests pending for generation & sets initial data
+   * @returns {string}
+   */
   public async checkReportRequests() {
     const pendingOperationThread = await OperationThreadsService.findByOperationAndStatus(
       'DownloadReport',

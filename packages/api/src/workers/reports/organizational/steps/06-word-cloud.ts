@@ -7,9 +7,9 @@ export default async (
 ) => {
 
   const mode = (arr) => {
-    return arr.sort((a,b) =>
-        arr.filter(v => v===a).length
-      - arr.filter(v => v===b).length
+    return arr.sort((a, b) =>
+        arr.filter(v => v === a).length
+      - arr.filter(v => v === b).length
     ).pop();
   };
 
@@ -18,10 +18,10 @@ export default async (
     _source = source.slice();
     matches = [];
     for (x = _source.length - 1; x >= 0; x--) {
-      let output = _source.splice(x, 1);
+      const output = _source.splice(x, 1);
 
       for (y = _source.length - 1; y >= 0; y--) {
-        var match = stringSimilarity.compareTwoStrings(output[0], _source[y]);
+        const match = stringSimilarity.compareTwoStrings(output[0], _source[y]);
         if (match > rate) {
           output.push(_source[y]);
           _source.splice(y, 1);

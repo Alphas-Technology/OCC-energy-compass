@@ -44,7 +44,7 @@ class AnswersUtils {
       professional: getInitDimension()
     };
   }
-  
+
   // Questionnaire Answers Initializer
   public iniAnswersDimension (): IAnswersDimension {
     const getInitScore = () => ({ score: 0, previous: 0 });
