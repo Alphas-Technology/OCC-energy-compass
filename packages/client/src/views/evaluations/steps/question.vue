@@ -213,7 +213,7 @@
     </v-card>
 
     <img
-      src="/img/20220531_occ_energy_logo.png"
+      src="/img/20220621_occ_energy_logo_x.png"
       style="visibility:hidden;"
       id="occEnergyCompassLogo"
       width="0"
@@ -454,9 +454,9 @@ export default {
         header: () => {
           return [{
             image: this.energyLogoBase64,
-            height: 45,
-            width: 117,
-            margin: [15, 0, 25, 40]
+            height: 44,
+            width: 114,
+            margin: [20, 7, 0, 0]
           }]
         },
         footer: () => {
