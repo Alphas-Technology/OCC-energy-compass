@@ -7,6 +7,8 @@ import XWellcomeDialog from './components/wellcome-dialog.vue'
 import XMiddleDialog from './components/middle-dialog.vue'
 import XEndDialog from './components/end-dialog.vue'
 
+import DevFillForm from '../../utils/dev-fill-form.js'
+
 export default Vue.extend({
   components: {
     XWellcomeDialog,
@@ -81,6 +83,7 @@ export default Vue.extend({
   created () {
     this.lang = this.user ? (this.user.lang || 'es') : 'es'
     this.getEvaluation()
+    window.fillForm = (options) => { DevFillForm(this, options) }
   },
   methods: {
     changePage () {
