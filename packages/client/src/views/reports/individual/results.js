@@ -10,6 +10,8 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js'
 import initial from './mixins/00-initial'
 import cover from './mixins/01-cover'
 import index from './mixins/02-index'
+import intro from './mixins/03-intro'
+import methodology from './mixins/04-methodology'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -20,7 +22,9 @@ export default Vue.extend({
   mixins: [
     initial,
     cover,
-    index
+    index,
+    intro,
+    methodology
   ],
   data () {
     return {

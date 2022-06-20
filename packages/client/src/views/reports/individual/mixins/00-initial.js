@@ -87,12 +87,12 @@ export default {
           // Cover
           this.$generateCover(),
           // Table of Contents
-          this.$generateTableOfContents()
-          /*
+          this.$generateTableOfContents(),
           // Introduction
           this.$generateIntroduction(),
           // Methodology
-          this.$generateMethodology(),
+          this.$generateMethodology()
+          /*
           // Model Description
           this.$generateModelDescription(),
           // Response Rate
