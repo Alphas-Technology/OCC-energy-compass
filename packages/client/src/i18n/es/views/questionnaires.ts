@@ -52,9 +52,9 @@ export default {
     d_mental: 'Mental',
     d_emotional: 'Emocional',
     d_professional: 'Profesional',
-    v_foodAndHydration: 'Alimentación',
+    v_nutrition: 'Alimentación',
     v_physicalActivity: 'Actividad física',
-    v_rest: 'Recuperación',
+    v_recovery: 'Recuperación',
     v_stress: 'Estrés',
     v_mindfulness: 'Mindfulness',
     v_productivity: 'Productividad',
@@ -63,6 +63,6 @@ export default {
     v_positivePsychology: 'Psicología Positiva',
     v_professionalHabits: 'Hábitos profesionales',
     v_personalDevelopment: 'Desarrollo personal',
-    v_distractorManagement: 'Gestión de distractores'
+    v_distractionManagement: 'Gestión de distractores'
   }
 }
