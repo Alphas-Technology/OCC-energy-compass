@@ -1,8 +1,8 @@
 {
   "idx": 3,
-  "5": { "es": "No fumo", "en": "I do not smoke" },
-  "4": { "es": "Casi nunca fumo", "en": "I hardly ever smoke" },
-  "3": { "es": "Fumo menos de 3 cigarrillos diarios", "en": "I smoke less than 3 cigarettes a day" },
-  "2": { "es": "Fumo entre 4 y 10 cigarrillos diarios", "en": "I smoke between 4 and 10 cigarettes a day" },
-  "1": { "es": "Fumo más de 10 cigarrillos diarios", "en": "I smoke more than 10 cigarettes a day" }
+  "5": { "es": "No fumo", "en": "I don’t smoke/vape" },
+  "4": { "es": "Casi nunca fumo", "en": "I rarely smoke/vape" },
+  "3": { "es": "Fumo menos de 3 cigarrillos diarios", "en": "Less than 3 cigarettes per day" },
+  "2": { "es": "Fumo entre 4 y 10 cigarrillos diarios", "en": "4-10 cigarettes per day" },
+  "1": { "es": "Fumo más de 10 cigarrillos diarios", "en": "Over 10 cigarettes per day" }
 }

@@ -1,7 +1,7 @@
 {
   "idx": 1,
-  "5": { "es": "4 o más", "en": "4 or more" },
-  "4": { "es": "Entre 2 y 3", "en": "between 2 and 3" },
+  "5": { "es": "4 o más", "en": "4 times or more" },
+  "4": { "es": "Entre 2 y 3", "en": "2-3 times" },
   "3": { "es": "1 vez", "en": "1 time" },
   "2": { "es": "Rara vez", "en": "Rarely" },
   "1": { "es": "Nunca", "en": "Never" }
