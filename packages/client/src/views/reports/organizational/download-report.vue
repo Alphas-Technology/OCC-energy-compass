@@ -46,21 +46,24 @@ import pdfFonts from 'pdfmake/build/vfs_fonts.js'
 import initial from './mixins/00-initial'
 import cover from './mixins/01-cover'
 import index from './mixins/02-index'
-// import scores from './mixins/03-scores'
-// import dimResults from './mixins/04-dim-results'
-// import varResults from './mixins/05-var-results'
+import intro from './mixins/03-intro'
+import methodology from './mixins/04-methodology'
+import model from './mixins/05-model'
+import responseRate from './mixins/06-response-rate'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
+const echarts = require('echarts')
 
 export default {
   name: 'thread-organizational-report-exec',
   mixins: [
     initial,
     cover,
-    index
-    // scores,
-    // dimResults,
-    // varResults,
+    index,
+    intro,
+    methodology,
+    model,
+    responseRate
   ],
   props: {
     pollId: String,
@@ -69,6 +72,10 @@ export default {
   },
   data () {
     return {
+      renderPart: {
+        donutPie: false
+        // chartPie: false
+      },
       occGreen: '#51c7af',
       occGrey: '#7d838d',
       occRed: '#ec604d',
@@ -81,13 +88,21 @@ export default {
       questionnaire: {},
       answersResponsibility: {},
       completedPolls: 0,
-      expectedPolls: 0
+      expectedPolls: 0,
+      responseRatePie: null
     }
   },
   mounted () {
     this.enterpriseLogoSrc = `data:image/png;base64,${this.evaluationData.enterprise.logo}`
   },
   watch: {
+    renderPart: {
+      handler () {
+        const hasFalses = Object.values(this.renderPart).includes(false)
+        if (!hasFalses) this.renderPdf()
+      },
+      deep: true
+    },
     enterpriseLogoSrc (val) {
       if (val) {
         this.toDataURL(this.enterpriseLogoSrc, (dataURL) => {
@@ -106,7 +121,6 @@ export default {
       this.$store.dispatch('loading/show')
       this.lockPdfButton = true
       await this.$getInitialData()
-      await this.renderPdf()
     },
     async renderPdf () {
       this.$emit('render-pdf')
@@ -123,12 +137,89 @@ export default {
             this.closeRenderPdf()
           })
         }
+      } else {
+        this.closeRenderPdf()
       }
     },
     closeRenderPdf () {
       this.$store.dispatch('loading/hide')
       this.lockPdfButton = false
       this.$emit('pdfRenderedOrg')
+    },
+    generateResponseRatePie () {
+      const canvas = document.createElement('canvas')
+      canvas.width = 1040 * 2
+      canvas.height = 740 * 2
+
+      const chartPieLocal = echarts.init(canvas)
+
+      const participationPercent = (this.expectedPolls * 100) / this.completedPolls
+
+      chartPieLocal.setOption({
+        tooltip: {
+          trigger: 'none'
+        },
+        title: {
+          text: this.$t('Views.Evaluations.report.organizational.of_population'),
+          left: 'center',
+          textStyle: { fontSize: 40, fontWeight: 'lighter' },
+          y: 876
+        },
+        series: [
+          {
+            name: 'Response Rate',
+            type: 'pie',
+            radius: ['59%', '70%'],
+            avoidLabelOverlap: true,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: false
+              }
+            },
+            markPoint: {
+              tooltip: { show: false },
+              label: {
+                show: true,
+                formatter: '{b}%',
+                color: 'black',
+                fontSize: 270,
+                textStyle: { fontWeight: 'bold' }
+              },
+              data: [{
+                name: participationPercent.toString(),
+                value: '',
+                symbol: 'circle',
+                itemStyle: { color: 'transparent' },
+                x: '50%',
+                y: '51.5%'
+              }]
+            },
+            data: [
+              {
+                value: 100 - participationPercent,
+                itemStyle: {
+                  color: '#DDDDDD'
+                }
+              },
+              {
+                value: participationPercent,
+                itemStyle: {
+                  color: this.occBlue
+                }
+              }
+            ]
+          }
+        ]
+      })
+
+      chartPieLocal.on('finished', () => {
+        this.responseRatePie = chartPieLocal.getDataURL()
+        this.renderPart.donutPie = true
+      })
     },
     toDataURL (url, callback) {
       const xhr = new XMLHttpRequest()

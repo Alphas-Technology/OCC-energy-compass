@@ -20,6 +20,7 @@ export default {
           this.lowestScatter = res.data.lowestScatter
           this.wordsCloud = res.data.wordsCloud
           this.hasPrevious = res.data.hasPrevious
+          this.generateResponseRatePie()
         })
         .catch((err) => {
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
@@ -107,8 +108,7 @@ export default {
           // Cover
           this.$generateCover(),
           // Table of Contents
-          this.$generateTableOfContents()
-          /*
+          this.$generateTableOfContents(),
           // Introduction
           this.$generateIntroduction(),
           // Methodology
@@ -116,7 +116,8 @@ export default {
           // Model Description
           this.$generateModelDescription(),
           // Response Rate
-          this.$generateResponseRate(),
+          this.$generateResponseRate()
+          /*
           // General Scores
           this.$generateGeneralResults(),
           // Dimensions/Variables
