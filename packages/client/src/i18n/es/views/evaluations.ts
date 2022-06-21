@@ -388,7 +388,10 @@ export default {
       title: 'Reporte Organizacional',
       subject: 'Reporte Organizacional Energy Compass',
       already_generated_report: 'Este reporte ya ha sido generado. Puedes descargarlo en la parte inferior, donde se encuentran todos los reportes generados.',
-      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos'
+      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos',
+      of_population: 'De la población',
+      total_expected: 'Total Esperadas:',
+      total_obtained: 'Total respondidas:'
     },
     demographic: {
       title: 'Reporte por Población',
