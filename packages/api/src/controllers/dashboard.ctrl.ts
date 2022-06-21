@@ -125,6 +125,10 @@ class DashboardController {
         open: evaluation.openQuestions
       };
 
+      if (!evaluationQuestions.segmentation) {
+        delete evaluationQuestions.segmentation;
+      }
+
       response.push({
         productService,
         token: evaluated.token,
