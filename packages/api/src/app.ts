@@ -77,7 +77,17 @@ if (!Boolean(process.env.APP_ENERGY_COMPASS_COSMOSDB)) {
   })
   .then(() => console.log('Connection to CosmosDB successful'))
   .catch((err) => console.error(err));
+
+  // Event listener
+  mongoose.connection.on('error', (err) => {
+    console.log('*Event Listener Error*', err);
+  });
 }
+
+// Avoid -> DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()`
+// without the `useFindAndModify` option set to false are deprecated.
+// See: https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+mongoose.set('useFindAndModify', false);
 
 // Express configuration
 app.set('port', process.env.PORT || 3000);
