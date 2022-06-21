@@ -1,7 +1,7 @@
 
 export interface Dimention<T> {
   physical: {
-    foodAndHydration: {
+    nutrition: {
       dietQuality: T;
       quantityOfFood: T;
       foodKnowledge: T;
@@ -13,7 +13,7 @@ export interface Dimention<T> {
       movement: T;
       exerciseDiscipline: T;
     };
-    rest: {
+    recovery: {
       amountOfSleep: T;
       dailyEnergy: T;
       activeBreaks: T;
@@ -73,7 +73,7 @@ export interface Dimention<T> {
       weather: T;
       selfKnowledge: T;
     };
-    distractorManagement: {
+    distractionManagement: {
       screenTime: T;
       procrastination: T;
       distractorsStrategy: T;
