@@ -3,11 +3,11 @@
   "index": ["burnoutOrganizational"],
   "answers": 0,
   "reference": {
-    "es": "Balance y bienestar como proridades organizacionales",
+    "es": "Balance y bienestar como prioridades organizacionales",
     "en": "Balance and well-being as organizational priorities"
   },
   "question": {
     "es": "El balance y bienestar de los colaboradores es prioridad de la organización",
-    "en": "The balance and well-being of the collaborators is a priority of the organization"
+    "en": "Collaborators’ balance and well-being is a priority of the organization"
   }
 }

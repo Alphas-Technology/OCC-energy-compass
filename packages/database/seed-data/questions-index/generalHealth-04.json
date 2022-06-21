@@ -4,10 +4,10 @@
   "answers": 4,
   "reference": {
     "es": "Frecuencia de consumo de alcohol",
-    "en": "Frequency of alcohol consumption"
+    "en": "Alcohol consumption frequency"
   },
   "question": {
     "es": "Consumo alcohol",
-    "en": "Alcohol consumption"
+    "en": "I drink alcohol"
   }
 }

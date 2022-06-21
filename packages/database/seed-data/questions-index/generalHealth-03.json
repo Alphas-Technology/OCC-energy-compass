@@ -4,10 +4,10 @@
   "answers": 3,
   "reference": {
     "es": "Frecuencia de consumo de tabaco",
-    "en": "Frequency of tobacco use"
+    "en": "Tobacco use frequency"
   },
   "question": {
     "es": "Consumo cigarrillos ",
-    "en": "Cigarette consumption"
+    "en": "I smoke/vape"
   }
 }
