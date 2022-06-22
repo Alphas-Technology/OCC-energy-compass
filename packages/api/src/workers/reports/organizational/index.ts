@@ -100,7 +100,7 @@ class ReportMethods {
             threadData.answersDimension,
             threadData.indicesAnswers,
             threadData.answeredCount,
-            threadData.hasPrevious ? threadData.previous.answeredCount : 1
+            threadData.hasPrevious ? threadData.tempData.previous.answeredCount : 1
           );
 
           threadData.answersForScatter = tempStepFour.answersForScatter;
