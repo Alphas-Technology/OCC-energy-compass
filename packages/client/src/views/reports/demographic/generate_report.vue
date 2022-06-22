@@ -177,18 +177,25 @@ export default Vue.extend({
           type: 'header',
           label: this.$t('Views.Evaluations.report.demographic.additional_segmentation')
         }]
+        let segCnt = 0
         for (const key of keys) {
-          segmentations.push({
-            id: val[key].id,
-            type: 'segmentation',
-            code: key,
-            selected: false,
-            is_optional: true,
-            label: val[key].trans[this.lang].label
-          })
+          if (val[key].selected) {
+            segmentations.push({
+              id: val[key].id,
+              type: 'segmentation',
+              code: key,
+              selected: false,
+              is_optional: true,
+              label: val[key].trans[this.lang].label
+            })
+            segCnt++
+          }
         }
-        segmentations.sort((a, b) => a.id - b.id)
-        this.tableItems = [...this.tableItems, ...segmentations]
+
+        if (segCnt) {
+          segmentations.sort((a, b) => a.id - b.id)
+          this.tableItems = [...this.tableItems, ...segmentations]
+        }
       },
       immediate: true,
       deep: true
