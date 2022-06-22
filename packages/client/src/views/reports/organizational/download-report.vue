@@ -50,6 +50,7 @@ import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
 import responseRate from './mixins/06-response-rate'
+import gralScores from './mixins/07-gral-scores'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const echarts = require('echarts')
@@ -63,7 +64,8 @@ export default {
     intro,
     methodology,
     model,
-    responseRate
+    responseRate,
+    gralScores
   ],
   props: {
     pollId: String,
@@ -76,6 +78,13 @@ export default {
         donutPie: false
         // chartPie: false
       },
+      heatMap: [
+        '#f85d19',
+        '#f99c16',
+        '#fcec14',
+        '#b7d600',
+        '#1bd800'
+      ],
       occGreen: '#51c7af',
       occGrey: '#7d838d',
       occRed: '#ec604d',
@@ -84,9 +93,11 @@ export default {
       enterpriseLogoSrc: null,
       enterpriseLogo: null,
       lockPdfButton: false,
-      evaluation: {},
+      previous: {},
       questionnaire: {},
-      answersResponsibility: {},
+      answersDimension: {},
+      gralScore: 0,
+      gralPrevScore: 0,
       completedPolls: 0,
       expectedPolls: 0,
       responseRatePie: null
@@ -145,6 +156,21 @@ export default {
       this.$store.dispatch('loading/hide')
       this.lockPdfButton = false
       this.$emit('pdfRenderedOrg')
+    },
+    getHeatMap (s) {
+      if (!s) {
+        return '#FFFFFF'
+      } else if (s >= 1 && s < 2) {
+        return this.heatMap[0]
+      } else if (s >= 2 && s < 3) {
+        return this.heatMap[1]
+      } else if (s >= 3 && s < 4) {
+        return this.heatMap[2]
+      } else if (s >= 4 && s < 4.5) {
+        return this.heatMap[3]
+      } else if (s >= 4.5) {
+        return this.heatMap[4]
+      }
     },
     generateResponseRatePie () {
       const canvas = document.createElement('canvas')

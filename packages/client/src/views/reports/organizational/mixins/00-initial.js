@@ -7,12 +7,38 @@ import WaterMarkBase64 from '../../base64Files/watermark'
 
 export default {
   methods: {
+    calculateGeneralScores () {
+      let acc = 0
+      let cnt = 0
+      for (const key of Object.keys(this.answersDimension)) {
+        if (key === 'physical') {
+          acc += ((this.answersDimension[key].general.score + this.indicesAnswers.generalHealth.general.score) / 2)
+        } else {
+          acc += this.answersDimension[key].general.score
+        }
+        cnt++
+      }
+      this.gralScore = acc / cnt
+    },
+    calculatePreviousGeneralScores () {
+      let acc = 0
+      let cnt = 0
+      for (const key of Object.keys(this.previous.answersDimension)) {
+        if (key === 'physical') {
+          acc += ((this.previous.answersDimension[key].general.score + this.previous.indicesAnswers.generalHealth.general.score) / 2)
+        } else {
+          acc += this.previous.answersDimension[key].general.score
+        }
+        cnt++
+      }
+      this.gralPrevScore = acc / cnt
+    },
     async $getInitialData () {
       await evaluationService.getOneReportByThreadId(this.thread._id, this.pollId)
         .then((res) => {
           this.expectedPolls = this.evaluationData.populationCount
           this.completedPolls = res.data.answeredCount
-          this.answersDimention = res.data.answersDimention
+          this.answersDimension = res.data.answersDimension
           this.indicesAnswers = res.data.indicesAnswers
           this.highestScores = res.data.highestScores
           this.lowestScores = res.data.lowestScores
@@ -20,9 +46,15 @@ export default {
           this.lowestScatter = res.data.lowestScatter
           this.wordsCloud = res.data.wordsCloud
           this.hasPrevious = res.data.hasPrevious
+          if (this.hasPrevious) {
+            this.previous = res.data.previous
+            this.calculatePreviousGeneralScores()
+          }
+          this.calculateGeneralScores()
           this.generateResponseRatePie()
         })
         .catch((err) => {
+          console.log(err)
           this.$store.dispatch('alert/error', this.$t(`errors.${err.code}`))
         })
     },
@@ -105,21 +137,21 @@ export default {
           }
         },
         content: [
-          // Cover
+          // 01 Cover
           this.$generateCover(),
-          // Table of Contents
+          // 02 Table of Contents
           this.$generateTableOfContents(),
-          // Introduction
+          // 03 Introduction
           this.$generateIntroduction(),
-          // Methodology
+          // 04 Methodology
           this.$generateMethodology(),
-          // Model Description
+          // 05 Model Description
           this.$generateModelDescription(),
-          // Response Rate
-          this.$generateResponseRate()
+          // 06 Response Rate
+          this.$generateResponseRate(),
+          // 07 General Scores
+          this.$generateGeneralScores()
           /*
-          // General Scores
-          this.$generateGeneralResults(),
           // Dimensions/Variables
           this.$generateDimensionsResults(),
           // Detailed Dimensions
