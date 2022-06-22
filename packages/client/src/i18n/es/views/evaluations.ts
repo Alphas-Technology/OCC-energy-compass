@@ -391,7 +391,9 @@ export default {
       operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos',
       of_population: 'De la población',
       total_expected: 'Total Esperadas:',
-      total_obtained: 'Total respondidas:'
+      total_obtained: 'Total respondidas:',
+      prev_score: 'Puntaje Anterior',
+      trend: 'Tendencia'
     },
     demographic: {
       title: 'Reporte por Población',
@@ -436,6 +438,8 @@ export default {
       burnout_index: 'Índice de Burnout',
       health_index: 'Índice de Salud',
       word_clouds: 'Preguntas Abiertas'
-    }
+    },
+    current: 'Actual',
+    gral_score: 'Puntaje General'
   }
 }
