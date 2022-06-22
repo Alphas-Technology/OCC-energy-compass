@@ -74,6 +74,7 @@ export default {
   },
   data () {
     return {
+      downloadPdf: true,
       renderPart: {
         donutPie: false
         // chartPie: false
@@ -89,7 +90,6 @@ export default {
       occGrey: '#7d838d',
       occRed: '#ec604d',
       occBlue: '#1999da',
-      downloadPdf: true,
       enterpriseLogoSrc: null,
       enterpriseLogo: null,
       lockPdfButton: false,
@@ -172,6 +172,14 @@ export default {
         return this.heatMap[4]
       }
     },
+    getPercentString (value) {
+      // if (value % 1 === 0) {
+      if (Number.isInteger(value)) {
+        return Math.round(value).toString()
+      } else {
+        return this.round(value).toString()
+      }
+    },
     generateResponseRatePie () {
       const canvas = document.createElement('canvas')
       canvas.width = 1040 * 2
@@ -179,7 +187,8 @@ export default {
 
       const chartPieLocal = echarts.init(canvas)
 
-      const participationPercent = (this.expectedPolls * 100) / this.completedPolls
+      const participationPercent = (this.completedPolls * 100) / this.expectedPolls
+      const participationPercentString = this.getPercentString(participationPercent)
 
       chartPieLocal.setOption({
         tooltip: {
@@ -216,7 +225,7 @@ export default {
                 textStyle: { fontWeight: 'bold' }
               },
               data: [{
-                name: participationPercent.toString(),
+                name: participationPercentString,
                 value: '',
                 symbol: 'circle',
                 itemStyle: { color: 'transparent' },
@@ -269,7 +278,7 @@ export default {
       const monthName = this.$t(`Views.Evaluations.report.months.${[today.getMonth()]}`)
       return `${monthName} - ${today.getFullYear()}`
     },
-    round (value, decimals) {
+    round (value, decimals = 2) {
       if (isNaN(Number(value))) {
         return '--'
       }
