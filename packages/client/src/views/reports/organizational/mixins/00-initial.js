@@ -7,31 +7,28 @@ import WaterMarkBase64 from '../../base64Files/watermark'
 
 export default {
   methods: {
-    calculateGeneralScores () {
-      let acc = 0
+    calculateGeneralScores (hasPrevious) {
+      let currentScores = 0
+      let previousScores = 0
       let cnt = 0
       for (const key of Object.keys(this.answersDimension)) {
         if (key === 'physical') {
-          acc += ((this.answersDimension[key].general.score + this.indicesAnswers.generalHealth.general.score) / 2)
+          currentScores += ((this.answersDimension[key].general.score + this.indicesAnswers.generalHealth.general.score) / 2)
+          if (hasPrevious) {
+            previousScores += ((this.answersDimension[key].general.previous + this.indicesAnswers.generalHealth.general.previous) / 2)
+          }
         } else {
-          acc += this.answersDimension[key].general.score
+          currentScores += this.answersDimension[key].general.score
+          if (hasPrevious) {
+            previousScores += this.answersDimension[key].general.previous
+          }
         }
         cnt++
       }
-      this.gralScore = acc / cnt
-    },
-    calculatePreviousGeneralScores () {
-      let acc = 0
-      let cnt = 0
-      for (const key of Object.keys(this.previous.answersDimension)) {
-        if (key === 'physical') {
-          acc += ((this.previous.answersDimension[key].general.score + this.previous.indicesAnswers.generalHealth.general.score) / 2)
-        } else {
-          acc += this.previous.answersDimension[key].general.score
-        }
-        cnt++
+      this.gralScore = currentScores / cnt
+      if (hasPrevious) {
+        this.gralPrevScore = previousScores / cnt
       }
-      this.gralPrevScore = acc / cnt
     },
     async $getInitialData () {
       await evaluationService.getOneReportByThreadId(this.thread._id, this.pollId)
@@ -46,11 +43,7 @@ export default {
           this.lowestScatter = res.data.lowestScatter
           this.wordsCloud = res.data.wordsCloud
           this.hasPrevious = res.data.hasPrevious
-          if (this.hasPrevious) {
-            this.previous = res.data.previous
-            this.calculatePreviousGeneralScores()
-          }
-          this.calculateGeneralScores()
+          this.calculateGeneralScores(this.hasPrevious)
           this.generateResponseRatePie()
         })
         .catch((err) => {
