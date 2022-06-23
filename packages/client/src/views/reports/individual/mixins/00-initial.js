@@ -9,7 +9,7 @@ export default {
       return {
         pageSize: 'A4',
         pageOrientation: 'landscape',
-        pageMargins: [40, 100, 50, 27],
+        pageMargins: [40, 100, 40, 27],
         info: {
           title: this.$t('Views.Evaluations.report.individual.title'),
           author: 'OCC Solutions',
@@ -91,10 +91,10 @@ export default {
           // Introduction
           this.$generateIntroduction(),
           // Methodology
-          this.$generateMethodology()
-          /*
+          this.$generateMethodology(),
           // Model Description
-          this.$generateModelDescription(),
+          this.$generateModelDescription()
+          /*
           // Response Rate
           this.$generateResponseRate(),
           // General Scores

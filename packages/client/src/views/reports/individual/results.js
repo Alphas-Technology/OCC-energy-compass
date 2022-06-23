@@ -12,6 +12,7 @@ import cover from './mixins/01-cover'
 import index from './mixins/02-index'
 import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
+import model from './mixins/05-model'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -24,7 +25,8 @@ export default Vue.extend({
     cover,
     index,
     intro,
-    methodology
+    methodology,
+    model
   ],
   data () {
     return {
