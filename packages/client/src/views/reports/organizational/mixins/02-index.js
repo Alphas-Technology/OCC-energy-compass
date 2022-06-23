@@ -6,7 +6,7 @@ export default {
     $generateTableOfContents () {
       return [
         // Page Title
-        pdfUtils.generateHeaderTitle(this.$t('Views.Evaluations.report.toc.index')),
+        pdfUtils.generateHeaderTitle(this.$t('Views.Evaluations.report.toc.index'), false),
         // Table of Contents
         {
           toc: {
@@ -15,11 +15,13 @@ export default {
               id: 'subToc'
             }
           },
-          color: '#6d7a7a',
-          fontSize: 13,
-          margin: [15, 0, 65, 0],
+          color: '#333333',
+          fontSize: 14,
+          bold: true,
+          margin: [50, 17, 40, 0],
           maxHeight: 0,
-          lineHeight: 0.7
+          lineHeight: 0.9,
+          characterSpacing: 0.4
         }
       ]
     }
