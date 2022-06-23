@@ -101,6 +101,39 @@ export default {
               return (i === node.table.body.length) ? 9 : 0.1
             }
           }
+        },
+        {
+          text: this.$t('Views.Evaluations.report.dimension_results'),
+          margin: [29, 14, 0, -18],
+          fontSize: 17,
+          color: '#666666',
+          characterSpacing: 0.4
+        },
+        {
+          image: this.dimensionsResultsPie,
+          fit: [370, 370],
+          margin: [0, 0, 0, 0],
+          alignment: 'center'
+        },
+        {
+          columns: [
+            { width: '86.8%', text: '' },
+            { width: '1.3%', text: '---', color: this.occBlue, background: this.occBlue },
+            { width: '1.3%', text: '---', color: this.occRed, background: this.occRed },
+            { width: '1.3%', text: '---', color: this.occGreen, background: this.occGreen },
+            { width: '1.3%', text: '---', color: this.occGrey, background: this.occGrey },
+            { width: '1%', text: '\u0020' },
+            { width: '7%', text: this.$t('Views.Evaluations.report.current') }
+          ],
+          margin: [0, -170, 0, 4]
+        },
+        {
+          columns: [
+            { width: '86.8%', text: '' },
+            { width: '5.2%', text: '-----------', color: '#555555', background: '#555555', fontSize: 12.5, lineHeight: 1 },
+            { width: '1%', text: '\u0020' },
+            { width: '7%', text: this.$t('Views.Evaluations.report.organizational.previous') }
+          ]
         }
       ]
     }

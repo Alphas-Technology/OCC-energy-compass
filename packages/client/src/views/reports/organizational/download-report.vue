@@ -76,8 +76,8 @@ export default {
     return {
       downloadPdf: true,
       renderPart: {
-        donutPie: false
-        // chartPie: false
+        donutPie: false,
+        chartPie: false
       },
       heatMap: [
         '#f85d19',
@@ -90,6 +90,10 @@ export default {
       occGrey: '#7d838d',
       occRed: '#ec604d',
       occBlue: '#1999da',
+      occGreenRgba: 'rgba(81, 199, 175, 0.6)',
+      occGreyRgba: 'rgba(125, 131, 141, 0.6)',
+      occRedRgba: 'rgba(236, 96, 77, 0.6)',
+      occBlueRgba: 'rgba(25, 153, 218, 0.6)',
       enterpriseLogoSrc: null,
       enterpriseLogo: null,
       lockPdfButton: false,
@@ -100,7 +104,8 @@ export default {
       gralPrevScore: 0,
       completedPolls: 0,
       expectedPolls: 0,
-      responseRatePie: null
+      responseRatePie: null,
+      dimensionsResultsPie: null
     }
   },
   mounted () {
@@ -210,11 +215,6 @@ export default {
               show: false,
               position: 'center'
             },
-            emphasis: {
-              label: {
-                show: false
-              }
-            },
             markPoint: {
               tooltip: { show: false },
               label: {
@@ -222,7 +222,7 @@ export default {
                 formatter: '{b}%',
                 color: 'black',
                 fontSize: 270,
-                textStyle: { fontWeight: 'bold' }
+                fontWeight: 'bold'
               },
               data: [{
                 name: participationPercentString,
@@ -254,6 +254,213 @@ export default {
       chartPieLocal.on('finished', () => {
         this.responseRatePie = chartPieLocal.getDataURL()
         this.renderPart.donutPie = true
+        this.generateDimensionsResultsPie()
+      })
+    },
+    generateDimensionsResultsPie () {
+      const canvas = document.createElement('canvas')
+      canvas.width = 700
+      canvas.height = 700
+
+      const chartPieLocal = echarts.init(canvas)
+
+      chartPieLocal.setOption({
+        angleAxis: {
+          type: 'category',
+          data: [
+            {
+              value: '{a|4.10}{b| | 5.00}\n{c|PROFESIONAL}',
+              textStyle: {
+                rich: {
+                  a: {
+                    fontSize: 19,
+                    color: '#1999da',
+                    align: 'center'
+                  },
+                  b: {
+                    fontSize: 18,
+                    color: '#000000',
+                    align: 'center'
+                  },
+                  c: {
+                    fontSize: 20,
+                    color: '#1999da',
+                    align: 'center'
+                  }
+                }
+              }
+            },
+            {
+              value: '{a|2.00}{b| | 4.28}\n{c|EMOCIONAL}',
+              textStyle: {
+                rich: {
+                  a: {
+                    fontSize: 19,
+                    color: '#ec604d',
+                    align: 'center'
+                  },
+                  b: {
+                    fontSize: 18,
+                    color: '#000000',
+                    align: 'center'
+                  },
+                  c: {
+                    fontSize: 20,
+                    color: '#ec604d',
+                    align: 'center'
+                  }
+                }
+              }
+            },
+            {
+              value: '{a|4.33}{b| | 4.67}\n{c|FÍSICA}',
+              textStyle: {
+                rich: {
+                  a: {
+                    fontSize: 19,
+                    color: '#51c7af',
+                    align: 'center'
+                  },
+                  b: {
+                    fontSize: 18,
+                    color: '#000000',
+                    align: 'center'
+                  },
+                  c: {
+                    fontSize: 20,
+                    color: '#51c7af',
+                    align: 'center'
+                  }
+                }
+              }
+            },
+            {
+              value: '{a|4.67}{b| | 3.28}\n{c|MENTAL}',
+              textStyle: {
+                rich: {
+                  a: {
+                    fontSize: 19,
+                    color: '#7d838d',
+                    align: 'center'
+                  },
+                  b: {
+                    fontSize: 18,
+                    color: '#000000',
+                    align: 'center'
+                  },
+                  c: {
+                    fontSize: 20,
+                    color: '#7d838d',
+                    align: 'center'
+                  }
+                }
+              }
+            }
+          ],
+          z: 10
+        },
+        radiusAxis: {
+          min: 1,
+          max: 5,
+          interval: 1,
+          axisLabel: {
+            show: true,
+            fontSize: 15
+          }
+        },
+        polar: {},
+        series: [
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(25, 153, 218, 0.6)',
+            data: [4.10, 0, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(0,0,0,0)',
+            data: [0.8, 0, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: '#555555',
+            data: [0.1, 0, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(236, 96, 77, 0.6)',
+            data: [0, 2, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(0,0,0,0)',
+            data: [0, 2.18, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: '#555555',
+            data: [0, 0.1, 0, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(81, 199, 175, 0.6)',
+            data: [0, 0, 4.33, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(0,0,0,0)',
+            data: [0, 0, 0.24, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: '#555555',
+            data: [0, 0, 0.1, 0]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(125, 131, 141, 0.6)',
+            data: [0, 0, 0, 3.18]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: '#555555',
+            data: [0, 0, 0, 0.1]
+          },
+          {
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: 'rgba(125, 131, 141, 0.6)',
+            data: [0, 0, 0, 1.39]
+          }
+        ],
+        barWidth: '100%'
+      })
+
+      chartPieLocal.on('finished', () => {
+        this.dimensionsResultsPie = chartPieLocal.getDataURL()
+        this.renderPart.chartPie = true
       })
     },
     toDataURL (url, callback) {
