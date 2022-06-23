@@ -388,7 +388,13 @@ export default {
       title: 'Reporte Organizacional',
       subject: 'Reporte Organizacional Energy Compass',
       already_generated_report: 'Este reporte ya ha sido generado. Puedes descargarlo en la parte inferior, donde se encuentran todos los reportes generados.',
-      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos'
+      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte Organizacional". Este proceso puede tardar varios minutos',
+      of_population: 'De la población',
+      total_expected: 'Total Esperadas:',
+      total_obtained: 'Total respondidas:',
+      prev_score: 'Puntaje Anterior',
+      previous: 'Anterior',
+      trend: 'Tendencia'
     },
     demographic: {
       title: 'Reporte por Población',
@@ -436,6 +442,7 @@ export default {
     },
     current: 'Actual',
     gral_score: 'Puntaje General',
+    dimension_results: 'Resultados por Dimensión',
     introduction: {
       first_paragraph: 'Las organizaciones invierten recursos significativos para desarrollar los conocimientos, habilidades, compromiso y actitudes de suscolaboradores, con el propósito de lograr un alto desempeño que les permita conseguir mejores resultados de negocio. Sin embargo, la inversión tiende a ser significativamente inferior en un multiplicador (positivo o negativo) de la ecuación del desempeño: la energía. Como personas y como colaboradores de una organización, los niveles individuales de energía personal varían en términos de cantidad (alta, media, baja) y en términos de calidad (positiva, neutra, negativa). La zona más favorable es por supuesto la de altos niveles de energía positiva y es allí donde típicamente conseguimos mayores niveles de bienestar en nuestra vida y mayores niveles de desempeño en nuestro trabajo.',
       second_paragraph: 'A diferencia del tiempo, la energía individual se puede expandir a través de buenos hábitos de vida y se puede renovar a través de buenas prácticas de recuperación y descanso. Sin embargo, si no se cuenta con una buena alineación mental y emocional, la energía también se puede drenar a través de episodios de alto estrés. La responsabilidad primaria sobre la salud y bienestar de cada quien es indelegable y es por ello que a través del Energy Compass, buscamos elevar la consciencia individual del autocuidado como piedra angular para todos los objetivos de la vida. En adición a la gestión individual de la energía, las organizaciones tienen la corresponsabilidad de construir culturas y ambientes de trabajo sanos, y estilos de liderazgo constructivos que faciliten la conciliación de altos estándares de desempeño y bienestar.',
