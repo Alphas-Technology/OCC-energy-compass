@@ -257,7 +257,154 @@ export default {
         this.generateDimensionsResultsPie()
       })
     },
+    getData (dimension, score, previous, color) {
+      dimension = this.$t(`Views.Evaluations.report.introduction.${dimension}`)
+      score = this.round(score)
+      previous = this.round(previous)
+      let value
+      if (this.hasPrevious) {
+        value = `{a|${score}}{b| | ${previous}}\n{c|${dimension}}`
+      } else {
+        value = `{a|${score}}\n{c|${dimension}}`
+      }
+
+      return {
+        value: value,
+        textStyle: {
+          rich: {
+            a: {
+              fontSize: 19,
+              color: color,
+              align: 'center'
+            },
+            b: {
+              fontSize: 18,
+              color: '#000000',
+              align: 'center'
+            },
+            c: {
+              fontSize: 20,
+              color: color,
+              align: 'center'
+            }
+          }
+        }
+      }
+    },
+    getPreviusSerie (score, previous, position, color) {
+      const dimColor = color
+      const series = []
+
+      for (let i = 0; i < 3; i++) {
+        const data = [0, 0, 0, 0]
+
+        if (previous > score) {
+          const blank = previous - 0.1 - score
+          switch (i) {
+            case 0:
+              data[position] = score
+              color = dimColor
+              break
+            case 1:
+              data[position] = blank
+              color = dimColor
+              break
+            case 2:
+              data[position] = 0.1
+              color = '#555555'
+              break
+          }
+          series.push({
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: color,
+            data: data
+          })
+        } else {
+          switch (i) {
+            case 0:
+              data[position] = previous - 0.1
+              color = dimColor
+              break
+            case 1:
+              data[position] = 0.1
+              color = '#555555'
+              break
+            case 2:
+              data[position] = score - previous
+              color = dimColor
+              break
+          }
+          series.push({
+            type: 'bar',
+            coordinateSystem: 'polar',
+            stack: 'a',
+            color: color,
+            data: data
+          })
+        }
+      }
+
+      return series
+    },
+    getSimpleSerie (score, position, color) {
+      const data = [0, 0, 0, 0]
+      data[position] = score
+      return {
+        type: 'bar',
+        coordinateSystem: 'polar',
+        stack: 'a',
+        color: color,
+        data: data
+      }
+    },
     generateDimensionsResultsPie () {
+      const dataSet = []
+      let seriesSet = []
+      let hexColor, rgbColor
+      let dimCnt = 0
+      for (const key of Object.keys(this.answersDimension)) {
+        let dimScore = 0
+        let prevScore = 0
+
+        dimScore = this.answersDimension[key].general.score
+        if (this.hasPrevious) {
+          prevScore = this.answersDimension[key].general.previous
+        }
+
+        switch (key) {
+          case 'physical':
+            hexColor = this.occGreen
+            rgbColor = this.occGreenRgba
+            break
+          case 'mental':
+            hexColor = this.occGrey
+            rgbColor = this.occGreyRgba
+            break
+          case 'emotional':
+            hexColor = this.occRed
+            rgbColor = this.occRedRgba
+            break
+          case 'professional':
+            hexColor = this.occBlue
+            rgbColor = this.occBlueRgba
+            break
+        }
+
+        dataSet.push(this.getData(key, dimScore, prevScore, hexColor))
+        if (this.hasPrevious) {
+          seriesSet = [
+            ...seriesSet,
+            ...this.getPreviusSerie(dimScore, prevScore, dimCnt, rgbColor)
+          ]
+        } else {
+          seriesSet.push(this.getSimpleSerie(dimScore, dimCnt, rgbColor))
+        }
+
+        dimCnt++
+      }
+
       const canvas = document.createElement('canvas')
       canvas.width = 700
       canvas.height = 700
@@ -267,96 +414,7 @@ export default {
       chartPieLocal.setOption({
         angleAxis: {
           type: 'category',
-          data: [
-            {
-              value: '{a|4.10}{b| | 5.00}\n{c|PROFESIONAL}',
-              textStyle: {
-                rich: {
-                  a: {
-                    fontSize: 19,
-                    color: '#1999da',
-                    align: 'center'
-                  },
-                  b: {
-                    fontSize: 18,
-                    color: '#000000',
-                    align: 'center'
-                  },
-                  c: {
-                    fontSize: 20,
-                    color: '#1999da',
-                    align: 'center'
-                  }
-                }
-              }
-            },
-            {
-              value: '{a|2.00}{b| | 4.28}\n{c|EMOCIONAL}',
-              textStyle: {
-                rich: {
-                  a: {
-                    fontSize: 19,
-                    color: '#ec604d',
-                    align: 'center'
-                  },
-                  b: {
-                    fontSize: 18,
-                    color: '#000000',
-                    align: 'center'
-                  },
-                  c: {
-                    fontSize: 20,
-                    color: '#ec604d',
-                    align: 'center'
-                  }
-                }
-              }
-            },
-            {
-              value: '{a|4.33}{b| | 4.67}\n{c|FÍSICA}',
-              textStyle: {
-                rich: {
-                  a: {
-                    fontSize: 19,
-                    color: '#51c7af',
-                    align: 'center'
-                  },
-                  b: {
-                    fontSize: 18,
-                    color: '#000000',
-                    align: 'center'
-                  },
-                  c: {
-                    fontSize: 20,
-                    color: '#51c7af',
-                    align: 'center'
-                  }
-                }
-              }
-            },
-            {
-              value: '{a|4.67}{b| | 3.28}\n{c|MENTAL}',
-              textStyle: {
-                rich: {
-                  a: {
-                    fontSize: 19,
-                    color: '#7d838d',
-                    align: 'center'
-                  },
-                  b: {
-                    fontSize: 18,
-                    color: '#000000',
-                    align: 'center'
-                  },
-                  c: {
-                    fontSize: 20,
-                    color: '#7d838d',
-                    align: 'center'
-                  }
-                }
-              }
-            }
-          ],
+          data: dataSet,
           z: 10
         },
         radiusAxis: {
@@ -369,92 +427,7 @@ export default {
           }
         },
         polar: {},
-        series: [
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(25, 153, 218, 0.6)',
-            data: [4.10, 0, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(0,0,0,0)',
-            data: [0.8, 0, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: '#555555',
-            data: [0.1, 0, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(236, 96, 77, 0.6)',
-            data: [0, 2, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(0,0,0,0)',
-            data: [0, 2.18, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: '#555555',
-            data: [0, 0.1, 0, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(81, 199, 175, 0.6)',
-            data: [0, 0, 4.33, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(0,0,0,0)',
-            data: [0, 0, 0.24, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: '#555555',
-            data: [0, 0, 0.1, 0]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(125, 131, 141, 0.6)',
-            data: [0, 0, 0, 3.18]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: '#555555',
-            data: [0, 0, 0, 0.1]
-          },
-          {
-            type: 'bar',
-            coordinateSystem: 'polar',
-            stack: 'a',
-            color: 'rgba(125, 131, 141, 0.6)',
-            data: [0, 0, 0, 1.39]
-          }
-        ],
+        series: seriesSet,
         barWidth: '100%'
       })
 
