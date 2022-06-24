@@ -12,16 +12,9 @@ export default {
       let previousScores = 0
       let cnt = 0
       for (const key of Object.keys(this.answersDimension)) {
-        if (key === 'physical') {
-          currentScores += ((this.answersDimension[key].general.score + this.indicesAnswers.generalHealth.general.score) / 2)
-          if (hasPrevious) {
-            previousScores += ((this.answersDimension[key].general.previous + this.indicesAnswers.generalHealth.general.previous) / 2)
-          }
-        } else {
-          currentScores += this.answersDimension[key].general.score
-          if (hasPrevious) {
-            previousScores += this.answersDimension[key].general.previous
-          }
+        currentScores += this.answersDimension[key].general.score
+        if (hasPrevious) {
+          previousScores += this.answersDimension[key].general.previous
         }
         cnt++
       }
