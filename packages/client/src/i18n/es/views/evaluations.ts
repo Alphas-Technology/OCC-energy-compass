@@ -448,7 +448,7 @@ export default {
       second_paragraph: 'A diferencia del tiempo, la energía individual se puede expandir a través de buenos hábitos de vida y se puede renovar a través de buenas prácticas de recuperación y descanso. Sin embargo, si no se cuenta con una buena alineación mental y emocional, la energía también se puede drenar a través de episodios de alto estrés. La responsabilidad primaria sobre la salud y bienestar de cada quien es indelegable y es por ello que a través del Energy Compass, buscamos elevar la consciencia individual del autocuidado como piedra angular para todos los objetivos de la vida. En adición a la gestión individual de la energía, las organizaciones tienen la corresponsabilidad de construir culturas y ambientes de trabajo sanos, y estilos de liderazgo constructivos que faciliten la conciliación de altos estándares de desempeño y bienestar.',
       third_paragraph: 'El estado pleno de bienestar requiere la alineación de cuatro dimensiones: la física, la mental, la emocional y la profesional. En la dimensión física generamos y renovamos la energía, en la dimensión mental enfocamos la energía en nuestras prioridades, en la dimensión emocional aseguramos buenas relaciones y alineación con nuestro propósito y en la dimensión profesional establecemos hábitos deliberados para maximizar nuestro desempeño.',
       fourth_paragraph: 'El modelo Energy Compass está compuesto así:',
-      professional: 'MENTAL',
+      professional: 'PROFESIONAL',
       physical: 'FÍSICA',
       mental: 'MENTAL',
       emotional: 'EMOCIONAL'
