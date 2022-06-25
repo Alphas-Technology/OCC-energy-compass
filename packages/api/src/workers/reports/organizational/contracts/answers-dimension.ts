@@ -4,21 +4,19 @@ export interface IScore {
   previous: number;
 }
 
+interface IQuestion {
+  name: string;
+  general: IScore;
+}
+
 interface IVariable {
+  name: string;
   general: IScore;
   questions: {
-    question_1: {
-      general: IScore;
-    };
-    question_2: {
-      general: IScore;
-    };
-    question_3: {
-      general: IScore;
-    };
-    question_4: {
-      general: IScore;
-    };
+    question_1: IQuestion;
+    question_2: IQuestion;
+    question_3: IQuestion;
+    question_4: IQuestion;
   }
 }
 
