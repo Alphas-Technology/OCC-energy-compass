@@ -177,22 +177,24 @@ class SaveTempAnswers {
       let dimAcumulator = 0;
       dimensionStructure.push({ name: dimKey, score: 0, variables: [] });
       let varCnt = 0;
+      let auxCnt = 0;
       for (const varKey of Object.keys(questionnaire[dimKey])) {
         let varAcumulator = 0;
         dimensionStructure[dimCnt].variables.push({ name: varKey, score: 0, questions: [] });
         let qCnt = 0;
         for (const qKey of Object.keys(questionnaire[dimKey][varKey])) {
           const foundIndex = questionnaire[dimKey][varKey][qKey].index.some(r => SaveTempAnswers.indices.includes(r));
+          const qScore = data[dimCnt].variable[auxCnt].score;
           if (foundIndex) {
             indexAnswers.push({
               index: questionnaire[dimKey][varKey][qKey].index,
-              answer: data[dimCnt].variable[varCnt].score
+              answer: qScore
             });
           }
-          const qScore = data[dimCnt].variable[varCnt].score;
           dimensionStructure[dimCnt].variables[varCnt].questions.push({ name: qKey, score: qScore });
           varAcumulator += qScore;
           qCnt++;
+          auxCnt++;
         }
         dimAcumulator += varAcumulator / qCnt;
         // Update variable average score
