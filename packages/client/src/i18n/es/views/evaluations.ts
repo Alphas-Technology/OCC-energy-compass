@@ -468,6 +468,7 @@ export default {
         bad: 'Deficiente: 2.9 - 2.0',
         very_bad: 'Muy deficiente: 1.9 - 1.0'
       }
-    }
+    },
+    burnout_index: 'El burnout, o Síndrome de Desgaste Ocupacional según la OMS, es un conjunto de síntomas en respuesta a un estrés laboral crónico, caracterizado por fatiga física y emocional extrema, que se refleja en una actitud negativa hacia el trabajo, agotamiento constante, baja autoestima y pérdida de interés en los resultados.'
   }
 }
