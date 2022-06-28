@@ -13,6 +13,8 @@ import index from './mixins/02-index'
 import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
+import highScores from './mixins/highestAndLowerScores'
+import bornoutIndex from './mixins/13-burnoutIndex'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -26,7 +28,9 @@ export default Vue.extend({
     index,
     intro,
     methodology,
-    model
+    model,
+    highScores,
+    bornoutIndex
   ],
   data () {
     return {
@@ -36,7 +40,23 @@ export default Vue.extend({
       downloadPdf: true,
       identifyTypes: {},
       evaluation: {},
-      evaluated: {}
+      evaluated: {},
+      highestScores: [],
+      lowerScores: [],
+      burnoutAverages: {},
+      heatMap: [
+        '#f85d19',
+        '#f99c16',
+        '#fcec14',
+        '#b7d600',
+        '#1bd800'
+      ],
+      colors: {
+        physical: '#51c7af',
+        mental: '#7d838d',
+        emotional: '#ec604d',
+        professional: '#1999da'
+      }
     }
   },
   watch: {
@@ -62,6 +82,7 @@ export default Vue.extend({
           console.log('Indices Answers', this.evaluated.temp.indices)
           console.log('additionalQuestions Answers', this.evaluated.temp.additional)
           this.getIdentifyTypes()
+          this.getHighAndLowerScores()
         })
         .catch((err) => {
           err.message
@@ -113,6 +134,78 @@ export default Vue.extend({
       const today = new Date()
       const monthName = this.$t(`Views.Evaluations.report.months.${[today.getMonth()]}`)
       return `${monthName} - ${today.getFullYear()}`
+    },
+    getHighAndLowerScores () {
+      const { questionnaire: { evaluations }, questionsIndex } = this.evaluation
+      const { temp: { evaluations: evaluatedEvaluations, indices } } = this.evaluated
+      const scores = []
+      const burnoutIndexes = {
+        individual: [],
+        organizational: []
+      }
+      let dimensionCount = 0
+      for (const [dimensionKey, dimensionVar] of Object.entries(evaluations)) {
+        let questionCount = 0
+        for (const [varKey, varValues] of Object.entries(dimensionVar)) {
+          for (const questionKey of Object.keys(varValues)) {
+            const score = evaluatedEvaluations[dimensionCount].variable[questionCount].score
+            if (varValues[questionKey].index.includes('burnoutIndividual')) {
+              burnoutIndexes.individual.push(score)
+            }
+            scores.push({
+              type: 'evaluation',
+              dimension: dimensionKey,
+              variable: varKey,
+              reference: varValues[questionKey].reference[this.lang],
+              score
+            })
+            questionCount++
+          }
+        }
+        dimensionCount++
+      }
+
+      questionsIndex.forEach(qi => {
+        const item = indices.find(index => index.idx === qi.idx)
+        const score = item.answer
+
+        if (qi.index.includes('burnoutIndividual')) {
+          burnoutIndexes.individual.push(score)
+        }
+
+        if (qi.index.includes('burnoutOrganizational')) {
+          burnoutIndexes.organizational.push(score)
+        }
+
+        scores.push({
+          type: 'index',
+          index: qi.index[0],
+          ref: qi.reference[this.lang],
+          idx: item.idx,
+          score
+        })
+      })
+
+      this.burnoutAverages.individual = burnoutIndexes.individual.reduce((a, b) => a + b, 0) / burnoutIndexes.individual.length
+      this.burnoutAverages.organizational = burnoutIndexes.organizational.reduce((a, b) => a + b, 0) / burnoutIndexes.organizational.length
+
+      this.highestScores = scores.sort((a, b) => b.score - a.score).slice(0, 6)
+      this.lowerScores = scores.sort((a, b) => a.score - b.score).slice(0, 6)
+    },
+    getHeatMap (s) {
+      if (!s) {
+        return '#FFFFFF'
+      } else if (s >= 1 && s < 2) {
+        return this.heatMap[0]
+      } else if (s >= 2 && s < 3) {
+        return this.heatMap[1]
+      } else if (s >= 3 && s < 4) {
+        return this.heatMap[2]
+      } else if (s >= 4 && s < 4.5) {
+        return this.heatMap[3]
+      } else if (s >= 4.5) {
+        return this.heatMap[4]
+      }
     }
   }
 })

@@ -36,6 +36,7 @@
 
     <x-loading></x-loading>
     <x-alert></x-alert>
+    <canvas id="burnoutIndex" width="448" height="451" class="d-none"></canvas>
   </v-container>
 </template>
 
