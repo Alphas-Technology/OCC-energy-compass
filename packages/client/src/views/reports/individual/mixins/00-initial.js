@@ -93,7 +93,12 @@ export default {
           // Methodology
           this.$generateMethodology(),
           // Model Description
-          this.$generateModelDescription()
+          this.$generateModelDescription(),
+          // Scores
+          this.$generateScores(this.highestScores, 'highest_scores'),
+          this.$generateScores(this.lowerScores, 'lowest_scores'),
+          // Burnout index
+          await this.$generateBurnoutIndex()
           /*
           // Response Rate
           this.$generateResponseRate(),
