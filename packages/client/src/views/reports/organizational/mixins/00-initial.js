@@ -140,12 +140,12 @@ export default {
           // Dimensions/Variables
           this.$generateDimensionsResults(),
           // Detailed Dimensions
-          this.$generateDimensionDetail()
-          /*
+          this.$generateDimensionDetail(),
           // Highest/Lowest Scores
-          this.$generateScoreRank()
+          this.$generateScoreRank(),
           // Highest/Lowest Scatter
           this.$generateScatterRank()
+          /*
           // Burnout Index
           this.$generateBurnoutIndex()
           // Health Index

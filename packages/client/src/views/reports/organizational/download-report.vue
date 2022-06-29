@@ -53,6 +53,8 @@ import responseRate from './mixins/06-response-rate'
 import gralScores from './mixins/07-gral-scores'
 import dimResults from './mixins/08-dimension-results'
 import dimDetails from './mixins/09-dimension-details'
+import scoresRank from './mixins/10-highest-lowest-scores'
+import scatterRank from './mixins/11-highest-lowest-scatter'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const echarts = require('echarts')
@@ -69,7 +71,9 @@ export default {
     responseRate,
     gralScores,
     dimResults,
-    dimDetails
+    dimDetails,
+    scoresRank,
+    scatterRank
   ],
   props: {
     pollId: String,
