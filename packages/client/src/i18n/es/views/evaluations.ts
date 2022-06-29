@@ -441,6 +441,7 @@ export default {
       word_clouds: 'Preguntas Abiertas'
     },
     current: 'Actual',
+    dimension: 'Dimensión',
     gral_score: 'Puntaje General',
     dimension_results: 'Resultados por Dimensión',
     introduction: {
