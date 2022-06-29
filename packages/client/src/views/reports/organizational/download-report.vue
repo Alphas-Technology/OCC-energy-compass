@@ -51,6 +51,8 @@ import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
 import responseRate from './mixins/06-response-rate'
 import gralScores from './mixins/07-gral-scores'
+import dimResults from './mixins/08-dimension-results'
+import dimDetails from './mixins/09-dimension-details'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const echarts = require('echarts')
@@ -65,7 +67,9 @@ export default {
     methodology,
     model,
     responseRate,
-    gralScores
+    gralScores,
+    dimResults,
+    dimDetails
   ],
   props: {
     pollId: String,

@@ -136,12 +136,12 @@ export default {
           // 06 Response Rate
           this.$generateResponseRate(),
           // 07 General Scores
-          this.$generateGeneralScores()
-          /*
+          this.$generateGeneralScores(),
           // Dimensions/Variables
           this.$generateDimensionsResults(),
           // Detailed Dimensions
-          this.$generateDimensionDetail(),
+          this.$generateDimensionDetail()
+          /*
           // Highest/Lowest Scores
           this.$generateScoreRank()
           // Highest/Lowest Scatter
