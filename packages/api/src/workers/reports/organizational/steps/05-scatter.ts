@@ -80,8 +80,8 @@ export default async (
     }
   }
 
-  const highest = higherLower.sort((a, b) => b.score - a.score).slice(0, 6);
-  const lowest = higherLower.sort((a, b) => a.score - b.score).slice(0, 6);
+  const highest = higherLower.sort((a, b) => b.scatter - a.scatter).slice(0, 6);
+  const lowest = higherLower.sort((a, b) => a.scatter - b.scatter).slice(0, 6);
 
   return {
     scatter: scatterDimension,
