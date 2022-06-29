@@ -106,7 +106,7 @@
                 <v-tooltip v-else bottom color="primary">
                   <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon
-                      @click="pageReload"
+                      @click="getEvaluations"
                     >
                       <v-icon small>mdi-reload</v-icon>
                     </v-btn>
@@ -197,9 +197,6 @@ export default Vue.extend({
     })
   },
   methods: {
-    pageReload () {
-      location.reload()
-    },
     getColor (status) {
       switch (status) {
         case 'pending':
