@@ -144,15 +144,13 @@ export default {
           // Highest/Lowest Scores
           this.$generateScoreRank(),
           // Highest/Lowest Scatter
-          this.$generateScatterRank()
-          /*
+          this.$generateScatterRank(),
           // Burnout Index
-          this.$generateBurnoutIndex()
+          await this.$generateBurnoutIndex(),
           // Health Index
-          this.$generateHealthIndex()
+          this.$generateHealthIndex(),
           // WordClouds
           this.$generateWordClouds()
-          */
         ]
       }
     }

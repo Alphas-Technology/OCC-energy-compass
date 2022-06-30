@@ -33,6 +33,7 @@
       id="dynamicEnterpriseLogo"
       class="d-none"
     />
+    <canvas id="burnoutIndex" width="448" height="451" class="d-none"></canvas>
   </div>
 </template>
 
@@ -55,6 +56,9 @@ import dimResults from './mixins/08-dimension-results'
 import dimDetails from './mixins/09-dimension-details'
 import scoresRank from './mixins/10-highest-lowest-scores'
 import scatterRank from './mixins/11-highest-lowest-scatter'
+import burnoutIndex from './mixins/12-burnout-index'
+import healthIndex from './mixins/13-health-index'
+import wordClouds from './mixins/14-word-clouds'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const echarts = require('echarts')
@@ -73,7 +77,10 @@ export default {
     dimResults,
     dimDetails,
     scoresRank,
-    scatterRank
+    scatterRank,
+    burnoutIndex,
+    healthIndex,
+    wordClouds
   ],
   props: {
     pollId: String,
