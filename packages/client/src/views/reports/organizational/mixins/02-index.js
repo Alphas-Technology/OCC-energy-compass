@@ -20,6 +20,7 @@ export default {
           bold: true,
           margin: [50, 17, 40, 0],
           maxHeight: 0,
+          lineHeight: 1,
           characterSpacing: 0.4
         }
       ]
