@@ -13,9 +13,9 @@ import index from './mixins/02-index'
 import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
-import highScores from './mixins/highestAndLowerScores'
 import generalScore from './mixins/07-gral-scores'
-import bornoutIndex from './mixins/13-burnoutIndex'
+import highScores from './mixins/10-highest-lowest-scores'
+import burnoutIndex from './mixins/12-burnout-index'
 
 const echarts = require('echarts')
 
@@ -34,7 +34,7 @@ export default Vue.extend({
     model,
     highScores,
     generalScore,
-    bornoutIndex
+    burnoutIndex
   ],
   data () {
     return {
@@ -45,6 +45,7 @@ export default Vue.extend({
       identifyTypes: {},
       evaluation: {},
       evaluated: {},
+      evaluatedName: '',
       highestScores: [],
       lowerScores: [],
       gralScore: 0,
@@ -97,9 +98,7 @@ export default Vue.extend({
           if (this.evaluated.status !== 'completed') {
             throw new TypeError('demographic_report/004')
           }
-          console.log('Questionnaire Answers', this.evaluated.temp.evaluations)
-          console.log('Indices Answers', this.evaluated.temp.indices)
-          console.log('additionalQuestions Answers', this.evaluated.temp.additional)
+          this.evaluatedName = `${this.evaluated.employee.employeeEnterprise.firstName} ${this.evaluated.employee.employeeEnterprise.lastName}`
           this.getIdentifyTypes()
           this.getHighAndLowerScores()
         })
@@ -136,11 +135,11 @@ export default Vue.extend({
         if (is.edge() || is.ie()) {
           const pdfDocGenerator = pdfMake.createPdf(configuration)
           pdfDocGenerator.getBlob((blob) => {
-            window.navigator.msSaveBlob(blob, `${this.evaluation.name}.pdf`)
+            window.navigator.msSaveBlob(blob, `${this.evaluation.name} - Individual - ${this.evaluatedName}.pdf`)
             this.closeRenderPdf()
           })
         } else {
-          pdfMake.createPdf(configuration).download(`${this.evaluation.name}.pdf`, () => {
+          pdfMake.createPdf(configuration).download(`${this.evaluation.name} - Individual - ${this.evaluatedName}.pdf`, () => {
             this.closeRenderPdf()
           })
         }
