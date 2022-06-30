@@ -37,6 +37,11 @@ export default {
 
             const reference = this.evaluationData.questionnaire.evaluations[dimKey][vName][qName].reference[this.user.lang]
 
+            // Keep the questionnaire question, belonging to the health index
+            if (this.evaluationData.questionnaire.evaluations[dimKey][vName][qName].index.includes('generalHealth')) {
+              this.healthIndexQ1 = reference
+            }
+
             rows.push([
               {
                 text: this.truncateReference(reference),
