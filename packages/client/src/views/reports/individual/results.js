@@ -14,7 +14,10 @@ import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
 import highScores from './mixins/highestAndLowerScores'
+import generalScore from './mixins/07-gral-scores'
 import bornoutIndex from './mixins/13-burnoutIndex'
+
+const echarts = require('echarts')
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -30,6 +33,7 @@ export default Vue.extend({
     methodology,
     model,
     highScores,
+    generalScore,
     bornoutIndex
   ],
   data () {
@@ -43,7 +47,14 @@ export default Vue.extend({
       evaluated: {},
       highestScores: [],
       lowerScores: [],
+      gralScore: 0,
       burnoutAverages: {},
+      dimensionAverages: {
+        physical: [],
+        mental: [],
+        emotional: [],
+        professional: []
+      },
       heatMap: [
         '#f85d19',
         '#f99c16',
@@ -56,7 +67,15 @@ export default Vue.extend({
         mental: '#7d838d',
         emotional: '#ec604d',
         professional: '#1999da'
-      }
+      },
+      occGreen: '#51c7af',
+      occGrey: '#7d838d',
+      occRed: '#ec604d',
+      occBlue: '#1999da',
+      occGreenRgba: 'rgba(81, 199, 175, 0.6)',
+      occGreyRgba: 'rgba(125, 131, 141, 0.6)',
+      occRedRgba: 'rgba(236, 96, 77, 0.6)',
+      occBlueRgba: 'rgba(25, 153, 218, 0.6)'
     }
   },
   watch: {
@@ -108,6 +127,7 @@ export default Vue.extend({
     async openPdf () {
       this.$store.dispatch('loading/show')
       this.loadingBtn = true
+      await this.generateDimensionsResultsPie()
       await this.renderPdf()
     },
     async renderPdf () {
@@ -159,6 +179,7 @@ export default Vue.extend({
               reference: varValues[questionKey].reference[this.lang],
               score
             })
+            this.dimensionAverages[dimensionKey].push(score)
             questionCount++
           }
         }
@@ -186,11 +207,131 @@ export default Vue.extend({
         })
       })
 
-      this.burnoutAverages.individual = burnoutIndexes.individual.reduce((a, b) => a + b, 0) / burnoutIndexes.individual.length
-      this.burnoutAverages.organizational = burnoutIndexes.organizational.reduce((a, b) => a + b, 0) / burnoutIndexes.organizational.length
+      this.burnoutAverages.individual = this.getAverage(burnoutIndexes.individual)
+      this.burnoutAverages.organizational = this.getAverage(burnoutIndexes.organizational)
+
+      this.getDimensionAverages()
+      this.getGeneralScore()
 
       this.highestScores = scores.sort((a, b) => b.score - a.score).slice(0, 6)
       this.lowerScores = scores.sort((a, b) => a.score - b.score).slice(0, 6)
+    },
+    generateDimensionsResultsPie () {
+      const dataSet = []
+      const seriesSet = []
+      let hexColor, rgbColor
+      Object.keys(this.dimensionAverages).forEach((key, index) => {
+        const dimScore = this.dimensionAverages[key]
+
+        switch (key) {
+          case 'physical':
+            hexColor = this.occGreen
+            rgbColor = this.occGreenRgba
+            break
+          case 'mental':
+            hexColor = this.occGrey
+            rgbColor = this.occGreyRgba
+            break
+          case 'emotional':
+            hexColor = this.occRed
+            rgbColor = this.occRedRgba
+            break
+          case 'professional':
+            hexColor = this.occBlue
+            rgbColor = this.occBlueRgba
+            break
+        }
+
+        dataSet.push(this.getData(key, dimScore, hexColor))
+        seriesSet.push(this.getSimpleSerie(dimScore, index, rgbColor))
+      })
+
+      const canvas = document.createElement('canvas')
+      canvas.width = 700
+      canvas.height = 700
+
+      return new Promise(resolve => {
+        const chartPieLocal = echarts.init(canvas)
+
+        chartPieLocal.setOption({
+          angleAxis: {
+            type: 'category',
+            data: dataSet,
+            z: 10
+          },
+          radiusAxis: {
+            min: 1,
+            max: 5,
+            interval: 1,
+            axisLabel: {
+              show: true,
+              fontSize: 15
+            }
+          },
+          polar: {},
+          series: seriesSet,
+          barWidth: '100%'
+        })
+
+        chartPieLocal.on('finished', () => {
+          this.dimensionsResultsPie = chartPieLocal.getDataURL()
+          resolve()
+        })
+      })
+    },
+    getData (dimension, score, color) {
+      dimension = this.$t(`Views.Evaluations.report.introduction.${dimension}`)
+      score = this.round(score)
+      const value = `{a|${score}}\n{c|${dimension}}`
+
+      return {
+        value: value,
+        textStyle: {
+          rich: {
+            a: {
+              fontSize: 19,
+              color: color,
+              align: 'center'
+            },
+            b: {
+              fontSize: 18,
+              color: '#000000',
+              align: 'center'
+            },
+            c: {
+              fontSize: 20,
+              color: color,
+              align: 'center'
+            }
+          }
+        }
+      }
+    },
+    getSimpleSerie (score, position, color) {
+      const data = [0, 0, 0, 0]
+      data[position] = score
+      return {
+        type: 'bar',
+        coordinateSystem: 'polar',
+        stack: 'a',
+        color: color,
+        data
+      }
+    },
+    getDimensionAverages () {
+      Object.keys(this.dimensionAverages).forEach(key => {
+        this.dimensionAverages[key] = this.getAverage(this.dimensionAverages[key])
+      })
+    },
+    getGeneralScore () {
+      let total = 0
+      Object.entries(this.dimensionAverages).forEach((data) => {
+        total += data[1]
+      })
+      this.gralScore = this.round(total / 4)
+    },
+    getAverage (data) {
+      return data.reduce((a, b) => a + b, 0) / data.length
     },
     getHeatMap (s) {
       if (!s) {
@@ -206,6 +347,15 @@ export default Vue.extend({
       } else if (s >= 4.5) {
         return this.heatMap[4]
       }
+    },
+    round (value, decimals = 2) {
+      if (isNaN(Number(value))) {
+        return '--'
+      }
+      if ((value * 100) < 1 && (value * 100) > -1) {
+        value = 0
+      }
+      return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals).toFixed(decimals)
     }
   }
 })

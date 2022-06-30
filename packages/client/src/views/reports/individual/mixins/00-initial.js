@@ -94,6 +94,8 @@ export default {
           this.$generateMethodology(),
           // Model Description
           this.$generateModelDescription(),
+          // General Score
+          await this.$generateGeneralScores(),
           // Scores
           this.$generateScores(this.highestScores, 'highest_scores'),
           this.$generateScores(this.lowerScores, 'lowest_scores'),
