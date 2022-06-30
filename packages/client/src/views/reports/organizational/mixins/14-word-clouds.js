@@ -6,23 +6,24 @@ export default {
     $generateWordClouds () {
       const pages = []
 
-      let cnt = 0
-      for (const key of Object.keys(this.wordsCloud)) {
-        const foundOpenQ = this.evaluationData.openQuestions.find(x => x.name === key)
-        const qText = foundOpenQ.question[this.user.lang]
-
+      this.evaluationData.openQuestions.forEach((openQ, cnt) => {
         pages.push(
           // Page Title
           pdfUtils.generateHeaderTitle(this.$t('Views.Evaluations.report.toc.word_clouds'), !cnt),
           {
-            text: qText,
+            text: openQ.question[this.user.lang],
             alignment: 'center',
             margin: [0, 20, 0, 0],
             fontSize: 14
+          },
+          {
+            absolutePosition: { x: 20, y: 120 },
+            image: this.wClouds[openQ.name],
+            width: 800,
+            height: 440
           }
         )
-        cnt++
-      }
+      })
 
       return pages
     }

@@ -62,6 +62,7 @@ import wordClouds from './mixins/14-word-clouds'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 const echarts = require('echarts')
+require('echarts-wordcloud')
 
 export default {
   name: 'thread-organizational-report-exec',
@@ -92,7 +93,8 @@ export default {
       downloadPdf: true,
       renderPart: {
         donutPie: false,
-        chartPie: false
+        chartPie: false,
+        wordClouds: false
       },
       heatMap: [
         '#f85d19',
@@ -120,7 +122,14 @@ export default {
       completedPolls: 0,
       expectedPolls: 0,
       responseRatePie: null,
-      dimensionsResultsPie: null
+      dimensionsResultsPie: null,
+      wClouds: {},
+      wordColors: [
+        'rgba(81, 199, 175, 1)',
+        'rgba(125, 131, 141, 1)',
+        'rgba(236, 96, 77, 1)',
+        'rgba(25, 153, 218, 1)'
+      ]
     }
   },
   mounted () {
@@ -449,7 +458,47 @@ export default {
       chartPieLocal.on('finished', () => {
         this.dimensionsResultsPie = chartPieLocal.getDataURL()
         this.renderPart.chartPie = true
+        this.generateWordClouds()
       })
+    },
+    generateWordClouds () {
+      let cnt = 1
+      for (const key of Object.keys(this.wordsCloud)) {
+        const canvas = document.createElement('canvas')
+        canvas.width = 1200// 800
+        canvas.height = 660// 440
+        const chartWordsLocal = echarts.init(canvas)
+
+        chartWordsLocal.setOption({
+          series: [{
+            type: 'wordCloud',
+            shape: 'circle',
+            gridSize: 7,
+            sizeRange: [14, 60],
+            rotationRange: [-90, 90],
+            rotationStep: 90,
+            left: 'center',
+            top: 'center',
+            // width: '80%',
+            // height: '70%',
+            drawOutOfBound: true,
+            textStyle: {
+              fontFamily: 'sans-serif',
+              fontWeight: 'bold',
+              color: () => this.wordColors[Math.floor(Math.random() * this.wordColors.length)]
+            },
+            data: this.wordsCloud[key]
+          }]
+        })
+
+        chartWordsLocal.on('finished', () => {
+          this.wClouds[key] = chartWordsLocal.getDataURL()
+          if (cnt === this.evaluationData.openQuestions.length) {
+            this.renderPart.wordClouds = true
+          }
+          cnt++
+        })
+      }
     },
     toDataURL (url, callback) {
       const xhr = new XMLHttpRequest()
