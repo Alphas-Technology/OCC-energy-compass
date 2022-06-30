@@ -15,11 +15,13 @@ export default {
               id: 'subToc'
             }
           },
-          color: '#6d7a7a',
+          color: '#222222',
           fontSize: 13,
-          margin: [15, 0, 65, 0],
+          bold: true,
+          margin: [50, 17, 40, 0],
           maxHeight: 0,
-          lineHeight: 0.7
+          lineHeight: 1,
+          characterSpacing: 0.4
         }
       ]
     }
