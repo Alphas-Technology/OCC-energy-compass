@@ -74,7 +74,7 @@ export default {
             body: [
               [
                 {
-                  text: 'Dimension',
+                  text: this.$t('Views.Evaluations.report.dimension'),
                   bold: true,
                   border: [false],
                   alignment: 'center'
@@ -84,7 +84,7 @@ export default {
                   border: [false]
                 },
                 {
-                  text: 'Actual',
+                  text: this.$t('Views.Evaluations.report.current'),
                   bold: true,
                   border: [false],
                   alignment: 'center'
