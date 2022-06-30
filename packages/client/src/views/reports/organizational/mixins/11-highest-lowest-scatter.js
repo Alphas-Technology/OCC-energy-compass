@@ -98,7 +98,7 @@ export default {
                 // Headers
                 [
                   {
-                    text: 'Dimension',
+                    text: this.$t('Views.Evaluations.report.dimension'),
                     bold: true,
                     border: [false],
                     alignment: 'center'
