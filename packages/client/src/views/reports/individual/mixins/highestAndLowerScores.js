@@ -5,7 +5,6 @@ import ScoreRectBase64 from '../../base64Files/score-rect'
 export default {
   methods: {
     getScoresData (scoresData) {
-      let count = 1
       return scoresData.map((hc, index) => {
         const data = [
           {
@@ -59,7 +58,6 @@ export default {
             }
           }
         ]
-        count++
         return data
       })
     },
