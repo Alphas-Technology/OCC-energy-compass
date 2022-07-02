@@ -1,18 +1,34 @@
 
 <template>
   <v-container fluid class="py-0 px-2 fill-height">
-    <v-card height="100%" width="100%">
+    <v-card height="100%" width="100%" class="occ-watermark">
       <!-- Header -->
       <v-card-title class="px-5 headline grey--text text--darken-3">
-        Resultados Individuales
+        <v-spacer></v-spacer>
+        <!--
+        <v-select dense hide-details
+          v-model="language"
+          :items="computedLanguages"
+          :menu-props="{ top: false, left: true, offsetY: true }"
+          class="styled-select mb-2 mr-3"
+          style="max-width: 170px"
+          @change="changeLocale"
+        ></v-select>
+        -->
       </v-card-title>
 
       <!-------------------------------------------->
       <!----------------- Results ------------------>
       <!-------------------------------------------->
       <v-card-text>
-        <!-- Display message or results here -->
+        <section class="enterprise-logo">
+          <img src="/img/20220531_occ_energy_logo_2.png" />
+        </section>
+        <p class="mt-6 text-center display-1 grey--text text--darken-2">
+          {{ $t('Views.Evaluations.report.individual.title') }}
+        </p>
       </v-card-text>
+
       <!-------------------------------------------->
       <!-------------- Action Buttons -------------->
       <!-------------------------------------------->
@@ -45,6 +61,15 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+  }
+  .occ-watermark {
+    display: block;
+    position: relative;
+    border: 1px solid red;
+    background: url('/img/20200301_w_occ_solution_logo.png');
+    background-position: left -270px bottom -440px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 </style>
 
