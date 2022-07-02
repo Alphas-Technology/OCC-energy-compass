@@ -48,6 +48,42 @@ export default {
       }
     }
   },
+  calculateIndividualBarWidth (score: number) {
+    const base = 38
+    if (score <= 1.5) {
+      return ((score + -0.5) * base) + -5
+    } else if (score > 1.5 && score <= 2) {
+      return (score * base)
+    } else if (score > 2 && score <= 2.5) {
+      return ((score + 0.51) * base) + 5
+    } else if (score > 2.5 && score <= 3) {
+      return ((score + 1.05) * base) + 10
+    } else if (score > 3 && score <= 3.5) {
+      return ((score + 1.52) * base) + 15
+    } else if (score > 3.5 && score <= 4) {
+      return ((score + 2.1) * base) + 20
+    } else if (score > 4 && score <= 4.5) {
+      return ((score + 2.7) * base) + 25
+    } else if (score > 4.5 && score <= 5) {
+      return ((score + 3.15) * base) + 30
+    }
+  },
+  generateIndividualScoreBar (score: number, marginTop: number) {
+    return {
+      layout: { defaultBorder: '', fillColor: '#445bcc' },
+      table: {
+        headerRows: 1,
+        widths: [score === 1 ? -10 : this.calculateIndividualBarWidth(score)],
+        heights: [1],
+        body: [
+          [{ text: '', lineHeight: 0.01 }]
+        ]
+      },
+      margin: [-3.1, marginTop, 0, 0],
+      border: [false, false, false, false],
+      alignment: 'left'
+    }
+  },
   calculateBarWidth (score: number) {
     const base = 28.5
     if (score <= 1.5) {
