@@ -14,8 +14,11 @@ import intro from './mixins/03-intro'
 import methodology from './mixins/04-methodology'
 import model from './mixins/05-model'
 import generalScore from './mixins/07-gral-scores'
+import dimResults from './mixins/08-dimension-results'
+import dimDetails from './mixins/09-dimension-details'
 import highScores from './mixins/10-highest-lowest-scores'
 import burnoutIndex from './mixins/12-burnout-index'
+import healthIndex from './mixins/13-health-index'
 
 const echarts = require('echarts')
 
@@ -34,7 +37,10 @@ export default Vue.extend({
     model,
     highScores,
     generalScore,
-    burnoutIndex
+    dimResults,
+    dimDetails,
+    burnoutIndex,
+    healthIndex
   ],
   data () {
     return {
@@ -143,6 +149,8 @@ export default Vue.extend({
             this.closeRenderPdf()
           })
         }
+      } else {
+        this.closeRenderPdf()
       }
     },
     closeRenderPdf () {

@@ -96,31 +96,17 @@ export default {
           this.$generateModelDescription(),
           // General Score
           await this.$generateGeneralScores(),
-          // Scores
-          this.$generateScores(this.highestScores, 'highest_scores'),
-          this.$generateScores(this.lowerScores, 'lowest_scores'),
-          // Burnout index
-          await this.$generateBurnoutIndex()
-          /*
-          // Response Rate
-          this.$generateResponseRate(),
-          // General Scores
-          this.$generateGeneralResults(),
           // Dimensions/Variables
           this.$generateDimensionsResults(),
           // Detailed Dimensions
           this.$generateDimensionDetail(),
           // Highest/Lowest Scores
-          this.$generateScoreRank()
-          // Highest/Lowest Scatter
-          this.$generateScatterRank()
+          this.$generateScores(this.highestScores, 'highest_scores'),
+          this.$generateScores(this.lowerScores, 'lowest_scores'),
           // Burnout Index
-          this.$generateBurnoutIndex()
+          await this.$generateBurnoutIndex(),
           // Health Index
           this.$generateHealthIndex()
-          // WordClouds
-          this.$generateWordClouds()
-          */
         ]
       }
     }
