@@ -51,17 +51,14 @@
             <v-col cols="12" v-for="(question, q) in editingData" :key="`q-${q}`">
               <v-tooltip bottom color="blue" >
                 <template v-slot:activator="{ on }" >
-                  <v-text-field
-                    light outlined
-                    :label="(question.reference || {})[lang]"
-                    name="question"
+                  <v-text-field light outlined
                     v-model="(question.question || {})[lang]"
-                    @keypress.enter="sendForm"
-                    @blur="sendForm(question.idx)"
                     v-on="on"
-                    outline
-                    append-icon="mdi-content-save-edit-outline"
+                    name="question"
+                    :label="(question.reference || {})[lang]"
                     color="blue"
+                    append-icon="mdi-content-save-edit-outline"
+                    @keypress.enter="sendForm(question.idx)"
                   ></v-text-field>
                 </template>
                 <span>
