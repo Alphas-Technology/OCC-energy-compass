@@ -163,7 +163,7 @@ class EvaluatedService {
   async updateTempAnswers(tokenId: string, temp: any): Promise<EvaluatedType> {
     return EvaluatedRepository.findOneAndUpdate(
       {'token': tokenId},
-      { '$set': { 'temp': temp }},
+      { '$set': { 'temp': temp, 'status': 'in_progress' }},
       { new: true}
     );
   }
