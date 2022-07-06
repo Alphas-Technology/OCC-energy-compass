@@ -21,7 +21,7 @@
                   v-model="item.selected"
                   :ripple="false"
                   :label="item.label"
-                  :disabled="optionalAnswerCount[item.code] && optionalAnswerCount[item.code] === 0"
+                  :disabled="(optionalAnswerCount[item.code] && optionalAnswerCount[item.code] === 0) || (selectedFiltersCount > 0 && !item.selected)"
                   color="primary"
                   class="mt-1 mb-2 small-label"
                   style="max-width: fit-content;"
