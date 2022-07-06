@@ -46,7 +46,9 @@
             :headers="headers"
             :parent-fetch-data="getEvaluations"
             :options="options"
+            :reload="reloadTable"
             no-data="Views.Evaluations.list.table_no_data"
+            @offReload="offReload"
           >
             <template v-slot:structure="prop">
               <td class="text-center" style="vertical-align: middle;">
@@ -106,7 +108,7 @@
                 <v-tooltip v-else bottom color="primary">
                   <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon
-                      @click="getEvaluations"
+                      @click="reloadTable = true"
                     >
                       <v-icon small>mdi-reload</v-icon>
                     </v-btn>
@@ -188,7 +190,8 @@ export default Vue.extend({
         { text: 'Pendiente', value: 'pending' },
         { text: 'En progreso', value: 'in_progress' },
         { text: 'Completada', value: 'completed' }
-      ]
+      ],
+      reloadTable: false
     }
   },
   computed: {
@@ -209,6 +212,9 @@ export default Vue.extend({
     },
     getEvaluations (options) {
       return evaluationsService.list(options)
+    },
+    offReload () {
+      this.reloadTable = false
     },
     copyUrl () {
       const input = document.getElementById('tokenUrl')
