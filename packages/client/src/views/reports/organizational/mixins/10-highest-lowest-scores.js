@@ -8,7 +8,7 @@ export default {
       return str.length > limit ? str.slice(0, limit) + '...' : str
     },
     getScoresData (scoresData) {
-      return scoresData.map((hc, index) => {
+      return scoresData.map((hc, i) => {
         let hexColor
         switch (hc.dimension) {
           case 'physical':
@@ -25,16 +25,27 @@ export default {
             break
         }
 
-        const vName = this.answersDimension[hc.dimension].variables[hc.variable].name
-        const qName = this.answersDimension[hc.dimension].variables[hc.variable].questions[hc.question].name
-        const reference = this.evaluationData.questionnaire.evaluations[hc.dimension][vName][qName].reference[this.user.lang]
+        let reference = ''
+        if (hc.type === 'evaluations') {
+          const vName = this.answersDimension[hc.dimension].variables[hc.variable].name
+          const qName = this.answersDimension[hc.dimension].variables[hc.variable].questions[hc.question].name
+          reference = this.evaluationData.questionnaire.evaluations[hc.dimension][vName][qName].reference[this.user.lang]
+        }
+        if (hc.type === 'indices') {
+          if (hc.idx === null) {
+            reference = this.healthIndexQ1
+          } else {
+            const foundIndex = this.evaluationData.questionsIndex.find(x => x.idx === hc.idx)
+            reference = foundIndex.reference[this.user.lang] || ''
+          }
+        }
 
         const data = [
           {
             image: ScoreRectBase64,
             width: 752,
             height: 84,
-            margin: [20, index > 0 ? 10 : 23, -12, 0],
+            margin: [20, i > 0 ? 10 : 23, -12, 0],
             alignment: 'center'
           },
           {
