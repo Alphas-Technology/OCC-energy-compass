@@ -133,7 +133,9 @@ export default {
     }
   },
   mounted () {
-    this.enterpriseLogoSrc = `data:image/png;base64,${this.evaluationData.enterprise.logo}`
+    if (this.evaluationData.enterprise.logo) {
+      this.enterpriseLogoSrc = `data:image/png;base64,${this.evaluationData.enterprise.logo}`
+    }
   },
   watch: {
     renderPart: {

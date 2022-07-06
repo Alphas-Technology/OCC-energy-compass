@@ -109,7 +109,7 @@ export default {
                     : [
                       {
                         text: '',
-                        margin: [0, this.coverLogoHeight, 0, 0]
+                        margin: [0, 40, 0, 0]
                       }
                     ],
                   [
