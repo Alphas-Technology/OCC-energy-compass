@@ -217,9 +217,7 @@ export default {
     showUpdateProgressBtn () {
       let shouldShow = false
       if (this.reportThreads.length) {
-        const inProgress = this.reportThreads.find((t) => {
-          return t.progressPercentage !== 100
-        })
+        const inProgress = this.reportThreads.find(t => t.data.progress !== 100)
         if (inProgress) {
           shouldShow = true
         }
