@@ -445,14 +445,12 @@ export default {
     gral_score: 'Puntaje General',
     dimension_results: 'Resultados por Dimensión',
     introduction: {
-      first_paragraph: 'Las organizaciones invierten recursos significativos para desarrollar los conocimientos, habilidades, compromiso y actitudes de suscolaboradores, con el propósito de lograr un alto desempeño que les permita conseguir mejores resultados de negocio. Sin embargo, la inversión tiende a ser significativamente inferior en un multiplicador (positivo o negativo) de la ecuación del desempeño: la energía. Como personas y como colaboradores de una organización, los niveles individuales de energía personal varían en términos de cantidad (alta, media, baja) y en términos de calidad (positiva, neutra, negativa). La zona más favorable es por supuesto la de altos niveles de energía positiva y es allí donde típicamente conseguimos mayores niveles de bienestar en nuestra vida y mayores niveles de desempeño en nuestro trabajo.',
-      second_paragraph: 'A diferencia del tiempo, la energía individual se puede expandir a través de buenos hábitos de vida y se puede renovar a través de buenas prácticas de recuperación y descanso. Sin embargo, si no se cuenta con una buena alineación mental y emocional, la energía también se puede drenar a través de episodios de alto estrés. La responsabilidad primaria sobre la salud y bienestar de cada quien es indelegable y es por ello que a través del Energy Compass, buscamos elevar la consciencia individual del autocuidado como piedra angular para todos los objetivos de la vida. En adición a la gestión individual de la energía, las organizaciones tienen la corresponsabilidad de construir culturas y ambientes de trabajo sanos, y estilos de liderazgo constructivos que faciliten la conciliación de altos estándares de desempeño y bienestar.',
-      third_paragraph: 'El estado pleno de bienestar requiere la alineación de cuatro dimensiones: la física, la mental, la emocional y la profesional. En la dimensión física generamos y renovamos la energía, en la dimensión mental enfocamos la energía en nuestras prioridades, en la dimensión emocional aseguramos buenas relaciones y alineación con nuestro propósito y en la dimensión profesional establecemos hábitos deliberados para maximizar nuestro desempeño.',
-      fourth_paragraph: 'El modelo Energy Compass está compuesto así:',
-      professional: 'PROFESIONAL',
-      physical: 'FÍSICA',
-      mental: 'MENTAL',
-      emotional: 'EMOCIONAL'
+      first_paragraph: 'Las organizaciones invierten recursos significativos para desarrollar los conocimientos, habilidades, compromiso y actitudes de sus colaboradores, con el propósito de lograr un alto desempeño que les permita conseguir mejores resultados de negocio. Sin embargo, la inversión tiende a ser significativamente inferior en un multiplicador (positivo o negativo) de la ecuación del desempeño: la energía. Como personas y como colaboradores de una organización, los niveles individuales de energía personal varían en términos de cantidad (alta, media, baja) y en términos de calidad (positiva, neutra, negativa). La zona más favorable es por supuesto la de altos niveles de energía positiva y es allí donde típicamente conseguimos mayores niveles de bienestar en nuestra vida y mayores niveles de desempeño en nuestro trabajo.',
+      second_paragraph: 'A diferencia del tiempo, la energía individual se puede expandir a través de buenos hábitos de vida y se puede renovar a través de buenas prácticas de recuperación y descanso. Sin embargo, si no se cuenta con una buena alineación mental y emocional, la energía también se puede drenar a través de episodios de alto estrés. La responsabilidad primaria sobre la salud y bienestar de cada quien es indelegable y es por ello que a través del Energy Compass, buscamos elevar la consciencia individual del autocuidado como piedra angular para todos los objetivos de la vida. En adición a la gestión individual de la energía, las organizaciones tienen la corresponsabilidad de construir culturas y ambientes de trabajo sanos, y estilos de liderazgo constructivos que faciliten la conciliación de altos estándares de desempeño y bienestar.'
+    },
+    model: {
+      first_paragraph: 'El estado pleno de bienestar requiere la alineación de cuatro dimensiones: la física, la mental, la emocional y la profesional. En la dimensión física generamos y renovamos la energía, en la dimensión mental enfocamos la energía en nuestras prioridades, en la dimensión emocional aseguramos buenas relaciones y alineación con nuestro propósito, y en la dimensión profesional establecemos hábitos deliberados para maximizar nuestro desempeño.',
+      second_paragraph: 'El modelo Energy Compass está compuesto así:'
     },
     methodology: {
       first_paragraph: 'El cuestionario del Energy Compass formula 48 preguntas cerradas (12 por cada dimensión), más 6 adicionales correspondientes al índice de Salud y 6 preguntas adicionales correspondientes al índice de Burnout. Adicionalmente se formulan dos preguntas semi-abiertas al final de la evaluación para obtener información cualitativa complementaria a la medición cuantitativa.',
@@ -460,14 +458,14 @@ export default {
       third_paragraph: `Los resultados organizacionales son el promedio simple de todas las respuestas individuales obtenidas en la encuesta.
                          Adicionalmente, la evaluación incluye dos índices:`,
       fifth_paragraph: '1.   El índice de salud que incluye 6 variables, todas incluidas dentro de los factores recomendados por la OMS para lograr una buena salud.',
-      sixth_paragraph: '2.   El índice de riesgo de burnout* que relaciona 6 factores individuales y 6 factores organizacionales que identifican el nivel de riesgo en incurrir en este síndrome.',
-      seventh_paragraph: '*El burnout, o Síndrome de Desgaste Ocupacional según la OMS, es un conjunto de síntomas en respuesta a un estrés laboral crónico, caracterizado por fatiga física y emocional extrema, que se refleja en una actitud negativa hacia el trabajo, agotamiento constante, baja autoestima y pérdida de interés en los resultados.',
+      sixth_paragraph: '2.   El índice de riesgo de burnout, que relaciona 6 factores individuales y 6 factores organizacionales que identifican el nivel de riesgo en incurrir en este síndrome.',
+      seventh_paragraph: 'El burnout, o Síndrome de Desgaste Ocupacional según la OMS, es un conjunto de síntomas en respuesta a un estrés laboral crónico, caracterizado por fatiga física y emocional extrema, que se refleja en una actitud negativa hacia el trabajo, agotamiento constante, baja autoestima y pérdida de interés en los resultados.',
       scores: {
         very_good: 'Sobresaliente: 5.0 - 4.5',
         good: 'Bueno: 4.4 - 4.0',
         acceptable: 'Aceptable: 3.9 - 3.0',
         bad: 'Deficiente: 2.9 - 2.0',
-        very_bad: 'Muy deficiente: 1.9 - 1.0'
+        very_bad: 'Crítica: 1.9 - 1.0'
       }
     },
     burnout_index: 'El burnout, o Síndrome de Desgaste Ocupacional según la OMS, es un conjunto de síntomas en respuesta a un estrés laboral crónico, caracterizado por fatiga física y emocional extrema, que se refleja en una actitud negativa hacia el trabajo, agotamiento constante, baja autoestima y pérdida de interés en los resultados.'
