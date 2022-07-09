@@ -7,6 +7,7 @@ export default {
     table_actions: 'Acciones',
     no_data: 'No hay índices para mostrar',
     i_generalHealth: 'Salud General',
+    i_burnoutIndividual: 'Burnout Individual',
     i_burnoutOrganizational: 'Burnout Organizacional'
   },
   edit: {
