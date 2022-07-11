@@ -31,6 +31,19 @@ class EvaluationAnswersService {
   }
 
   /**
+   * @description Find batch of evaluation's answers
+   * @param {any} evaluationId
+   * @returns {Promise<EvaluationAnswers[]>}
+   */
+  async findBatchByEvaluationId(evaluationId: any, skip: number, qty: number, select?: undefined|any): Promise<EvaluationAnswers[]> {
+    return EvaluationAnswersRepository.find(
+      { evaluationRef: evaluationId },
+      select || undefined,
+      { skip: skip, limit: qty }
+    );
+  }
+
+  /**
    * @description Get batch of answers in an evaluation
    * @param {any} evaluationId
    * @returns {Promise<EvaluationAnswers[]>}

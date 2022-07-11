@@ -18,7 +18,7 @@ export default async (
 ) => {
   const chunkSize = 100;
   const fields = 'evaluations indices openQuestions';
-  const answersBatch = await EvaluationAnswersService.findByBatchByEvaluationId(evaluationId, alreadyProcessedAnswersCount, chunkSize, fields);
+  const answersBatch = await EvaluationAnswersService.findBatchByEvaluationId(evaluationId, alreadyProcessedAnswersCount, chunkSize, fields);
 
   // Run Answers Dimension
   for (let i = 0; i < answersBatch.length; i++) {
