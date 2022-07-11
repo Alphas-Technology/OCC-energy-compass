@@ -5,9 +5,6 @@ import dimResultsBase64 from '../../base64Files/individual/dimension-results'
 
 export default {
   methods: {
-    truncateReference (str, limit = 24) {
-      return str.length > limit ? str.slice(0, limit) + '...' : str
-    },
     $generateDimensionsResults () {
       const rows = []
       const evaluations = this.evaluation.questionnaire.evaluations
@@ -28,26 +25,23 @@ export default {
 
           rows.push([
             {
-              text: this.truncateReference(variable),
-              margin: [4, 11, 0, 7],
-              fontSize: 7,
+              text: variable,
+              margin: [2, 8, 0, 0],
+              fontSize: 8,
               color: '#666666',
-              characterSpacing: 0.4
+              lineHeight: 1,
+              characterSpacing: 0.3
             },
             {
               text: ' '
             },
-            pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), 1.4),
+            pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), [0, 0, 2, 0.3]),
             // Score Bars
-            pdfUtils.generateIndividualScoreBar(score, 11)
+            pdfUtils.generateIndividualScoreBar(score, 9.5, -4)
           ])
         }
         // Dimension spacer
-        rows.push([
-          {
-            text: '', colSpan: 4, margin: [0, 4]
-          }
-        ])
+        rows.push([{ text: '', colSpan: 4 }])
         dimCnt++
       }
 
@@ -66,16 +60,15 @@ export default {
           absolutePosition: { x: 244, y: 95 },
           table: {
             widths: ['20%', '0.9%', '6%', '68.2%'],
+            heights: [1, 27.7, 27.7, 27.7, 8.5, 27.7, 27.7, 27.7, 8.4, 27.7, 27.7, 27.7, 8.4, 27.7, 27.7, 27.7, 0],
             body: [
               // Headers
               [
                 {
-                  text: ' ',
-                  margin: [0, 0, 0, -2]
+                  text: ' '
                 },
                 {
-                  text: ' ',
-                  margin: [0, 0, 0, -2]
+                  text: ' '
                 },
                 {
                   text: this.$t('Views.Evaluations.report.current'),
@@ -85,8 +78,7 @@ export default {
                   bold: true
                 },
                 {
-                  text: ' ',
-                  margin: [0, 0, 0, -2]
+                  text: ' '
                 }
               ],
               // Variables rows

@@ -5,12 +5,8 @@ import dimResultsBase64 from '../../base64Files/dimension-results'
 
 export default {
   methods: {
-    truncateReference (str, limit = 24) {
-      return str.length > limit ? str.slice(0, limit) + '...' : str
-    },
     $generateDimensionsResults () {
       const rows = []
-      let dimCnt = 0
       for (const dimKey of Object.keys(this.answersDimension)) {
         for (const varKey of Object.keys(this.answersDimension[dimKey].variables)) {
           const score = this.answersDimension[dimKey].variables[varKey].general.score
@@ -21,20 +17,21 @@ export default {
 
           rows.push([
             {
-              text: this.truncateReference(variable),
-              margin: [2, 9.4, 0, 8.4],
-              fontSize: 7,
+              text: variable,
+              margin: [0, 8.4, 0, 0],
+              fontSize: 8,
               color: '#666666',
-              characterSpacing: 0.4
+              lineHeight: 1,
+              characterSpacing: 0.3
             },
             {
               text: ' '
             },
-            pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), 0.5),
-            pdfUtils.generateScoreWithHeatMap(!this.hasPrevious ? '--' : this.round(previous), this.getHeatMap(previous), 0.5),
+            pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), [0, 0, 2, 0.5]),
+            pdfUtils.generateScoreWithHeatMap(!this.hasPrevious ? '--' : this.round(previous), this.getHeatMap(previous), [0, 0, 2, 0.5]),
             {
               text: !this.hasPrevious ? '--' : this.round(score - previous),
-              margin: [0, 7, 0, -5],
+              margin: [0, 6, 0, 0],
               fontSize: 11,
               alignment: 'center',
               bold: true,
@@ -44,16 +41,13 @@ export default {
             // Score Bars
             this.hasPrevious
               ? pdfUtils.generatePreviousScoreBar(score, previous, 7)
-              : pdfUtils.generateSimpleScoreBar(score, 10)
+              : pdfUtils.generateSimpleScoreBar(score, 9.5)
           ])
         }
         // Dimension spacer
         rows.push([
-          {
-            text: '', colSpan: 6, margin: [0, dimCnt === 0 ? 4 : 4.1]
-          }
+          { text: '', colSpan: 6 }
         ])
-        dimCnt++
       }
 
       return [
@@ -70,7 +64,8 @@ export default {
         {
           absolutePosition: { x: 240, y: 73.2 },
           table: {
-            widths: ['21%', '0.4%', '6.2%', '6.1%', '7.3%', '56%'],
+            widths: ['21%', '0.4%', '6.2%', '6.1%', '7.3%', '55.5%'],
+            heights: [1, 1, 27.5, 27.5, 27.5, 7.5, 27.5, 27.5, 27.5, 9, 27.5, 27.5, 27.5, 9, 27.5, 27.5, 27.5, 0],
             body: [
               // Headers
               [

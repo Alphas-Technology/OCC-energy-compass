@@ -84,28 +84,28 @@ export default {
           }
         },
         content: [
-          // Cover
+          // 01 Cover
           this.$generateCover(),
-          // Table of Contents
+          // 02 Table of Contents
           this.$generateTableOfContents(),
-          // Introduction
+          // 03 Introduction
           this.$generateIntroduction(),
-          // Methodology
-          this.$generateMethodology(),
-          // Model Description
+          // 04 Model Description
           this.$generateModelDescription(),
-          // General Score
+          // 05 Methodology
+          this.$generateMethodology(),
+          // 07 General Score
           await this.$generateGeneralScores(),
-          // Dimensions/Variables
+          // 08 Dimensions/Variables
           this.$generateDimensionsResults(),
-          // Detailed Dimensions
+          // 09 Detailed Dimensions
           this.$generateDimensionDetail(),
-          // Highest/Lowest Scores
+          // 10 Highest/Lowest Scores
           this.$generateScores(this.highestScores, 'highest_scores'),
           this.$generateScores(this.lowerScores, 'lowest_scores'),
-          // Burnout Index
+          // 12 Burnout Index
           await this.$generateBurnoutIndex(),
-          // Health Index
+          // 13 Health Index
           this.$generateHealthIndex()
         ]
       }

@@ -42,23 +42,23 @@ export default {
 
             rows.push([
               {
-                text: this.truncateReference(reference),
-                margin: [2, 7.6, 0, -5],
-                fontSize: 7,
+                text: reference,
+                margin: [2, 5.5, 2, 0],
+                fontSize: 8,
                 color: '#666666',
-                characterSpacing: 0.4
+                characterSpacing: 0.3
               },
               {
                 text: ' '
               },
-              pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), -4.9),
+              pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), [0, 2.6, 2, 1.1]),
               // Score Bars
-              pdfUtils.generateIndividualScoreBar(score, 7.7)
+              pdfUtils.generateIndividualScoreBar(score, 11.5, -2.8)
             ])
             varCnt++
           }
           // Variable spacer
-          rows.push([{ text: '', colSpan: 4, margin: [0, 6.6] }])
+          rows.push([{ text: '', colSpan: 4 }])
         }
 
         pages.push(
@@ -73,9 +73,10 @@ export default {
           },
           // Table
           {
-            absolutePosition: { x: 244, y: 95 },
+            absolutePosition: { x: 174, y: 97 },
             table: {
-              widths: ['20%', '0.9%', '6%', '68.2%'],
+              widths: ['29.5%', '0.5%', '5.3%', '60.6%'],
+              heights: [1, 29.5, 30.5, 30.5, 30, 5, 29, 30.1, 30, 30, 7, 30, 30.5, 30.5, 30.5, 0],
               body: [
                 // Headers
                 [

@@ -22,20 +22,21 @@ export default {
 
         rows.push([
           {
-            text: this.truncateReference(reference),
-            margin: [2, 7.6, 0, -5],
-            fontSize: 7,
+            text: reference,
+            margin: [2, 6, 2, 0],
+            fontSize: 8,
             color: '#666666',
-            characterSpacing: 0.4
+            lineHeight: 1,
+            characterSpacing: 0.2
           },
           {
             text: ' '
           },
-          pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), -5),
-          pdfUtils.generateScoreWithHeatMap(!this.hasPrevious ? '--' : this.round(previous), this.getHeatMap(previous), -5),
+          pdfUtils.generateScoreWithHeatMap(this.round(score, 2), this.getHeatMap(score), [0, 3.3, 0, 1.5], !this.hasPrevious ? -4 : -2.2),
+          pdfUtils.generateScoreWithHeatMap(!this.hasPrevious ? '--' : this.round(previous), this.getHeatMap(previous), [0, 3.3, 0, 1.5], -2.2),
           {
             text: !this.hasPrevious ? '--' : this.round(score - previous),
-            margin: [0, 5.4, 0, -5],
+            margin: [0, 9.5, 0, 0],
             fontSize: 11,
             alignment: 'center',
             bold: true,
@@ -44,8 +45,8 @@ export default {
           },
           // Score Bars
           this.hasPrevious
-            ? pdfUtils.generatePreviousScoreBar(score, previous, 3.6)
-            : pdfUtils.generateSimpleScoreBar(score, 7)
+            ? pdfUtils.generatePreviousScoreBar(score, previous, 9.5, -2.6)
+            : pdfUtils.generateSimpleScoreBar(score, 12, -2.6)
         ])
       }
 
@@ -61,9 +62,10 @@ export default {
         },
         // Table
         {
-          absolutePosition: { x: 240, y: 73.2 },
+          absolutePosition: { x: 170, y: 73.2 },
           table: {
-            widths: ['21%', '0.4%', '6.2%', '6.1%', '7.3%', '55%'],
+            widths: ['30.6%', '0.4%', '5.5%', '5.8%', '5.8%', '55%'],
+            heights: [1, 1, 30, 32.5, 31.5, 31.7, 31.7, 31.5],
             body: [
               // Headers
               [

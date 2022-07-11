@@ -18,7 +18,7 @@ export default {
       margin: [25, -100, 0, 0]
     }
   },
-  generateScoreWithHeatMap (score: string, color: string, marginBottom: number) {
+  generateScoreWithHeatMap (score: string, color: string, cellMargin: Array<number>, leftMargin = -4) {
     return {
       table: {
         headerRows: 1,
@@ -26,7 +26,7 @@ export default {
         body: [
           [{
             text: score,
-            margin: [0, 0, 2, marginBottom],
+            margin: cellMargin,
             fontSize: 11,
             alignment: 'center',
             bold: true,
@@ -36,7 +36,7 @@ export default {
           }]
         ]
       },
-      margin: [-4, 0, 0, -1.7],
+      margin: [leftMargin, 0, 0, -1.7],
       alignment: 'center',
       layout: {
         hLineWidth: () => {
@@ -68,18 +68,18 @@ export default {
       return ((score + 3.15) * base) + 30
     }
   },
-  generateIndividualScoreBar (score: number, marginTop: number) {
+  generateIndividualScoreBar (score: number, marginTop: number, marginLeft: number) {
     return {
       layout: { defaultBorder: '', fillColor: '#445bcc' },
       table: {
         headerRows: 1,
-        widths: [score === 1 ? -10 : this.calculateIndividualBarWidth(score)],
+        widths: [score === 1 ? -9 : this.calculateIndividualBarWidth(score)],
         heights: [1],
         body: [
           [{ text: '', lineHeight: 0.01 }]
         ]
       },
-      margin: [-3.1, marginTop, 0, 0],
+      margin: [marginLeft, marginTop, 0, 0],
       border: [false, false, false, false],
       alignment: 'left'
     }
@@ -104,7 +104,7 @@ export default {
       return ((score + 3) * base) + 30
     }
   },
-  generateSimpleScoreBar (score: number, marginTop: number) {
+  generateSimpleScoreBar (score: number, marginTop: number, marginLeft = -2.8) {
     return {
       layout: { defaultBorder: '', fillColor: '#445bcc' },
       table: {
@@ -115,12 +115,12 @@ export default {
           [{ text: '', lineHeight: 0.01 }]
         ]
       },
-      margin: [-2.8, marginTop, 0, 0],
+      margin: [marginLeft, marginTop, 0, 0],
       border: [false, false, false, false],
       alignment: 'left'
     }
   },
-  generatePreviousScoreBar (score: number, previous: number, marginTop: number) {
+  generatePreviousScoreBar (score: number, previous: number, marginTop: number, marginLeft = -2.8) {
     return [
       {
         layout: { defaultBorder: '', fillColor: '#445bcc' },
@@ -132,7 +132,7 @@ export default {
             [{ text: '', lineHeight: 0.01 }]
           ]
         },
-        margin: [-2.8, marginTop, 0, 0],
+        margin: [marginLeft, marginTop, 0, 0],
         alignment: 'left'
       },
       {
@@ -145,7 +145,7 @@ export default {
             [{ text: '', lineHeight: 0.01 }]
           ]
         },
-        margin: [-2.8, -1, 0, 0],
+        margin: [marginLeft, -1, 0, 0],
         alignment: 'left'
       }
     ]

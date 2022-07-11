@@ -48,8 +48,8 @@ import initial from './mixins/00-initial'
 import cover from './mixins/01-cover'
 import index from './mixins/02-index'
 import intro from './mixins/03-intro'
-import methodology from './mixins/04-methodology'
-import model from './mixins/05-model'
+import model from './mixins/04-model'
+import methodology from './mixins/05-methodology'
 import responseRate from './mixins/06-response-rate'
 import gralScores from './mixins/07-gral-scores'
 import dimResults from './mixins/08-dimension-results'
@@ -71,8 +71,8 @@ export default {
     cover,
     index,
     intro,
-    methodology,
     model,
+    methodology,
     responseRate,
     gralScores,
     dimResults,
@@ -247,7 +247,7 @@ export default {
                 show: true,
                 formatter: '{b}%',
                 color: 'black',
-                fontSize: 270,
+                fontSize: 240,
                 fontWeight: 'bold'
               },
               data: [{
@@ -284,7 +284,7 @@ export default {
       })
     },
     getData (dimension, score, previous, color) {
-      dimension = this.$t(`Views.Evaluations.report.introduction.${dimension}`)
+      dimension = this.$t(`Views.Questionnaires.edit.d_${dimension}`)
       score = this.round(score)
       previous = this.round(previous)
       let value
@@ -472,10 +472,13 @@ export default {
         const chartWordsLocal = echarts.init(canvas)
 
         chartWordsLocal.setOption({
+          textStyle: {
+            fontFamily: 'Bowlby One'
+          },
           series: [{
             type: 'wordCloud',
             shape: 'circle',
-            gridSize: 7,
+            gridSize: 9,
             sizeRange: [14, 60],
             rotationRange: [-90, 90],
             rotationStep: 90,
@@ -485,8 +488,7 @@ export default {
             // height: '70%',
             drawOutOfBound: true,
             textStyle: {
-              fontFamily: 'sans-serif',
-              fontWeight: 'bold',
+              // fontWeight: 'bold',
               color: () => this.wordColors[Math.floor(Math.random() * this.wordColors.length)]
             },
             data: this.wordsCloud[key]

@@ -7,7 +7,7 @@ export default {
     truncateIndexName (str, limit = 9) {
       return str.slice(0, limit)
     },
-    truncateQuestion (str, limit = 57) {
+    truncateQuestion (str, limit = 70) {
       return str.length > limit ? str.slice(0, limit) + '...' : str
     },
     getScoresData (scoresData) {
@@ -63,7 +63,7 @@ export default {
                 [
                   {
                     text: firstColumnText,
-                    margin: [20, 37.5, 0, -3],
+                    margin: [20, 38, 0, -3],
                     fontSize: 12,
                     bold: true,
                     color: hexColor || '#51c7af',
@@ -71,10 +71,10 @@ export default {
                   },
                   {
                     text: this.truncateQuestion(reference),
-                    margin: [7, 35, 0, -3],
-                    fontSize: 18,
+                    margin: [7, 38, 0, -3],
+                    fontSize: 12,
                     color: '#666666',
-                    characterSpacing: 0.4,
+                    characterSpacing: 0.3,
                     border: [false]
                   },
                   {

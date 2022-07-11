@@ -42,7 +42,7 @@ export default {
                 [
                   {
                     text: this.$t(`Views.Questionnaires.edit.d_${hc.dimension}`),
-                    margin: [20, 37.5, 0, -3],
+                    margin: [20, 38, 0, -3],
                     fontSize: 12,
                     bold: true,
                     color: hexColor || '#51c7af',
@@ -50,10 +50,10 @@ export default {
                   },
                   {
                     text: this.truncateQuestion(reference),
-                    margin: [7, 35, 0, -3],
-                    fontSize: 18,
+                    margin: [7, 38, 0, -3],
+                    fontSize: 12,
                     color: '#666666',
-                    characterSpacing: 0.4,
+                    characterSpacing: 0.3,
                     border: [false]
                   },
                   {

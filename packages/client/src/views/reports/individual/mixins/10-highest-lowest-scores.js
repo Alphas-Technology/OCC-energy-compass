@@ -7,7 +7,7 @@ export default {
     truncateIndexName (str, limit = 9) {
       return str.slice(0, limit)
     },
-    truncateQuestion (str, limit = 57) {
+    truncateQuestion (str, limit = 70) {
       return str.length > limit ? str.slice(0, limit) + '...' : str
     },
     getScoresData (scoresData) {
@@ -25,14 +25,14 @@ export default {
             alignment: 'center'
           },
           {
-            margin: [25, -92, 4, 0],
+            margin: [25, -92, 4.6, 0],
             table: {
               widths: ['12%', '*', '10%'],
               body: [
                 [
                   {
                     text: firstColumnText,
-                    margin: [20, 39, 0, -3],
+                    margin: [20, 38, 0, -3],
                     fontSize: 12,
                     bold: true,
                     color: this.colors[hc.dimension] || '#51c7af',
@@ -40,15 +40,15 @@ export default {
                   },
                   {
                     text: this.truncateQuestion(hc.type === 'evaluation' ? hc.reference : hc.ref),
-                    margin: [20, 35, 0, -3],
-                    fontSize: 18,
+                    margin: [7, 38, 0, -3],
+                    fontSize: 12,
                     color: '#666666',
-                    characterSpacing: 0.4,
+                    characterSpacing: 0.3,
                     border: [false]
                   },
                   {
                     text: hc.score,
-                    margin: [0, 33, 0, -1],
+                    margin: [0, 33, 0, -1.3],
                     fontSize: 21,
                     alignment: 'center',
                     bold: true,

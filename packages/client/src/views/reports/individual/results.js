@@ -11,8 +11,8 @@ import initial from './mixins/00-initial'
 import cover from './mixins/01-cover'
 import index from './mixins/02-index'
 import intro from './mixins/03-intro'
-import methodology from './mixins/04-methodology'
-import model from './mixins/05-model'
+import model from './mixins/04-model'
+import methodology from './mixins/05-methodology'
 import generalScore from './mixins/07-gral-scores'
 import dimResults from './mixins/08-dimension-results'
 import dimDetails from './mixins/09-dimension-details'
@@ -33,8 +33,8 @@ export default Vue.extend({
     cover,
     index,
     intro,
-    methodology,
     model,
+    methodology,
     highScores,
     generalScore,
     dimResults,
@@ -287,7 +287,7 @@ export default Vue.extend({
       })
     },
     getData (dimension, score, color) {
-      dimension = this.$t(`Views.Evaluations.report.introduction.${dimension}`)
+      dimension = this.$t(`Views.Questionnaires.edit.d_${dimension}`)
       score = this.round(score)
       const value = `{a|${score}}\n{c|${dimension}}`
 
