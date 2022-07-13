@@ -7,8 +7,8 @@
           <v-divider></v-divider>
         </v-col>
       </v-row>
-      <v-card-subtitle class="pa-1 body-2 text-justify">
-        Descripción de esta sección
+      <v-card-subtitle class="pt-2 pb-8 px-0 body-2 text-justify">
+        {{ $t('Views.Evaluations.stepAdditionalSegmentation.description') }}
       </v-card-subtitle>
       <!------------------------------------------------------------------------>
       <!--------------------- Segmentation Selection Table --------------------->
@@ -16,14 +16,17 @@
       <v-row>
         <v-col cols="12" v-if="dataFetched && !segmentations.length">
           <v-alert text prominent type="warning" icon="mdi-shield-remove" class="text-center mt-3">
-            <h3>Tu empresa no tiene Segmentación Adicional</h3>
+            <h3>
+              {{ $t('Views.Evaluations.stepAdditionalSegmentation.no_segmentation_found') }}
+            </h3>
           </v-alert>
         </v-col>
         <v-col cols="12" v-else
           class="pt-0 px-4"
         >
           <p class="mb-0 body-2 text-right font-weight-bold">
-            {{ $t('Views.Evaluations.stepAdditionalSegmentation.selected') }} {{ selectedCount }}
+            {{ $t('Views.Evaluations.stepAdditionalSegmentation.selected') }}
+            {{ selectedCount }}
           </p>
           <v-simple-table dense
             fixed-header
@@ -69,9 +72,6 @@
               </tbody>
             </template>
           </v-simple-table>
-          <p class="mb-0 ml-1 caption primary--text font-weight-bold">
-            {{ $t('Views.Evaluations.stepAdditionalSegmentation.table_legend') }}
-          </p>
         </v-col>
       </v-row>
       <!------------------------------------------------------------------------>

@@ -227,7 +227,8 @@ export default {
   },
   stepAdditionalSegmentation: {
     title: 'Segmentación Adicional',
-    table_legend: 'Puedes seleccionar ??? Segmentaciones Adicionales para tu medición',
+    description: 'Selecciona las opciones de segmentación que quieres utilizar en la Valoración. Al momento de entrar a llenar su encuesta, al colaborador se le pedirá que responda esta segmentación. Posteriormente podrás generar reportes con esta información. Si no encuentras la segmentación que deseas realizar en este listado, puedes crearla previamente en la sección de configuración de la Suite.',
+    no_segmentation_found: 'Tu empresa no tiene Segmentación Adicional',
     selected: 'Seleccionada(s):'
   },
   edit: {
@@ -354,7 +355,7 @@ export default {
       btn_send: 'Enviar',
       btn_resend: 'Reenviar',
       email_subject: 'Resultados Energy Compass',
-      email_body: '<p>Gracias por participar</p>',
+      email_body: '<p>Muchas gracias por tu participación en la medición de Energy Compass.</p>',
       email_sent: 'Mensaje enviado exitosamente'
     }
   },
@@ -368,7 +369,7 @@ export default {
     general_desc: 'Este reporte muestra los resultados de la apreciación de todos los participantes de la medición.',
     no_members: 'No hubo participación de los miembros',
     demographic_title: 'Reporte por corte demográfico',
-    demographic_desc: 'Este reporte cuenta con los resultados de la medición, segmentado por cortes demográficos.',
+    demographic_desc: 'Seleccione uno de los cortes demograficos o segmentación adicional para generar un reporte detallado con las variables que lo componen:',
     generate_report: 'Generar reporte',
     generated_reports: 'Reportes Generados',
     generated_reports_desc: 'En esta sección encontrarás todos los reportes que has generado.<br>Dependiendo del número de participantes cada reporte puede tardar hasta 30 minutos en generarse. Puedes actualizar el progreso recargando la página.<br>Se recomienda generar un máximo de 5 reportes a la vez, para mejorar el rendimiento de la plataforma.',
@@ -402,7 +403,7 @@ export default {
       selected: 'Seleccionado(s)',
       demographic_cuts: 'Cortes Demográficos',
       additional_segmentation: 'Segmentación Adicional',
-      table_legend: 'Puedes seleccionar ???',
+      table_legend: 'Puedes seleccionar 1 corte demografico o segmentación adicional',
       operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte por Cortes Demográficos". Este proceso puede tardar varios minutos'
     },
     months: [
