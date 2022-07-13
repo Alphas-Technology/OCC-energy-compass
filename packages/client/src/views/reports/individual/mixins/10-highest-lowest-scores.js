@@ -4,17 +4,19 @@ import ScoreRectBase64 from '../../base64Files/score-rect'
 
 export default {
   methods: {
-    truncateIndexName (str, limit = 9) {
-      return str.slice(0, limit)
-    },
     truncateQuestion (str, limit = 70) {
       return str.length > limit ? str.slice(0, limit) + '...' : str
     },
     getScoresData (scoresData) {
       return scoresData.map((hc, index) => {
-        const firstColumnText = hc.type === 'evaluation'
-          ? this.$t(`Views.Questionnaires.edit.d_${hc.dimension}`)
-          : this.truncateIndexName(this.$t(`Views.Indices.list.i_${hc.index}`))
+        let firstColumnText, marginTop
+        if (hc.type === 'evaluation') {
+          firstColumnText = this.$t(`Views.Questionnaires.edit.d_${hc.dimension}`)
+          marginTop = 38
+        } else {
+          firstColumnText = this.$t(`Views.Indices.list.i_${hc.index}`)
+          marginTop = 29
+        }
 
         const data = [
           {
@@ -27,12 +29,12 @@ export default {
           {
             margin: [25, -92, 4.6, 0],
             table: {
-              widths: ['12%', '*', '10%'],
+              widths: ['15%', '*', '10%'],
               body: [
                 [
                   {
                     text: firstColumnText,
-                    margin: [20, 38, 0, -3],
+                    margin: [20, marginTop, 0, -3],
                     fontSize: 12,
                     bold: true,
                     color: this.colors[hc.dimension] || '#51c7af',
