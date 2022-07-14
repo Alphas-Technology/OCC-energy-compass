@@ -12,7 +12,7 @@ import ProcessReportOrganizational from './reports/organizational';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default () => {
-  setInterval(() => { console.log('Updated at 2022-07-11 16:00'); }, ms('5m'));
+  setInterval(() => { console.log('Updated at 2022-07-13 22:30'); }, ms('5m'));
   const quarter = '15m';
   const minutes = '5m';
   const seconds = '30s';
