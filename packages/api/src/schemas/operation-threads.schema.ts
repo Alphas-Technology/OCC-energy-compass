@@ -9,7 +9,7 @@ const OperationThreadsSchema = new mongoose.Schema({
   status: {index: true, type: String},
   data: {},
   dataFail: {},
-  createdAt: Date
+  createdAt: { index: true, type: Date }
 });
 
 const OperationThreadsRepository = mongoose.model<OperationThreadsType>('OperationThreads', OperationThreadsSchema);

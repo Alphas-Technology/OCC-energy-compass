@@ -17,7 +17,7 @@ class OperationThreadsService {
     return OperationThreadsRepository.find({
       operation: 'DownloadReport',
       'data._evaluation': new ObjectID(id)
-    }, select || undefined);
+    }, select || undefined).sort({'createdAt': -1});
   }
 
   /**
