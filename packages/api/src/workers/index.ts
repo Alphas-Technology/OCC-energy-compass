@@ -8,6 +8,7 @@ import EvaluationEmailsWorker from './evaluation/send-emails';
 import TempAnswersWorker from './evaluation/temp-answers';
 import ReportCheck from './reports/check-pending-reports';
 import ProcessReportOrganizational from './reports/organizational';
+import ProcessReportByPopulation from './reports/by-population';
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -34,6 +35,13 @@ export default () => {
     }).catch((error) => {
       // tslint:disable-next-line: no-console
       console.log('Processing Report error:', error);
+    });
+    ProcessReportByPopulation.processReportResults().then((res) => {
+      // tslint:disable-next-line: no-console
+      console.log('Processed Segmented Report:', res);
+    }).catch((error) => {
+      // tslint:disable-next-line: no-console
+      console.log('Processing Segmented Report error:', error);
     });
   }, ms(seconds));
 
