@@ -562,7 +562,7 @@ class EvaluationsController {
 
   async generateDemographicReport(req: IRequest, resp: Response) {
     try {
-      const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise deliveredAt validUntil');
+      const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise deliveredAt validUntil populationCompletedCount');
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
@@ -595,11 +595,11 @@ class EvaluationsController {
         }
       }
 
-      const answeredCount = await EvaluationAnswersService.countByEvaluationIdAndFilterItems(
+      const filteredAnswersCount = await EvaluationAnswersService.countByEvaluationIdAndFilterItems(
         evaluation._id,
         filters
       );
-      if (!answeredCount) {
+      if (!filteredAnswersCount) {
         throw new BadRequestException('evaluation-no-answers');
       }
 
@@ -617,17 +617,24 @@ class EvaluationsController {
         productService: productService.code
       });
 
+      const usr = {
+        ...req.user,
+        token: req.header('Authorization').replace('Bearer ', ''),
+      };
+
       await OperationThreadsService.save({
         operation: 'DownloadReport',
         status: 'pending',
         createdAt: new Date(),
         data: {
+          user: usr,
           _evaluation: evaluation._id,
           evaluationSlug: evaluation.slug,
           operations: spend,
           enterpriseId: evaluation.enterpriseId,
           questionnaire: evaluation.questionnaire.slug,
-          answeredCount,
+          answeredCount: evaluation.populationCompletedCount,
+          filteredAnswersCount,
           type: 'by_demographic',
           criteria: req.body.criteria
         }
