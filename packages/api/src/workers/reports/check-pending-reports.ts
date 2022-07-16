@@ -2,7 +2,7 @@
 import { default as OperationThreadsService } from '../../services/operation-threads.srvc';
 
 import InitOrganizational from './organizational/steps/00-init-data';
-// import InitByPopulation from './by-population/steps/00-init-data';
+import InitByPopulation from './by-population/steps/00-init-data';
 
 class ReportChecker {
 
@@ -40,12 +40,12 @@ class ReportChecker {
         };
         break;
       case 'by_demographic':
-        // const initByPopulation = await InitByPopulation();
-        // threadData.answersForScatter = initByPopulation.answersForScatter;
-        // threadData.answersDimension = initByPopulation.answersDimension;
-        // threadData.indicesAnswers = initByPopulation.indicesAnswers;
-        // threadData.openAnswers = initByPopulation.openAnswers;
-        // threadData.tempData = { alreadyProcessedAnswers: 0 };
+        const initByPopulation = await InitByPopulation();
+        threadData.answersDimension = initByPopulation.answersDimension;
+        threadData.indicesAnswers = initByPopulation.indicesAnswers;
+        threadData.segments = initByPopulation.segments;
+        threadData.segmentedAnswers = initByPopulation.segmentedAnswers;
+        threadData.tempData = { alreadyProcessedAnswers: 0 };
         break;
     }
 
