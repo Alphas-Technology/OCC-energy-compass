@@ -54,6 +54,10 @@ class RunHttpRequest {
   public suiteGet(req: Request|undefined, path: string) {
     return this.get(req, 'suite', path);
   }
+
+  public suiteSilentGet(req: any, path: string) {
+    return this.get(req, 'suite', path);
+  }
 }
 
 export default new RunHttpRequest();
