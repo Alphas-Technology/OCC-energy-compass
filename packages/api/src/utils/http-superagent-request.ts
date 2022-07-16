@@ -21,7 +21,9 @@ class HttpRequest {
     const host = await HostService.findByProductName(options.product);
     let token;
     if (req) {
-      token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+      token = req.user && req.user['token']
+        ? req.user['token']
+        : ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     } else if (host.token) {
       token = host.token;
     }
