@@ -21,7 +21,9 @@
           >
             {{ thread.data.progress }}%
           </span>
-          <v-icon color="primary" v-if="thread.status === 'pending'">mdi-progress-clock</v-icon>
+          <v-icon color="primary" v-if="thread.status === 'pending'">
+            mdi-progress-clock
+          </v-icon>
           <v-icon color="primary" v-else-if="thread.status === 'in_progress' || thread.status === 'in_action'">mdi-progress-alert</v-icon>
           <v-icon color="red" v-else-if="thread.status === 'failed'">mdi-alert-circle</v-icon>
           <v-icon color="primary" v-else>mdi-check-circle</v-icon>
@@ -30,21 +32,14 @@
       <v-expansion-panel-content>
         <v-row v-if="thread.data.type === 'by_demographic'">
           <v-col class="text-center pt-0">
-            <v-chip
-              class="ma-1 grey--text text--darken-3"
-              v-for="(demographic, $i) in Object.keys(getDemographicChips(thread.data.criteria))"
+            <v-chip large
+              class="ma-1 px-6 grey--text text--darken-3"
+              v-for="(demographic, $i) in getDemographicChip(thread.data.criteria)"
               :key="$i"
             >
               <span class="font-weight-bold body-2">
-                {{ demographic }}
+                {{ demographic.toUpperCase() }}
               </span>
-              <p
-                v-for="(child, $j) in getDemographicChips(thread.data.criteria)[demographic].childs"
-                :key="$j"
-                class="mb-0 ml-1 caption"
-              >
-                ({{ child }})
-              </p>
             </v-chip>
           </v-col>
         </v-row>
@@ -61,7 +56,7 @@
         </v-row>
         <v-row>
           <v-col cols="12" class="text-center pt-0">
-            <!-- ORGANIZATIONAL EXEC -->
+            <!-- ORGANIZATIONAL DOWNLOAD -->
             <x-download-organizational-report
               v-if="thread.data.type === 'organizational'"
               :key="orgKey"
@@ -71,17 +66,16 @@
               @pdfRenderedOrg="orgKey++"
             ></x-download-organizational-report>
 
-            <!-- DEMOGRAPHIC EXEC -->
-            <!--
-            <x-thread-demographic-report-exec
+            <!-- DEMOGRAPHIC DOWNLOAD -->
+            <x-download-demographic-report
               v-else
               :key="demoKey"
               :poll-id="$route.params.id"
               :thread="thread"
+              :evaluation-data="evaluation"
               :demographic-cuts="demographics"
               @pdfRenderedDemo="demoKey++"
-            ></x-thread-demographic-report-exec>
-            -->
+            ></x-download-demographic-report>
           </v-col>
         </v-row>
       </v-expansion-panel-content>
@@ -100,13 +94,13 @@
 import { mapState } from 'vuex'
 
 import XDownloadOrganizationalReport from './organizational/download-report'
-// import XDownloadDemographicReport from './demographic/download-report'
+import XDownloadDemographicReport from './demographic/download-report'
 
 export default {
   name: 'report-threads',
   components: {
-    XDownloadOrganizationalReport
-    // XDownloadDemographicReport
+    XDownloadOrganizationalReport,
+    XDownloadDemographicReport
   },
   props: {
     threads: Array,
@@ -131,51 +125,16 @@ export default {
     getTranslation (tag) {
       return this.$t(`reports.demographicCuts.${tag}`)
     },
-    getDemographicChips (criteria) {
+    getDemographicChip (criteria) {
       const labels = []
-      const formattedCriteria = { filters: criteria }
-      if (formattedCriteria && formattedCriteria.filters) {
-        const filters = formattedCriteria.filters
-        for (const filter of Object.keys(filters)) {
-          let filter2 = filter
-          if (filter2 === 'additionalDemographic1') {
-            filter2 = 'additionalDemographics1'
-          }
-          if (filter2 === 'additionalDemographic2') {
-            filter2 = 'additionalDemographics2'
-          }
-          if (filters[filter].length) {
-            if (filter === 'antiquity' || filter === 'age') {
-              const name = this.getTranslation(filter)
-              labels[name] = {
-                childs: []
-              }
-              const tmp = []
-              for (const flt of filters[filter]) {
-                const match = this.demographics[filter2].find(fl =>
-                  fl.range.min === flt.min && fl.range.max === flt.max
-                )
-                if (match) {
-                  tmp.push(match.name)
-                }
-              }
-              labels[name].childs.push(tmp.join(', '))
-            } else if (this.demographics[filter2]) {
-              const demographicToFilter = this.demographics[filter2]
-              const name = this.getTranslation(filter)
-              labels[name] = {
-                childs: []
-              }
-              const match = demographicToFilter.filter(fl => {
-                return filters[filter].includes(fl.id)
-              }).map(x => {
-                return filter === 'headquarter' ? x.name : x.translate.label
-              }).join(', ')
-              if (match.length) {
-                labels[name].childs.push(match)
-              }
-            }
-          }
+      for (const filter of criteria) {
+        if (filter.type === 'demographic' && this.demographics[filter.code]) {
+          labels.push(this.demographics[filter.code].label)
+        }
+        if (filter.type === 'segmentation') {
+          labels.push(
+            this.evaluation.additionalSegmentation[filter.code].trans[this.user.lang].label
+          )
         }
       }
       return labels
