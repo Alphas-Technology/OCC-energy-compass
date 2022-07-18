@@ -107,6 +107,7 @@
             <v-row>
               <v-col cols="12" class="my-0 pt-4 py-0">
                 <x-report-threads
+                  :key="demographicItemsFetched"
                   :threads="reportThreads"
                   :demographics="demographicItems"
                   :evaluation="evaluation"
@@ -196,6 +197,16 @@ export default {
     reportType (val) {
       if (val === 'by_demographic' && !this.demographicItemsFetched) {
         this.getDemographicItems()
+      }
+    },
+    reportThreads: {
+      handler (val) {
+        if (val.length) {
+          const found = val.find((t) => t.data.type === 'by_demographic')
+          if (found) {
+            this.getDemographicItems()
+          }
+        }
       }
     },
     loading (val) {
