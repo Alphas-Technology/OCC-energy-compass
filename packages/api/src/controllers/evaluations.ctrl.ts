@@ -656,11 +656,11 @@ class EvaluationsController {
 
   async currentThreads(req: IRequest, resp: Response) {
     try {
-      const evaluation = await EvaluationsService.findById(req.params.id, 'name displayName questionnaire status enterpriseId enterprise');
+      const evaluation = await EvaluationsService.findById(req.params.id, '_id enterpriseId');
       if (!evaluation || evaluation.enterpriseId !== req.user.enterprise.id) {
         throw new BadRequestException('evaluation-not-found');
       }
-      resp.send(await OperationThreadsService.findDownloadReportsByPollId(evaluation._id, '_id status data.type data.progress'));
+      resp.send(await OperationThreadsService.findDownloadReportsByPollId(evaluation._id, '_id status data.type data.progress data.criteria'));
     } catch (error) {
       resp.status(404).send({
         msg: 'Not found',
