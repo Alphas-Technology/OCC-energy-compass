@@ -25,23 +25,6 @@
         {{ $t('Views.Evaluations.report.download_report') }}
       </span>
     </v-btn>
-
-    <!-- Energy Compass page Header Logo -->
-    <img
-      src="/img/20220531_occ_energy_logo.png"
-      style="visibility:hidden;"
-      id="occEnergyCover"
-      alt="hidden"
-      width="0"
-      height="0"
-    />
-    <!-- Empty img container to load Enterprise Logo if any -->
-    <img
-      v-if="enterpriseLogo"
-      :src="enterpriseLogo"
-      id="dynamicEnterpriseLogo"
-      class="d-none"
-    />
   </div>
 </template>
 
@@ -52,52 +35,53 @@ import is from 'is_js'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts.js'
 
-// import initial from './mixins/00-initial'
-// import cover from './mixins/01-cover'
-// import index from './mixins/02-index'
-// import scores from './mixins/03-scores'
-// import dimResults from './mixins/04-dim-results'
-// import varResults from './mixins/05-var-results'
+import initial from './mixins/00-initial'
+import cover from './mixins/01-cover'
+import index from './mixins/02-index'
+import intro from '../organizational/mixins/03-intro'
+import model from '../organizational/mixins/04-model'
+import methodology from '../organizational/mixins/05-methodology'
+import gralScores from './mixins/07-gral-scores'
+import dimResults from './mixins/08-dimension-results'
+import dimDetails from './mixins/09-dimension-details'
+import healthIndex from './mixins/13-health-index'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
 export default {
   name: 'download-demographic-report',
   mixins: [
-    // initial,
-    // cover,
-    // index,
-    // scores,
-    // dimResults,
-    // varResults,
+    initial,
+    cover,
+    index,
+    intro,
+    model,
+    methodology,
+    gralScores,
+    dimResults,
+    dimDetails,
+    healthIndex
   ],
   props: {
     pollId: String,
+    evaluationData: Object,
+    demographicCuts: Object,
     thread: Object
   },
   data () {
     return {
       downloadPdf: true,
-      energyCoverSrc: null,
-      enterpriseLogo: null,
       lockPdfButton: false,
-      evaluation: {},
-      questionnaire: {},
-      answersResponsibility: {},
+      heatMap: [
+        '#f85d19',
+        '#f99c16',
+        '#fcec14',
+        '#b7d600',
+        '#1bd800'
+      ],
+      gralScore: {},
       completedPolls: 0,
       expectedPolls: 0
-    }
-  },
-  mounted () {
-    this.energyCoverSrc = document.getElementById('occEnergyCover').src
-  },
-  watch: {
-    energyCoverSrc (val) {
-      if (val) {
-        this.toDataURL(this.energyCoverSrc, (dataURL) => {
-          this.cultureCoverBase64 = dataURL
-        })
-      }
     }
   },
   computed: {
@@ -119,20 +103,37 @@ export default {
         if (is.edge() || is.ie()) {
           const pdfDocGenerator = pdfMake.createPdf(configuration)
           pdfDocGenerator.getBlob((blob) => {
-            window.navigator.msSaveBlob(blob, `${this.evaluation.name}.pdf`)
+            window.navigator.msSaveBlob(blob, `${this.reportName}.pdf`)
             this.closeRenderPdf()
           })
         } else {
-          pdfMake.createPdf(configuration).download(`${this.evaluation.name}.pdf`, () => {
+          pdfMake.createPdf(configuration).download(`${this.reportName}.pdf`, () => {
             this.closeRenderPdf()
           })
         }
+      } else {
+        this.closeRenderPdf()
       }
     },
     closeRenderPdf () {
       this.$store.dispatch('loading/hide')
       this.lockPdfButton = false
       this.$emit('pdfRenderedOrg')
+    },
+    getHeatMap (s) {
+      if (!s) {
+        return '#FFFFFF'
+      } else if (s >= 1 && s < 2) {
+        return this.heatMap[0]
+      } else if (s >= 2 && s < 3) {
+        return this.heatMap[1]
+      } else if (s >= 3 && s < 4) {
+        return this.heatMap[2]
+      } else if (s >= 4 && s < 4.5) {
+        return this.heatMap[3]
+      } else if (s >= 4.5) {
+        return this.heatMap[4]
+      }
     },
     toDataURL (url, callback) {
       const xhr = new XMLHttpRequest()
@@ -150,6 +151,11 @@ export default {
       }
 
       xhr.send()
+    },
+    getDateString () {
+      const today = new Date()
+      const monthName = this.$t(`Views.Evaluations.report.months.${[today.getMonth()]}`)
+      return `${monthName} - ${today.getFullYear()}`
     },
     round (value, decimals) {
       if (isNaN(Number(value))) {
