@@ -1,11 +1,11 @@
 
 export default {
-  generateHeaderTitle (title: string, isToc = true) {
+  generateHeaderTitle (title: string, isToc = true, customWidth = 368) {
     return {
       pageBreak: 'before',
       layout: 'noBorders',
       table: {
-        widths: [368, 0],
+        widths: [customWidth, 0],
         body: [
           [
             { text: title, bold: true, color: '#444444', margin: [22, 21, 22, 18], fontSize: 20 },
