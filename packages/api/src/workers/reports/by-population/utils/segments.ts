@@ -33,7 +33,7 @@ class SegmentsUtils {
         success: true,
         res: rangeItems[code],
         error: undefined
-      }
+      };
     } else {
       const urlDictionary = {
         academicDegree: 'academic-degrees/list',
@@ -86,7 +86,7 @@ class SegmentsUtils {
         count: 0,
         answersDimension: await AnswersUtils.iniAnswersDimension(),
         indicesAnswers: await AnswersUtils.iniIndicesAnswers()
-      }
+      };
     }
 
     return resp;
@@ -117,7 +117,7 @@ class SegmentsUtils {
         // segmentation
         const foundSegmentation = participation.segmentation.find(s => {
           return s.segmentationId === criteria[0].id && s.detailId === Number(segmentId);
-        })
+        });
         if (foundSegmentation) {
           belongs = true;
         }

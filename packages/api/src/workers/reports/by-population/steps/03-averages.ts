@@ -32,7 +32,7 @@ export default async (
       count: cnt,
       answersDimension: segmentAverages.answersDimension,
       indicesAnswers: segmentAverages.indicesAnswers
-    }
+    };
   }
 
   return {
