@@ -398,13 +398,15 @@ export default {
       trend: 'Tendencia'
     },
     demographic: {
-      title: 'Reporte por Población',
+      title: 'Reporte por corte Demográfico',
       subject: 'Reporte por Población Energy Compass',
       selected: 'Seleccionado(s)',
       demographic_cuts: 'Cortes Demográficos',
       additional_segmentation: 'Segmentación Adicional',
       table_legend: 'Puedes seleccionar 1 corte demografico o segmentación adicional',
-      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte por Cortes Demográficos". Este proceso puede tardar varios minutos'
+      operation_init: 'Se ha dado inicio a un proceso de descarga "Reporte por Cortes Demográficos". Este proceso puede tardar varios minutos',
+      page_header: 'Variable',
+      table_header: 'Demográfico'
     },
     months: [
       'Enero',
@@ -428,6 +430,7 @@ export default {
       model: 'Modelo Energy Compass',
       response_rate: 'Nivel de respuesta',
       general_scores: 'Resultado General',
+      dimension_results: 'Resultados por Dimensión',
       dimensions_variables_scores: 'Resultados por Dimensión/Variable',
       detailed_scores_dim_physical: 'Detalle Dimensión Física',
       detailed_scores_dim_mental: 'Detalle Dimensión Mental',
