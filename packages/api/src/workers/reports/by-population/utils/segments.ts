@@ -5,20 +5,20 @@ import AnswersUtils from './answers';
 
 const rangeItems = {
   age: [
-    { id: 1, range: [0, 25] },
-    { id: 2, range: [25, 35] },
-    { id: 3, range: [35, 45] },
-    { id: 4, range: [45, 50] },
-    { id: 5, range: [50, 200] }
+    { id: 1, range: [0, 25], label: 'age_low' },
+    { id: 2, range: [25, 35], label: 'age_range' },
+    { id: 3, range: [35, 45], label: 'age_range' },
+    { id: 4, range: [45, 50], label: 'age_range' },
+    { id: 5, range: [50, 200], label: 'age_upper' }
   ],
   antiquity: [
-    { id: 1, range: [0, 0.5] },
-    { id: 2, range: [0.5, 1] },
-    { id: 3, range: [1, 3] },
-    { id: 4, range: [3, 5] },
-    { id: 5, range: [5, 10] },
-    { id: 6, range: [10, 20] },
-    { id: 7, range: [20, 200] }
+    { id: 1, range: [0, 0.5], label: 'antiquity_low' },
+    { id: 2, range: [0.5, 1], label: 'antiquity_range_single' },
+    { id: 3, range: [1, 3], label: 'antiquity_range_one' },
+    { id: 4, range: [3, 5], label: 'antiquity_range' },
+    { id: 5, range: [5, 10], label: 'antiquity_range' },
+    { id: 6, range: [10, 20], label: 'antiquity_range' },
+    { id: 7, range: [20, 200], label: 'antiquity_upper' }
   ]
 };
 
