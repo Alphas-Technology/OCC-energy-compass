@@ -33,7 +33,7 @@
         <v-row v-if="thread.data.type === 'by_demographic'">
           <v-col class="text-center pt-0">
             <v-chip large
-              class="ma-1 px-6 grey--text text--darken-3"
+              class="ma-0 px-6 grey--text text--darken-3"
               v-for="(demographic, $i) in getDemographicChip(thread.data.criteria)"
               :key="$i"
             >
